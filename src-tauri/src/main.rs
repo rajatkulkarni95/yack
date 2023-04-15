@@ -80,13 +80,12 @@ fn main() {
     tauri::Builder::default()
         .system_tray(system_tray)
         .on_system_tray_event(move |app, event| match event {
-            SystemTrayEvent::LeftClick { position, size, .. } => {
+            SystemTrayEvent::LeftClick { .. } => {
                 let w = app.get_window("main").unwrap();
                 let visible = w.is_visible().unwrap();
                 if visible {
                     w.hide().unwrap();
                 } else {
-                    let window_size = w.outer_size().unwrap();
                     w.show().unwrap();
                     w.set_focus().unwrap();
                 }

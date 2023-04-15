@@ -5,7 +5,7 @@ import "./index.css";
 
 import { register } from "@tauri-apps/api/globalShortcut";
 
-register("Command+Shift+Space", async () => {
+register("Control+Shift+Space", async () => {
   const appWindow = await (await import("@tauri-apps/api/window")).appWindow;
 
   await appWindow.show();

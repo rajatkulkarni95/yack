@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
 import { useKeyPress } from "./hooks/useKeyPress";
+import { PromptInput } from "./components/Input";
 
 function App() {
   const escPress: boolean = useKeyPress("Escape");
@@ -15,7 +14,13 @@ function App() {
     hideApp();
   }
 
-  return <main className="h-screen w-screen bg-neutral-900"></main>;
+  return (
+    <main className="h-screen bg-neutral-900">
+      <section className="absolute bottom-0 w-full p-4">
+        <PromptInput />
+      </section>
+    </main>
+  );
 }
 
 export default App;

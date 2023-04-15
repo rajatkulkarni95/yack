@@ -1,3 +1,105 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: geometricPrecision;
+}
+
+html {
+  font-size: 13px;
+}
+
+body {
+  overflow: hidden;
+}
+
+*:focus {
+  outline: none;
+}
+
+:root {
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #d4d4d8;
+  --color-text-tertiary: #a1a1aa;
+  --color-text-placeholder: #71717a;
+
+  --color-app-sidebar: #141515;
+  --color-bg-primary: #18181b;
+  --color-bg-secondary: #27272a;
+  --color-bg-tertiary: #3f3f46;
+  --color-bg-fade: #1e1e1e;
+  --color-bg-hover: #232324;
+  --color-bg-primary-btn: #202020;
+  --color-bg-primary-btn-hover: #333333;
+  --color-bg-action: #6d28d9;
+
+  --color-border-primary: #2e2e2f;
+  --color-border-secondary: #52525b;
+  --color-border-selected: #2563eb;
+  --color-border-error: #ef4444;
+
+  --color-icon: #c3c4c6;
+  --color-bg-code: #202020;
+  --color-text-inline-code: #f97316;
+  --color-bg-error: #b91c1c;
+  --color-text-error: #f87171;
+
+  --color-bg-kbd: #27272a;
+  --color-bg-tooltip: #1a1a1a;
+  --color-bg-tooltip-kbd: #343333;
+}
+
+.grow-wrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) " ";
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+  max-height: 180px;
+}
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  padding: 0.5rem;
+  font: inherit;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-primary);
+}
+
+.hide_scrollbar::-webkit-scrollbar {
+  display: none !important;
+}

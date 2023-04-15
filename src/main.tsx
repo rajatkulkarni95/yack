@@ -6,8 +6,8 @@ import "./index.css";
 import { register } from "@tauri-apps/api/globalShortcut";
 
 register("Control+Shift+Space", async () => {
+  if (document.hasFocus()) return;
   const appWindow = await (await import("@tauri-apps/api/window")).appWindow;
-
   await appWindow.show();
   await appWindow.setFocus();
 });

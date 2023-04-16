@@ -40,3 +40,33 @@ export const saveConversation = (
     );
   }
 };
+
+export type THistoryMessageProps = {
+  id: string;
+  title: string;
+  created: Date;
+};
+
+export const saveConversationIDToHistory = ({
+  id,
+  title,
+  created,
+}: THistoryMessageProps) => {
+  const chatHistory = localStorage.getItem("history");
+  if (chatHistory) {
+    const parsed = JSON.parse(chatHistory);
+
+    if (!(id in parsed)) {
+      localStorage.setItem(
+        "history",
+        JSON.stringify({
+          ...parsed,
+          [id]: {
+            messages: title,
+            created,
+          },
+        })
+      );
+    }
+  }
+};

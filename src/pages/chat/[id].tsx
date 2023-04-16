@@ -5,13 +5,19 @@ import { PromptInput } from "../../components/Chat/Input";
 import ChatBubble from "../../components/Chat/Bubble";
 import poster from "../../helpers/poster";
 import { COMPLETION_API, MODEL } from "../../constants/API";
-import { incrementUsage, saveConversation } from "../../helpers/localstorage";
+import {
+  incrementUsage,
+  saveConversation,
+  saveConversationIDToHistory,
+} from "../../helpers/localstorage";
+import Header from "../../components/Header";
+import KbdShort from "../../components/KbdShort";
 
 const LOADING_MESSAGE = {
   created: new Date(),
   conversation: {
     role: "assistant",
-    content: "Doing AI things...",
+    content: "Doing AI things",
   },
 };
 
@@ -52,7 +58,7 @@ const ChatPage = () => {
         setMessages(parsedConversation.messages);
       }
     }
-  }, []);
+  }, [id]);
 
   const sendPrompt = async (prompt: string) => {
     if (!prompt) return;
@@ -68,6 +74,11 @@ const ChatPage = () => {
 
     setMessages((prev) => [...prev, message]);
     setTimeout(() => setLoading(true), 500);
+    saveConversationIDToHistory({
+      id,
+      created: message.created,
+      title: prompt,
+    });
 
     const promptMessages = messages.map((message) => message.conversation);
     const prompts = [...promptMessages, payload];
@@ -106,16 +117,48 @@ const ChatPage = () => {
     }
   };
 
+  const onClickNew = () => {
+    if (messages.length === 0) return;
+    navigate("/chat/new");
+  };
+
+  const onClickHistory = () => {
+    navigate("/history");
+  };
+
   return (
     <React.Fragment>
+      <Header small>
+        <div className="flex items-center justify-between w-full">
+          <div />
+          <div className="flex items-center">
+            <button
+              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded mr-4"
+              onClick={onClickHistory}
+            >
+              <span className="text-sm font-normal text-secondary flex items-center">
+                History <KbdShort keys={["⌘", "H"]} additionalStyles="ml-2" />
+              </span>
+            </button>
+            <button
+              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded"
+              onClick={onClickNew}
+            >
+              <span className="text-sm font-normal text-secondary flex items-center">
+                New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
+              </span>
+            </button>
+          </div>
+        </div>
+      </Header>
       <div
-        className="p-4 overflow-y-auto max-h-[420px] duration-150"
+        className="p-4 overflow-y-auto max-h-[375px] duration-150"
         id="chat-container"
       >
         {messages.map((message, index) => (
           <ChatBubble message={message} />
         ))}
-        {loading && <ChatBubble message={LOADING_MESSAGE} />}
+        {loading && <ChatBubble message={LOADING_MESSAGE} loading />}
       </div>
       <section className="absolute bottom-0 w-full p-4 bg-primary">
         <PromptInput sendPrompt={sendPrompt} />

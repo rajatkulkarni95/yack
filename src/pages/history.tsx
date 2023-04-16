@@ -105,16 +105,17 @@ const HistoryPage = () => {
             key={id}
             className={`hover:bg-secondary ${
               i === state.selectedIndex ? "bg-secondary" : "bg-primary"
-            } py-2 border-primary border-l border-b border-r text-left px-4 ${
+            } py-2 border-primary border-l border-b border-r text-left flex items-center justify-between px-4 ${
               i === 0 ? "border-t" : ""
             }`}
             onClick={() => {
               navigate(`/chat/${id}`);
             }}
           >
-            <p className="text-base font-normal text-primary">
+            <span className="text-base font-normal text-primary">
               {conversation.messages}
-            </p>
+            </span>
+            {i === state.selectedIndex && <KbdShort keys={["↵"]} />}
           </button>
         ))}
       </div>

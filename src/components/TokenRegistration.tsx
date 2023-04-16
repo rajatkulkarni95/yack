@@ -113,7 +113,7 @@ const TokenRegistration = () => {
       </ul>
       <div className="border border-dashed border-primary my-4" />
       <p className="text-base text-secondary mt-8">
-        SpotGPT is merely a wrapper around the ChatGPT API, all your questions
+        NameTBD is merely a wrapper around the ChatGPT API, all your questions
         and answers are either stored on your device in the browser's local
         storage or on OpenAI's servers.
       </p>

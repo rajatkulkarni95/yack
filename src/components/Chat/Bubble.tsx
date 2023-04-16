@@ -1,4 +1,4 @@
-import { TConversation, TMessage } from "../../pages/chat/[id]";
+import { TConversation } from "../../pages/chat/[id]";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 
 type TChatBubble = {

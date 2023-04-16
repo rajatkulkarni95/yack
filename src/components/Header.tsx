@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import KbdShort from "./KbdShort";
 import { useUsage } from "../hooks/useUsage";
+import { useGlobalShortcut } from "../hooks/useGlobalShortcut";
 
 interface IHeaderProps {
   haltNew?: boolean;
@@ -19,15 +20,18 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
     navigate("/history");
   };
 
+  useGlobalShortcut("Command+H", onClickHistory);
+  useGlobalShortcut("Command+N", onClickNew);
+
   return (
     <header className="p-4 flex bg-secondary border-b border-primary h-12">
       <div className="flex items-center justify-between w-full">
-        <div />
+        <h1 className="text-xl font-bold text-primary">NameTBD</h1>
         <div className="flex items-center">
           <div className="px-2 py-1 bg-transparent cursor-default select-none hover:bg-primaryBtnHover font-mono text-secondary rounded mr-4">
             ${totalCost}
           </div>
-          {hideHistory && (
+          {!hideHistory && (
             <button
               className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded mr-4"
               onClick={onClickHistory}

@@ -14,8 +14,10 @@ export const PromptInput = ({ sendPrompt }: TProps) => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       setValue("");
-      sendPrompt(value);
       e.preventDefault();
+      if (value.trim() === "") return;
+
+      sendPrompt(value);
     }
 
     if (e.key === "Escape") {

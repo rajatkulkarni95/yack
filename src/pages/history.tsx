@@ -83,21 +83,8 @@ const HistoryPage = () => {
 
   return (
     <React.Fragment>
-      <Header small>
-        <div className="flex items-center justify-between w-full">
-          <div />
-          <div className="flex items-center">
-            <button
-              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded"
-              onClick={onClickNew}
-            >
-              <span className="text-sm font-normal text-secondary flex items-center">
-                New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
-              </span>
-            </button>
-          </div>
-        </div>
-      </Header>
+      <Header hideHistory />
+
       <div className="p-4 overflow-y-auto flex flex-col">
         <h2 className="text-2xl font-bold mb-4 text-secondary">History</h2>
         {Object.entries(parsedConversations).map(([id, conversation], i) => (

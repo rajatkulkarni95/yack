@@ -1,6 +1,5 @@
 import { Fragment, useEffect } from "react";
 import TokenRegistration from "../components/TokenRegistration";
-import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 
 function Index() {
@@ -16,13 +15,13 @@ function Index() {
 
   return (
     <Fragment>
-      <Header classes="flex-col">
+      <header className="p-4 flex bg-secondary border-b border-primary flex-col h-16">
         <h1 className="text-2xl font-bold text-primary mb-1">SpotGPT</h1>
         <p className="text-base font-normal text-secondary">
           Instantly access ChatGPT on your Mac - get quick answers to anything
           with just a few taps on your keyboard!
         </p>
-      </Header>
+      </header>
       <TokenRegistration />
     </Fragment>
   );

@@ -12,6 +12,7 @@ import {
 } from "../../helpers/localstorage";
 import Header from "../../components/Header";
 import KbdShort from "../../components/KbdShort";
+import { useUsage } from "../../hooks/useUsage";
 
 const LOADING_MESSAGE = {
   created: new Date(),
@@ -61,7 +62,6 @@ const ChatPage = () => {
   }, [id]);
 
   const sendPrompt = async (prompt: string) => {
-    if (!prompt) return;
     const payload: TMessage = {
       role: "user",
       content: prompt,
@@ -117,40 +117,9 @@ const ChatPage = () => {
     }
   };
 
-  const onClickNew = () => {
-    if (messages.length === 0) return;
-    navigate("/chat/new");
-  };
-
-  const onClickHistory = () => {
-    navigate("/history");
-  };
-
   return (
     <React.Fragment>
-      <Header small>
-        <div className="flex items-center justify-between w-full">
-          <div />
-          <div className="flex items-center">
-            <button
-              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded mr-4"
-              onClick={onClickHistory}
-            >
-              <span className="text-sm font-normal text-secondary flex items-center">
-                History <KbdShort keys={["⌘", "H"]} additionalStyles="ml-2" />
-              </span>
-            </button>
-            <button
-              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded"
-              onClick={onClickNew}
-            >
-              <span className="text-sm font-normal text-secondary flex items-center">
-                New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
-              </span>
-            </button>
-          </div>
-        </div>
-      </Header>
+      <Header haltNew={messages.length === 0} />
       <div
         className="p-4 overflow-y-auto max-h-[375px] duration-150"
         id="chat-container"

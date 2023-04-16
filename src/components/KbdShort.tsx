@@ -10,9 +10,9 @@ const KbdShort = ({ keys, additionalStyles, inTooltip }: TProps) => {
       {keys.map((key) => (
         <kbd
           key={key}
-          className={`ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded px-1 font-sans text-s bg-tertiary`}
+          className={`ml-0.5 inline-flex h-5 min-w-[20px] items-center justify-center rounded px-1 font-sans text-secondary text-s bg-tertiary`}
         >
-          <span>{key}</span>
+          {key}
         </kbd>
       ))}
     </div>

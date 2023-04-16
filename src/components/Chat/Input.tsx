@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export const PromptInput = () => {
+type TProps = {
+  sendPrompt: (prompt: string) => void;
+};
+
+export const PromptInput = ({ sendPrompt }: TProps) => {
   const [value, setValue] = useState<string>("");
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -10,15 +14,12 @@ export const PromptInput = () => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       setValue("");
+      sendPrompt(value);
       e.preventDefault();
     }
 
     if (e.key === "Escape") {
       setValue("");
-    }
-
-    if (e.key === "Enter" && e.shiftKey) {
-      console.log("Shift + Enter");
     }
   };
 

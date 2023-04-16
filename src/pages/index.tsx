@@ -1,17 +1,17 @@
 import { Fragment, useEffect } from "react";
-// import Header from "~/components/common/Header";
 import TokenRegistration from "../components/TokenRegistration";
 import Header from "../components/Header";
+import { useNavigate } from "react-router-dom";
 
 function Index() {
-  //   const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const apiKey = localStorage.getItem("api_key");
 
-    // if (token) {
-    //   router.push("/dashboard");
-    // }
+    if (apiKey) {
+      navigate("/chat/new");
+    }
   }, []);
 
   return (

@@ -52,7 +52,7 @@ const TokenRegistration = () => {
             name="token"
             value={token}
             onChange={(e) => setToken(e.target.value)}
-            className={`rounded-md focus-within:border-secondary border border-primary bg-primary h-fit w-96 px-4 py-2 font-sans text-base text-primary hover:border-secondary placeholder:text-placeholder`}
+            className={`rounded-md focus-within:border-secondary border border-primary bg-primary h-fit w-[460px] px-4 py-2 font-sans text-base text-primary hover:border-secondary placeholder:text-placeholder`}
             placeholder="sk-xxxxxxxxxxxxxxxxxxxxx"
             disabled={isSubmitting}
             autoCapitalize="none"
@@ -90,22 +90,19 @@ const TokenRegistration = () => {
       </p>
       <div className="border border-dashed border-primary my-2" />
       <h2 className="text-xl text-primary font-bold mt-2">Disclaimer</h2>
-      <p className="text-base text-secondary mt-2">
-        <ul>
-          <li>
-            We do not store your API key on our servers.{" "}
-            <i>Hell I don't even have a server.</i>
-          </li>
-          <li>
-            We do not share your API key with anyone.{" "}
-            <i>Not in that business.</i>
-          </li>{" "}
-          <li>
-            We do not sell your API key to anyone.{" "}
-            <i>Not in that business as well.</i>
-          </li>{" "}
-        </ul>
-      </p>
+      <ul className="text-base text-secondary mt-2">
+        <li>
+          We do not store your API key on our servers.{" "}
+          <i>Hell I don't even have a server.</i>
+        </li>
+        <li>
+          We do not share your API key with anyone. <i>Not in that business.</i>
+        </li>{" "}
+        <li>
+          We do not sell your API key to anyone.{" "}
+          <i>Not in that business as well.</i>
+        </li>{" "}
+      </ul>
       <div className="border border-dashed border-primary my-4" />
       <p className="text-base text-secondary mt-8">
         SpotGPT is merely a wrapper around the ChatGPT API, all your questions

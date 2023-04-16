@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import IndexPage from "./pages";
+import ChatPage from "./pages/chat/[id]";
 // import LoginPage from "./pages/login";
 // import CreateWorkspacePage from "./pages/workspace/create";
 // import WorkspacePage from "./pages/workspace/[slug]";
@@ -17,6 +18,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/chat/:id", // this can have /chat/new when a blank page is opened, and then assign it a uuid post first message
+    Component: ChatPage,
   },
   {
     path: "/history",

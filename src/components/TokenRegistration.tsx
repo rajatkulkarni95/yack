@@ -1,29 +1,39 @@
 // import { useRouter } from "next/router";
 import { useState } from "react";
-// import { API_ENDPOINTS } from "~/constants/API";
-// import fetcher from "~/helpers/fetcher";
-import UpdateIcon from "~/svg/update.svg";
+import { MODELS_API } from "../constants/API";
+import fetcher from "../helpers/fetcher";
+import { useNavigate } from "react-router-dom";
 
 const TokenRegistration = () => {
   const [token, setToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  //   const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // setIsSubmitting(true);
-    // setError("");
-    // localStorage.setItem("token", token);
-    // try {
-    //   await fetcher(API_ENDPOINTS.user);
-    //   router.push("/dashboard");
-    // } catch (error) {
-    //   setError("Invalid token");
-    //   localStorage.removeItem("token");
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+    setIsSubmitting(true);
+    setError("");
+    localStorage.setItem("api_key", token);
+    try {
+      await fetcher(MODELS_API);
+      navigate("/chat/new");
+    } catch (error: any) {
+      setError(error.message);
+      localStorage.removeItem("api_key");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      if (token) {
+        setToken("");
+        e.stopPropagation();
+      }
+    }
   };
 
   return (
@@ -42,18 +52,23 @@ const TokenRegistration = () => {
             name="token"
             value={token}
             onChange={(e) => setToken(e.target.value)}
-            className={`w-full rounded-md focus-within:border-secondary border border-primary bg-primary h-fit w-96 px-4 py-2 font-sans text-base text-primary hover:border-secondary placeholder:text-placeholder`}
+            className={`rounded-md focus-within:border-secondary border border-primary bg-primary h-fit w-96 px-4 py-2 font-sans text-base text-primary hover:border-secondary placeholder:text-placeholder`}
             placeholder="sk-xxxxxxxxxxxxxxxxxxxxx"
             disabled={isSubmitting}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect="off"
+            autoFocus
+            onKeyDown={onKeyDown}
           />
           <button
             type="submit"
-            className={`w-full ml-2 py-2 px-3 border w-fit border-primary rounded-md bg-secondary text-primary font-medium text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:border-transparent ${
-              isSubmitting
+            className={`ml-2 py-2 px-3 border w-fit border-primary rounded-md bg-secondary text-primary font-medium text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:border-transparent ${
+              isSubmitting || !token
                 ? "cursor-not-allowed"
                 : "cursor-default hover:bg-action"
             }  duration-75`}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !token}
           >
             Get Started
           </button>

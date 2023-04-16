@@ -4,46 +4,16 @@ import { v4 as uuidv4 } from "uuid";
 import { PromptInput } from "../../components/Chat/Input";
 import ChatBubble from "../../components/Chat/Bubble";
 import poster from "../../helpers/poster";
-import { COMPLETION_API, MODEL, MODELS_API } from "../../constants/API";
+import { COMPLETION_API, MODEL } from "../../constants/API";
 import { incrementUsage, saveConversation } from "../../helpers/localstorage";
 
-// const DUMMY_MESSAGES = [
-//   {
-//     role: "user",
-//     content: "Hello!",
-//   },
-//   {
-//     role: "assistant",
-//     content: "Hello there! How may I assist you today?",
-//   },
-//   {
-//     role: "user",
-//     content: "Who's the prez of Nambia?",
-//   },
-//   {
-//     role: "assistant",
-//     content:
-//       "I'm sorry, but there is no country called Nambia. Perhaps you have confused it with Namibia, which has a president named Hage Geingob.",
-//   },
-//   {
-//     role: "user",
-//     content: "What's the source on that?",
-//   },
-//   {
-//     role: "assistant",
-//     content:
-//       "Hage G. Geingob is the current President of the Republic of Namibia. He has been serving as the President since March 2015. You can find more information about him and his presidency in various news and government websites, such as the official website of the Namibian Presidency: https://www.presidency.na/.",
-//   },
-//   {
-//     role: "user",
-//     content: "What's the source on that?",
-//   },
-//   {
-//     role: "assistant",
-//     content:
-//       "Hage G. Geingob is the current President of the Republic of Namibia. He has been serving as the President since March 2015. You can find more information about him and his presidency in various news and government websites, such as the official website of the Namibian Presidency: https://www.presidency.na/.",
-//   },
-// ];
+const LOADING_MESSAGE = {
+  created: new Date(),
+  conversation: {
+    role: "assistant",
+    content: "Doing AI things...",
+  },
+};
 
 export type TConversation = {
   created: Date;
@@ -62,6 +32,7 @@ const ChatPage = () => {
   if (!id) return null;
 
   const [messages, setMessages] = useState<TConversation[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (id === "new") {
@@ -96,6 +67,7 @@ const ChatPage = () => {
     };
 
     setMessages((prev) => [...prev, message]);
+    setTimeout(() => setLoading(true), 500);
 
     const promptMessages = messages.map((message) => message.conversation);
     const prompts = [...promptMessages, payload];
@@ -104,7 +76,7 @@ const ChatPage = () => {
     if (chatContainer) {
       setTimeout(() => {
         chatContainer.scrollTop = 99999999;
-      }, 50);
+      }, 600);
     }
 
     const requestPayload = {
@@ -120,19 +92,30 @@ const ChatPage = () => {
         conversation: response.choices[0].message,
       };
       setMessages((prev) => [...prev, responsedMessage]);
+      if (chatContainer) {
+        setTimeout(() => {
+          chatContainer.scrollTop = 99999999;
+        }, 100);
+      }
       const currentConversation = [message, responsedMessage];
       saveConversation(currentConversation, id);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   return (
     <React.Fragment>
-      <div className="p-4 overflow-y-auto max-h-[420px]" id="chat-container">
+      <div
+        className="p-4 overflow-y-auto max-h-[420px] duration-150"
+        id="chat-container"
+      >
         {messages.map((message, index) => (
           <ChatBubble message={message} />
         ))}
+        {loading && <ChatBubble message={LOADING_MESSAGE} />}
       </div>
       <section className="absolute bottom-0 w-full p-4 bg-primary">
         <PromptInput sendPrompt={sendPrompt} />

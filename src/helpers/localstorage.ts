@@ -1,4 +1,4 @@
-import { TConversation, TMessage } from "../pages/chat/[id]";
+import { TConversation } from "../pages/chat/[id]";
 
 export type TUsage = {
   prompt_tokens: number;

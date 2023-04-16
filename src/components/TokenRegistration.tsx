@@ -15,6 +15,14 @@ const TokenRegistration = () => {
     setIsSubmitting(true);
     setError("");
     localStorage.setItem("api_key", token);
+    localStorage.setItem(
+      "usage",
+      JSON.stringify({
+        prompt_tokens: 0,
+        completion_tokens: 0,
+        total_tokens: 0,
+      })
+    );
     try {
       await fetcher(MODELS_API);
       navigate("/chat/new");

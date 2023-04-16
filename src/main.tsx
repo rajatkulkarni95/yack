@@ -29,11 +29,9 @@ const Main = () => {
   }
 
   return (
-    <React.StrictMode>
-      <main className="h-screen bg-neutral-900">
-        <RouterProvider router={routes} />
-      </main>
-    </React.StrictMode>
+    <main className="h-screen bg-neutral-900">
+      <RouterProvider router={routes} />
+    </main>
   );
 };
 

@@ -1,5 +1,5 @@
 import { useKeyPress } from "./hooks/useKeyPress";
-import { PromptInput } from "./components/Input";
+import { PromptInput } from "./components/Chat/Input";
 
 function App() {
   const escPress: boolean = useKeyPress("Escape");
@@ -15,11 +15,9 @@ function App() {
   }
 
   return (
-    <main className="h-screen bg-neutral-900">
-      <section className="absolute bottom-0 w-full p-4">
-        <PromptInput />
-      </section>
-    </main>
+    <section className="absolute bottom-0 w-full p-4">
+      <PromptInput />
+    </section>
   );
 }
 

@@ -25,7 +25,7 @@ export const PromptInput = () => {
   return (
     <div className="grow-wrap" data-replicated-value={value}>
       <textarea
-        className={`rounded-md w-full resize-none focus-within:border-secondary border border-primary bg-primary p-3 font-sans text-sm text-primary hover:border-secondary placeholder:text-placeholder
+        className={`rounded-md w-full resize-none focus-within:border-secondary border border-primary bg-secondary p-3 font-sans text-sm text-primary hover:border-secondary placeholder:text-placeholder
       `}
         style={{ scrollPaddingBlock: "8px" }}
         value={value}

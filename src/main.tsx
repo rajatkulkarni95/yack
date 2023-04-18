@@ -5,19 +5,9 @@ import routes from "./routes";
 import "./index.css";
 
 import { useKeyPress } from "./hooks/useKeyPress";
-import { useGlobalShortcut } from "./hooks/useGlobalShortcut";
 
 const Main = () => {
   const escPress: boolean = useKeyPress("Escape");
-  useGlobalShortcut("Control+Shift+Space", async () => {
-    console.log("Control+Shift+Space pressed");
-    if (document.hasFocus()) return;
-    const appWindow = await (await import("@tauri-apps/api/window")).appWindow;
-    await appWindow.show();
-    setTimeout(() => {
-      appWindow.setFocus();
-    }, 10);
-  });
 
   const hideApp = async () => {
     const appWindow = await (await import("@tauri-apps/api/window")).appWindow;

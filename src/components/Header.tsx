@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import KbdShort from "./KbdShort";
 import { useUsage } from "../hooks/useUsage";
-import { useGlobalShortcut } from "../hooks/useGlobalShortcut";
-import { PaintBrushIcon } from "@heroicons/react/24/solid";
 import { LogoIcon } from "../svg";
 
 interface IHeaderProps {
@@ -21,9 +19,6 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
   const onClickHistory = () => {
     navigate("/history");
   };
-
-  useGlobalShortcut("Command+H", onClickHistory);
-  useGlobalShortcut("Command+N", onClickNew);
 
   return (
     <header className="p-4 flex bg-secondary border-b border-primary h-12">

@@ -4,7 +4,7 @@
 )]
 
 use tauri::Manager;
-use tauri::{CustomMenuItem, PhysicalPosition, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use tauri::{CustomMenuItem, GlobalShortcutManager, SystemTray, SystemTrayEvent, SystemTrayMenu};
 
 #[cfg(target_os = "macos")]
 use cocoa::appkit::{NSWindow, NSWindowButton, NSWindowStyleMask, NSWindowTitleVisibility};
@@ -140,6 +140,22 @@ fn main() {
         .build(tauri::generate_context!())
         .expect("error while running tauri application")
         .run(|_app_handle, event| match event {
+            tauri::RunEvent::Ready => {
+                let mut shortcut_manager = _app_handle.global_shortcut_manager();
+                let handle = _app_handle.clone();
+                shortcut_manager
+                    .register("Ctrl+Shift+Space", move || {
+                        let w = handle.get_window("main").unwrap();
+                        let visible = w.is_visible().unwrap();
+                        if visible {
+                            w.hide().unwrap();
+                        } else {
+                            w.show().unwrap();
+                            w.set_focus().unwrap();
+                        }
+                    })
+                    .unwrap();
+            }
             tauri::RunEvent::ExitRequested { api, .. } => {
                 api.prevent_exit();
             }

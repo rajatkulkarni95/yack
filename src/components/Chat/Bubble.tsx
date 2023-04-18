@@ -1,5 +1,9 @@
 import { TConversation } from "../../pages/chat/[id]";
 import showdown from "showdown";
+import showdownHighlight from "showdown-highlight";
+import hljs from "highlight.js";
+import "highlight.js/styles/github-dark.css";
+
 // import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 
 type TChatBubble = {
@@ -7,8 +11,23 @@ type TChatBubble = {
   loading?: boolean;
 };
 
+// function extractLanguageFromCodeBlock(inputString: string): string | null {
+//   const codeBlockRegex = /^```([\w+#-]+)$/gm;
+//   const match = codeBlockRegex.exec(inputString);
+//   return match ? match[1] : "javascript";
+// }
+
 const ChatBubble = ({ message, loading }: TChatBubble) => {
-  const converter = new showdown.Converter();
+  const converter = new showdown.Converter({
+    extensions: [
+      showdownHighlight({
+        // Whether to add the classes to the <pre> tag, default is false
+        pre: true,
+        // Whether to use hljs' auto language detection, default is true
+        auto_detection: true,
+      }),
+    ],
+  });
   const html = converter.makeHtml(message.conversation.content);
 
   return (
@@ -26,5 +45,3 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
 };
 
 export default ChatBubble;
-
-// 49dbfc2e-0656-46be-ad31-f6b2600d624f	{"created":"2023-04-16T16:09:30.943Z","messages":[{"created":"2023-04-16T16:13:44.034Z","conversation":{"role":"user","content":"how to handle Enter keypress for a button in react?"}},{"created":"2023-04-16T16:13:54.180Z","conversation":{"role":"assistant","content":"You can handle the Enter keypress for a button in React by adding a keydown event listener to the button and checking if the event key is \"Enter\". Here's an example:\n\n```\nfunction MyButton() {\n  const handleClick = () => {\n    // handle button click\n  };\n\n  const handleKeyPress = (event) => {\n    if (event.key === 'Enter') {\n      handleClick();\n    }\n  };\n\n  return (\n    <button onClick={handleClick} onKeyPress={handleKeyPress}>My button</button>\n  );\n}\n```\n\nIn this example, we define two functions: `handleClick` to handle the button click event, and `handleKeyPress` to handle the Enter keypress event. We add both functions as event listeners to the button using the `onClick` and `onKeyPress` props. When the button is clicked or the Enter key is pressed while the button is focused, `handleClick` will be called."}},{"created":"2023-04-16T16:14:13.665Z","conversation":{"role":"user","content":"keypress is deprecated it seems"}},{"created":"2023-04-16T16:14:21.725Z","conversation":{"role":"assistant","content":"You're correct, `onKeyPress` is deprecated in React. The new recommended way to handle key events is to use `onKeyDown` and check for the key code. Here's an updated example:\n\n```\nfunction MyButton() {\n  const handleClick = () => {\n    // handle button click\n  };\n\n  const handleKeyDown = (event) => {\n    if (event.keyCode === 13) { // Enter key code\n      handleClick();\n    }\n  };\n\n  return (\n    <button onClick={handleClick} onKeyDown={handleKeyDown}>My button</button>\n  );\n}\n```\n\nIn this example, we use the `onKeyDown` prop instead of `onKeyPress`, and check for the Enter key code (`13`) instead of the event key. This will handle the Enter keypress event for the button."}}]}

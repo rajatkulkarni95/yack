@@ -146,5 +146,9 @@ body {
 }
 
 .text-bubble {
-  @apply prose-headings-1 prose-headings-2 prose-headings-3 prose-anchor prose-paragraph prose-list-item prose-unordered-list prose-ordered-list prose-code-block prose-pre-text prose-strong-text prose-image prose prose-sm prose-zinc max-w-none prose-headings:!my-2 prose-headings:text-primary md:prose-base;
+  @apply prose-headings-1 prose-headings-2 prose-headings-3 prose-anchor prose-paragraph prose-list-item prose-unordered-list prose-code-block prose-pre-text prose-ordered-list prose-code-block prose-strong-text prose-image prose prose-sm prose-zinc max-w-none prose-headings:!my-2 prose-headings:text-primary md:prose-base;
+}
+
+pre > code {
+  @apply !bg-code !text-primary;
 }

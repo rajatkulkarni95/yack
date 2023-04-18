@@ -77,10 +77,6 @@ const HistoryPage = () => {
     }
   }, [enterPressed]);
 
-  const onClickNew = () => {
-    navigate("/chat/new");
-  };
-
   return (
     <React.Fragment>
       <Header hideHistory />

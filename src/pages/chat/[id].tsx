@@ -130,7 +130,7 @@ const ChatPage = () => {
         {loading && <ChatBubble message={LOADING_MESSAGE} loading />}
       </div>
       <section className="absolute bottom-0 w-full p-4 bg-primary">
-        <PromptInput sendPrompt={sendPrompt} />
+        <PromptInput sendPrompt={sendPrompt} haltNew={messages.length === 0} />
       </section>
     </React.Fragment>
   );

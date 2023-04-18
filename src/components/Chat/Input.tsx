@@ -1,14 +1,27 @@
 import { useState } from "react";
+import { hideApp } from "../Header";
+import { useNavigate } from "react-router-dom";
 
 type TProps = {
   sendPrompt: (prompt: string) => void;
+  haltNew: boolean;
 };
 
-export const PromptInput = ({ sendPrompt }: TProps) => {
+export const PromptInput = ({ sendPrompt, haltNew }: TProps) => {
   const [value, setValue] = useState<string>("");
+  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
+  };
+
+  const onClickHistory = () => {
+    navigate("/history");
+  };
+
+  const onClickNew = () => {
+    if (haltNew) return;
+    navigate("/chat/new");
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -22,6 +35,17 @@ export const PromptInput = ({ sendPrompt }: TProps) => {
 
     if (e.key === "Escape") {
       setValue("");
+      if (value.trim() === "") {
+        hideApp();
+      }
+    }
+
+    if (e.key === "h" && e.ctrlKey) {
+      onClickHistory();
+    }
+
+    if (e.key === "n" && e.ctrlKey) {
+      onClickNew();
     }
   };
 

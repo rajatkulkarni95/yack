@@ -36,7 +36,7 @@ body {
   --color-bg-hover: #232324;
   --color-bg-primary-btn: #202020;
   --color-bg-primary-btn-hover: #333333;
-  --color-bg-action: #6d28d9;
+  --color-bg-action: rgba(67, 56, 202, 0.6);
 
   --color-border-primary: #2e2e2f;
   --color-border-secondary: #52525b;
@@ -132,10 +132,10 @@ body {
     @apply prose-ol:!my-0 prose-ol:list-decimal;
   }
   .prose-code-block {
-    @apply prose-code:!rounded-sm prose-code:!bg-code prose-code:!p-1 prose-code:!font-mono prose-code:!text-sm prose-code:font-normal prose-code:!tracking-normal prose-code:text-inlineCode;
+    @apply prose-code:!rounded-sm  prose-code:!p-1 prose-code:!font-mono prose-code:!text-sm prose-code:font-normal prose-code:!tracking-normal prose-code:text-inlineCode;
   }
   .prose-pre-text {
-    @apply prose-pre:!rounded-sm prose-pre:border prose-pre:border-primary prose-pre:bg-code;
+    @apply prose-pre:!rounded-md prose-pre:border prose-pre:border-primary prose-pre:bg-code;
   }
   .prose-strong-text {
     @apply prose-strong:text-primary;

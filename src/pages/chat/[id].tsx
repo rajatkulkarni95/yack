@@ -121,7 +121,7 @@ const ChatPage = () => {
     <React.Fragment>
       <Header haltNew={messages.length === 0} />
       <div
-        className="p-4 overflow-y-auto max-h-[375px] duration-150"
+        className="p-4 overflow-y-auto max-h-[540px] duration-150"
         id="chat-container"
       >
         {messages.map((message, index) => (

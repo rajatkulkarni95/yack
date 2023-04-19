@@ -83,5 +83,4 @@ module.exports = {
       slideLeftAndFade: "slideLeftAndFade 100ms ease-in-out",
     },
   },
-  plugins: [require("@tailwindcss/typography")],
 };

@@ -39,7 +39,7 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
   useHotkeys("escape", handleEscape);
 
   useHotkeys("ctrl+h", onClickHistory);
-  useHotkeys("ctrl+n", onClickNew);
+  useHotkeys("meta+n", onClickNew);
 
   return (
     <header className="p-4 flex bg-secondary border-b border-primary h-12">
@@ -55,8 +55,7 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
               onClick={onClickHistory}
             >
               <span className="text-sm font-normal text-secondary flex items-center">
-                History{" "}
-                <KbdShort keys={["Ctrl", "H"]} additionalStyles="ml-2" />
+                History <KbdShort keys={["^", "H"]} additionalStyles="ml-2" />
               </span>
             </button>
           )}
@@ -65,7 +64,7 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
             onClick={onClickNew}
           >
             <span className="text-sm font-normal text-secondary flex items-center">
-              New Chat <KbdShort keys={["Ctrl", "N"]} additionalStyles="ml-2" />
+              New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
             </span>
           </button>
         </div>

@@ -72,8 +72,8 @@
         "fullscreen": false,
         "resizable": false,
         "title": "spot-gpt",
-        "width": 720,
-        "height": 480,
+        "width": 800,
+        "height": 640,
         "center": true
       }
     ]

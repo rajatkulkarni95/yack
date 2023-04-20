@@ -5,11 +5,13 @@ import routes from "./routes";
 import "./index.css";
 
 import { HotkeysProvider } from "react-hotkeys-hook";
+import { baseSetups } from "./helpers/localstorage";
 
 const Main = () => {
+  baseSetups();
   return (
     <HotkeysProvider>
-      <main className="h-screen bg-neutral-900">
+      <main className="h-screen bg-primary">
         <RouterProvider router={routes} />
       </main>
     </HotkeysProvider>

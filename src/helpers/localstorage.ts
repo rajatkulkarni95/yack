@@ -1,21 +1,16 @@
-import { TConversation } from "../pages/chat/[id]";
+import { TConversation, TMessage } from "../pages/chat/[id]";
 
 export type TUsage = {
-  prompt_tokens: number;
-  completion_tokens: number;
   total_tokens: number;
 };
 
 export const incrementUsage = (usage: TUsage) => {
   const currentUsage = localStorage.getItem("usage");
   if (currentUsage) {
-    const { prompt_tokens, completion_tokens, total_tokens } =
-      JSON.parse(currentUsage);
+    const { total_tokens } = JSON.parse(currentUsage);
     localStorage.setItem(
       "usage",
       JSON.stringify({
-        prompt_tokens: prompt_tokens + usage.prompt_tokens,
-        completion_tokens: completion_tokens + usage.completion_tokens,
         total_tokens: total_tokens + usage.total_tokens,
       })
     );
@@ -24,27 +19,14 @@ export const incrementUsage = (usage: TUsage) => {
   }
 };
 
-export const saveConversation = (
-  conversation: TConversation[],
-  chatId: string
-) => {
-  const chatConversations = localStorage.getItem(chatId);
-  if (chatConversations) {
-    const parsed = JSON.parse(chatConversations);
-    localStorage.setItem(
-      chatId,
-      JSON.stringify({
-        ...parsed,
-        messages: [...parsed.messages, ...conversation],
-      })
-    );
-  }
+export const saveConversation = (conversation: TMessage[], chatId: string) => {
+  localStorage.setItem(chatId, JSON.stringify(conversation));
 };
 
 export type THistoryMessageProps = {
   id: string;
   title: string;
-  created: Date;
+  created: number;
 };
 
 export const saveConversationIDToHistory = ({
@@ -62,11 +44,23 @@ export const saveConversationIDToHistory = ({
         JSON.stringify({
           ...parsed,
           [id]: {
-            messages: title,
+            title,
             created,
           },
         })
       );
     }
+  }
+};
+
+export const baseSetups = () => {
+  const chatHistory = localStorage.getItem("history");
+  if (!chatHistory) {
+    localStorage.setItem("history", JSON.stringify({}));
+  }
+
+  const usage = localStorage.getItem("usage");
+  if (!usage) {
+    localStorage.setItem("usage", JSON.stringify({ total_tokens: 0 }));
   }
 };

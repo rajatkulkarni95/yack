@@ -16,7 +16,7 @@ function Index() {
   return (
     <Fragment>
       <header className="p-4 flex bg-secondary border-b border-primary flex-col min-h-[64px]">
-        <h1 className="text-2xl font-bold text-primary mb-1">NameTBD</h1>
+        <h1 className="text-2xl font-bold text-primary mb-1 uppercase">Yack</h1>
         <p className="text-base font-normal text-secondary">
           Instantly access ChatGPT on your Mac - get quick answers to anything
           with just a few taps on your keyboard!

@@ -5,16 +5,16 @@ import { useKeyPress } from "../hooks/useKeyPress";
 import { useNavigate } from "react-router-dom";
 
 type THistoryMessage = {
-  created: Date;
-  messages: string;
+  created: number;
+  title: string;
 };
 
 const HistoryPage = () => {
   const conversations = window.localStorage.getItem("history");
   const parsedConversations: {
     [key: string]: {
-      created: Date;
-      messages: string;
+      created: number;
+      title: string;
     };
   } = conversations ? JSON.parse(conversations) : {};
   const historyMessages: THistoryMessage[] = Object.values(parsedConversations);
@@ -96,7 +96,7 @@ const HistoryPage = () => {
             }}
           >
             <span className="text-base font-normal text-primary">
-              {conversation.messages}
+              {conversation.title}
             </span>
             <KbdShort
               keys={["↵"]}

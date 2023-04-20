@@ -36,7 +36,13 @@ const ChatPage = () => {
   });
 
   if (!id) return null;
-  console.log({ id });
+
+  useEffect(() => {
+    const apiKey = window.localStorage.getItem("api_key");
+    if (!apiKey) {
+      navigate("/");
+    }
+  }, []);
 
   const [conv, setConv] = useState<TMessage[]>([]);
 
@@ -54,8 +60,6 @@ const ChatPage = () => {
   }, [id]);
 
   useEffect(() => {
-    console.log({ messages });
-
     if (
       !messages?.[messages.length - 1]?.meta?.loading &&
       messages?.length > 0

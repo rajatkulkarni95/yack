@@ -3,24 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PromptInput } from "../../components/Chat/Input";
 import ChatBubble from "../../components/Chat/Bubble";
-import poster from "../../helpers/poster";
-import { COMPLETION_API, MODEL } from "../../constants/API";
 import {
   incrementUsage,
   saveConversation,
   saveConversationIDToHistory,
 } from "../../helpers/localstorage";
 import Header from "../../components/Header";
-import KbdShort from "../../components/KbdShort";
-import { useUsage } from "../../hooks/useUsage";
-
-const LOADING_MESSAGE = {
-  created: new Date(),
-  conversation: {
-    role: "assistant",
-    content: "Doing AI things",
-  },
-};
+import {
+  useChatCompletion,
+  GPT35,
+  ChatMessageParams,
+} from "openai-streaming-hooks";
 
 export type TConversation = {
   created: Date;
@@ -30,58 +23,75 @@ export type TConversation = {
 export type TMessage = {
   role: string;
   content: string;
+  timestamp: number;
 };
 
 const ChatPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [messages, submitQuery] = useChatCompletion({
+    model: GPT35.TURBO,
+    apiKey: window.localStorage.getItem("api_key") || "",
+  });
+
   if (!id) return null;
 
-  const [messages, setMessages] = useState<TConversation[]>([]);
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const apiKey = window.localStorage.getItem("api_key");
+    if (!apiKey) {
+      navigate("/");
+    }
+  }, []);
+
+  const [conv, setConv] = useState<TMessage[]>([]);
 
   useEffect(() => {
-    if (id === "new") {
-      const newUuid = uuidv4();
-      window.localStorage.setItem(
-        newUuid,
-        JSON.stringify({ created: new Date(), messages: [] })
-      );
-
-      navigate(`/chat/${newUuid}`);
-    } else {
+    if (id !== "new") {
       const conversation = window.localStorage.getItem(id);
-      if (!conversation) {
-        navigate("/chat/new");
-      } else {
+
+      if (conversation) {
         const parsedConversation = JSON.parse(conversation);
-        setMessages(parsedConversation.messages);
+        setConv(parsedConversation);
       }
+    } else if (id === "new") {
+      setConv([]);
     }
   }, [id]);
 
+  useEffect(() => {
+    if (
+      !messages?.[messages.length - 1]?.meta?.loading &&
+      messages?.length > 0
+    ) {
+      const lastMessage = messages[messages.length - 1];
+      incrementUsage({ total_tokens: lastMessage.meta.chunks.length });
+      const tonedMessages = messages.map((message) => ({
+        content: message.content,
+        role: message.role,
+        timestamp: message.timestamp,
+      }));
+      saveConversation(tonedMessages, id);
+    }
+  }, [messages]);
+
   const sendPrompt = async (prompt: string) => {
-    const payload: TMessage = {
+    const payload: ChatMessageParams = {
       role: "user",
       content: prompt,
     };
 
-    const message = {
-      created: new Date(),
-      conversation: payload,
-    };
-
-    setMessages((prev) => [...prev, message]);
-    setTimeout(() => setLoading(true), 500);
-    saveConversationIDToHistory({
-      id,
-      created: message.created,
-      title: prompt,
-    });
-
-    const promptMessages = messages.map((message) => message.conversation);
-    const prompts = [...promptMessages, payload];
+    if (messages.length === 0) {
+      if (id === "new") {
+        const uuid = uuidv4();
+        saveConversationIDToHistory({
+          id: uuid,
+          created: new Date().getTime(),
+          title: prompt,
+        });
+        navigate(`/chat/${uuid}`);
+      }
+    }
 
     const chatContainer = document.getElementById("chat-container");
     if (chatContainer) {
@@ -90,47 +100,36 @@ const ChatPage = () => {
       }, 600);
     }
 
-    const requestPayload = {
-      model: MODEL,
-      messages: prompts,
-    };
-
-    try {
-      const response = await poster(COMPLETION_API, requestPayload);
-      incrementUsage(response.usage);
-      const responsedMessage = {
-        created: new Date(),
-        conversation: response.choices[0].message,
-      };
-      setMessages((prev) => [...prev, responsedMessage]);
-      if (chatContainer) {
-        setTimeout(() => {
-          chatContainer.scrollTop = 99999999;
-        }, 100);
-      }
-      const currentConversation = [message, responsedMessage];
-      saveConversation(currentConversation, id);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+    let messagePayload;
+    if (conv.length > 0 && messages.length === 0) {
+      messagePayload = [...conv, payload];
+    } else {
+      messagePayload = [payload];
     }
+
+    submitQuery(messagePayload);
   };
+
+  const chatConversations =
+    messages.length === 0 && conv.length > 0 ? conv : messages;
 
   return (
     <React.Fragment>
-      <Header haltNew={messages.length === 0} />
+      <Header haltNew={conv.length === 0} />
       <div
         className="p-4 overflow-y-auto max-h-[540px] duration-150"
         id="chat-container"
       >
-        {messages.map((message, index) => (
+        {chatConversations.map((message, index) => (
           <ChatBubble message={message} />
         ))}
-        {loading && <ChatBubble message={LOADING_MESSAGE} loading />}
       </div>
       <section className="absolute bottom-0 w-full p-4 bg-primary">
-        <PromptInput sendPrompt={sendPrompt} haltNew={messages.length === 0} />
+        <PromptInput
+          sendPrompt={sendPrompt}
+          haltNew={conv.length === 0}
+          disabled={messages?.[messages.length - 1]?.meta?.loading}
+        />
       </section>
     </React.Fragment>
   );

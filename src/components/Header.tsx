@@ -16,7 +16,7 @@ export const hideApp = async () => {
 };
 
 const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
-  const { promptCost, totalCost } = useUsage();
+  const { totalCost } = useUsage();
   const navigate = useNavigate();
 
   const onClickNew = () => {
@@ -42,7 +42,7 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
   useHotkeys("meta+n", onClickNew);
 
   return (
-    <header className="p-4 flex bg-secondary border-b border-primary h-12">
+    <header className="p-4 flex bg-primary border-b border-primary h-12">
       <div className="flex items-center justify-between w-full">
         <LogoIcon className="w-6 h-6 text-primary" />
         <div className="flex items-center">

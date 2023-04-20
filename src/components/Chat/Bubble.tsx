@@ -1,13 +1,11 @@
-import { TConversation } from "../../pages/chat/[id]";
+import { TMessage } from "../../pages/chat/[id]";
 import showdown from "showdown";
 import showdownHighlight from "showdown-highlight";
 import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css";
 
-// import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-
 type TChatBubble = {
-  message: TConversation;
+  message?: TMessage;
   loading?: boolean;
 };
 
@@ -28,18 +26,16 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
       }),
     ],
   });
-  const html = converter.makeHtml(message.conversation.content);
+  const html = converter.makeHtml(message?.content || "");
 
   return (
     <div
       className={`py-2 px-3 text-bubble break-words w-fit !max-w-[70%] overflow-hidden rounded-lg mb-3 ${
-        message.conversation.role === "user"
-          ? "bg-action ml-auto"
-          : "bg-secondary mr-auto"
+        message?.role === "user" ? "bg-action ml-auto" : "bg-secondary mr-auto"
       }`}
       dangerouslySetInnerHTML={{ __html: html }}
     >
-      {/* {loading && <EllipsisHorizontalIcon className="h-5 w-5 animate-spin" />} */}
+      {loading && <span>Loading...</span>}
     </div>
   );
 };

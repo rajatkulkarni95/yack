@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 type TProps = {
   sendPrompt: (prompt: string) => void;
   haltNew: boolean;
+  disabled?: boolean;
 };
 
-export const PromptInput = ({ sendPrompt, haltNew }: TProps) => {
+export const PromptInput = ({
+  sendPrompt,
+  haltNew,
+  disabled = false,
+}: TProps) => {
   const [value, setValue] = useState<string>("");
   const navigate = useNavigate();
 
@@ -63,6 +68,7 @@ export const PromptInput = ({ sendPrompt, haltNew }: TProps) => {
         autoFocus
         onKeyDown={onKeyDown}
         rows={1}
+        disabled={disabled}
       />
     </div>
   );

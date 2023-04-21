@@ -61,6 +61,7 @@ const ChatPage = () => {
   }, [id]);
 
   useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
     if (
       !messages?.[messages.length - 1]?.meta?.loading &&
       messages?.length > 0
@@ -69,6 +70,7 @@ const ChatPage = () => {
 
       if (lastMessage.content === "" && lastMessage.role === "") {
         setQueryErrored(true);
+        messages.pop();
         return;
       }
 
@@ -78,6 +80,7 @@ const ChatPage = () => {
         role: message.role,
         timestamp: message.timestamp,
       }));
+
       saveConversation(tonedMessages, id);
     }
   }, [messages]);

@@ -126,6 +126,10 @@ pre > code {
   @apply !bg-code !text-primary;
 }
 
+code {
+  @apply text-inlineCode;
+}
+
 pre {
   @apply !bg-code !text-primary !p-2 !rounded-md !mb-2 !overflow-x-auto !text-sm;
 }

@@ -130,7 +130,7 @@ const ChatPage = () => {
 
   return (
     <React.Fragment key={id}>
-      <Header haltNew={chatConversations.length === 0} />
+      <Header />
       <div
         className="p-4 overflow-y-auto max-h-[540px] duration-150"
         id="chat-container"
@@ -149,7 +149,6 @@ const ChatPage = () => {
       <section className="absolute bottom-0 w-full p-4 bg-primary">
         <PromptInput
           sendPrompt={sendPrompt}
-          haltNew={chatConversations.length === 0}
           disabled={messages?.[messages.length - 1]?.meta?.loading}
         />
       </section>

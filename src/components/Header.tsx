@@ -1,10 +1,9 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import KbdShort from "./KbdShort";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useUsage } from "../hooks/useUsage";
 import { LogoIcon } from "../svg";
-import { THistoryMessageProps } from "../helpers/localstorage";
-import { useEffect, useState } from "react";
+import { useNavigation } from "../hooks/useNavigation";
 
 interface IHeaderProps {
   haltNew?: boolean;
@@ -17,23 +16,11 @@ export const hideApp = async () => {
   await appWindow.hide();
 };
 
-const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
+const Header = ({ hideHistory }: IHeaderProps) => {
   const { totalCost } = useUsage();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [rollingChat, setRollingChat] = useState({
-    nextChat: "",
-    prevChat: "",
-  });
-
-  const onClickNew = () => {
-    if (haltNew) return;
-    navigate("/chat/new");
-  };
-
-  const onClickHistory = () => {
-    navigate("/history");
-  };
+  const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =
+    useNavigation();
 
   const handleEscape = () => {
     if (hideHistory) {
@@ -47,34 +34,6 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
 
   useHotkeys("meta+o", onClickHistory);
   useHotkeys("meta+n", onClickNew);
-
-  const conversations = localStorage.getItem("history");
-
-  useEffect(() => {
-    const historyMessages: string[] = Object.keys(
-      JSON.parse(conversations || "{}")
-    );
-
-    const currentChat = location.pathname.replace("/chat/", "");
-    const currentChatIndex = historyMessages.indexOf(currentChat);
-
-    setRollingChat({
-      nextChat: historyMessages[currentChatIndex + 1],
-      prevChat: historyMessages[currentChatIndex - 1],
-    });
-  }, [location]);
-
-  const navigateToNextChat = () => {
-    if (rollingChat.nextChat) {
-      navigate(`/chat/${rollingChat.nextChat}`);
-    }
-  };
-
-  const navigateToPrevChat = () => {
-    if (rollingChat.prevChat) {
-      navigate(`/chat/${rollingChat.prevChat}`);
-    }
-  };
 
   useHotkeys("meta+[", navigateToPrevChat);
   useHotkeys("meta+]", navigateToNextChat);
@@ -106,7 +65,7 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
               onClick={navigateToNextChat}
             >
               <span className="text-sm font-normal text-secondary font-sans flex items-center">
-                Prev
+                Next
                 <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
               </span>
             </button>

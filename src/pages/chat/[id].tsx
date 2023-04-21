@@ -29,6 +29,8 @@ export type TMessage = {
 const ChatPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [conv, setConv] = useState<TMessage[]>([]);
+  const [queryErrored, setQueryErrored] = useState(false);
 
   const [messages, submitQuery] = useChatCompletion({
     model: GPT35.TURBO,
@@ -44,18 +46,16 @@ const ChatPage = () => {
     }
   }, []);
 
-  const [conv, setConv] = useState<TMessage[]>([]);
-
   useEffect(() => {
-    if (id !== "new") {
+    if (id === "new") {
+      setConv([]);
+    } else {
       const conversation = window.localStorage.getItem(id);
 
       if (conversation) {
         const parsedConversation = JSON.parse(conversation);
         setConv(parsedConversation);
       }
-    } else if (id === "new") {
-      setConv([]);
     }
   }, [id]);
 
@@ -65,6 +65,12 @@ const ChatPage = () => {
       messages?.length > 0
     ) {
       const lastMessage = messages[messages.length - 1];
+
+      if (lastMessage.content === "" && lastMessage.role === "") {
+        setQueryErrored(true);
+        return;
+      }
+
       incrementUsage({ total_tokens: lastMessage.meta.chunks.length });
       const tonedMessages = messages.map((message) => ({
         content: message.content,
@@ -81,7 +87,7 @@ const ChatPage = () => {
       content: prompt,
     };
 
-    if (messages.length === 0) {
+    if (messages.length === 0 && conv.length === 0) {
       if (id === "new") {
         const uuid = uuidv4();
         saveConversationIDToHistory({
@@ -107,7 +113,12 @@ const ChatPage = () => {
       messagePayload = [payload];
     }
 
-    submitQuery(messagePayload);
+    try {
+      setQueryErrored(false);
+      submitQuery(messagePayload);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const chatConversations =
@@ -115,19 +126,26 @@ const ChatPage = () => {
 
   return (
     <React.Fragment>
-      <Header haltNew={conv.length === 0} />
+      <Header haltNew={chatConversations.length === 0} />
       <div
         className="p-4 overflow-y-auto max-h-[540px] duration-150"
         id="chat-container"
       >
-        {chatConversations.map((message, index) => (
-          <ChatBubble message={message} key={message.timestamp} />
-        ))}
+        {chatConversations
+          .filter((message) => message.content !== "" && message.role !== "")
+          .map((message, index) => (
+            <ChatBubble message={message} key={index} />
+          ))}
+        {queryErrored && (
+          <div className="px-4 py-3 border rounded-md mt-4 text-sm text-primary border-red-500 bg-red-600/25">
+            Something went wrong with the network call. Please try again.
+          </div>
+        )}
       </div>
       <section className="absolute bottom-0 w-full p-4 bg-primary">
         <PromptInput
           sendPrompt={sendPrompt}
-          haltNew={conv.length === 0}
+          haltNew={chatConversations.length === 0}
           disabled={messages?.[messages.length - 1]?.meta?.loading}
         />
       </section>

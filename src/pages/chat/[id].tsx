@@ -121,7 +121,7 @@ const ChatPage = () => {
         id="chat-container"
       >
         {chatConversations.map((message, index) => (
-          <ChatBubble message={message} />
+          <ChatBubble message={message} key={message.timestamp} />
         ))}
       </div>
       <section className="absolute bottom-0 w-full p-4 bg-primary">

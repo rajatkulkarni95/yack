@@ -45,11 +45,11 @@ export const PromptInput = ({
       }
     }
 
-    if (e.key === "h" && e.ctrlKey) {
+    if (e.key === "o" && e.metaKey) {
       onClickHistory();
     }
 
-    if (e.key === "n" && e.ctrlKey) {
+    if (e.key === "n" && e.metaKey) {
       onClickNew();
     }
   };

@@ -38,29 +38,31 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
 
   useHotkeys("escape", handleEscape);
 
-  useHotkeys("ctrl+h", onClickHistory);
+  useHotkeys("meta+o", onClickHistory);
   useHotkeys("meta+n", onClickNew);
 
   return (
     <header className="p-4 flex bg-primary border-b border-primary h-12">
       <div className="flex items-center justify-between w-full">
-        <LogoIcon className="w-6 h-6 text-primary" />
+        <div className="flex items-center">
+          <LogoIcon className="w-20 h-10 text-primary" />{" "}
+        </div>
         <div className="flex items-center">
           <div className="px-2 py-1 bg-transparent cursor-default select-none hover:bg-primaryBtnHover font-mono text-secondary rounded mr-4">
             ${totalCost}
           </div>
           {!hideHistory && (
             <button
-              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded mr-4"
+              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded mr-1"
               onClick={onClickHistory}
             >
-              <span className="text-sm font-normal text-secondary flex items-center">
-                History <KbdShort keys={["^", "H"]} additionalStyles="ml-2" />
+              <span className="text-sm font-normal text-secondary font-mono flex items-center">
+                History <KbdShort keys={["⌘", "O"]} additionalStyles="ml-2" />
               </span>
             </button>
           )}
           <button
-            className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded"
+            className="px-2 py-1 bg-transparent font-mono hover:bg-primaryBtnHover rounded"
             onClick={onClickNew}
           >
             <span className="text-sm font-normal text-secondary flex items-center">

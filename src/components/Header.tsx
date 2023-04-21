@@ -3,6 +3,8 @@ import KbdShort from "./KbdShort";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useUsage } from "../hooks/useUsage";
 import { LogoIcon } from "../svg";
+import { THistoryMessageProps } from "../helpers/localstorage";
+import { useEffect, useState } from "react";
 
 interface IHeaderProps {
   haltNew?: boolean;
@@ -18,6 +20,11 @@ export const hideApp = async () => {
 const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
   const { totalCost } = useUsage();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [rollingChat, setRollingChat] = useState({
+    nextChat: "",
+    prevChat: "",
+  });
 
   const onClickNew = () => {
     if (haltNew) return;
@@ -41,6 +48,39 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
   useHotkeys("meta+o", onClickHistory);
   useHotkeys("meta+n", onClickNew);
 
+  const conversations = localStorage.getItem("history");
+
+  useEffect(() => {
+    const historyMessages: string[] = Object.keys(
+      JSON.parse(conversations || "{}")
+    );
+
+    const currentChat = location.pathname.replace("/chat/", "");
+    const currentChatIndex = historyMessages.indexOf(currentChat);
+
+    setRollingChat({
+      nextChat: historyMessages[currentChatIndex + 1],
+      prevChat: historyMessages[currentChatIndex - 1],
+    });
+  }, [location]);
+
+  const navigateToNextChat = () => {
+    if (rollingChat.nextChat) {
+      navigate(`/chat/${rollingChat.nextChat}`);
+    }
+  };
+
+  const navigateToPrevChat = () => {
+    if (rollingChat.prevChat) {
+      navigate(`/chat/${rollingChat.prevChat}`);
+    }
+  };
+
+  useHotkeys("meta+[", navigateToPrevChat);
+  useHotkeys("meta+]", navigateToNextChat);
+
+  const historyKbd = hideHistory ? ["Esc"] : ["⌘", "O"];
+
   return (
     <header className="p-4 flex bg-primary border-b border-primary h-12">
       <div className="flex items-center justify-between w-full">
@@ -48,27 +88,50 @@ const Header = ({ haltNew, hideHistory }: IHeaderProps) => {
           <LogoIcon className="w-20 h-10 text-primary" />{" "}
         </div>
         <div className="flex items-center">
-          <div className="px-2 py-1 bg-transparent cursor-default select-none hover:bg-primaryBtnHover font-mono text-secondary rounded mr-4">
-            ${totalCost}
-          </div>
           {!hideHistory && (
             <button
-              className="px-2 py-1 bg-transparent hover:bg-primaryBtnHover rounded mr-1"
-              onClick={onClickHistory}
+              className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
+              onClick={navigateToPrevChat}
             >
-              <span className="text-sm font-normal text-secondary font-mono flex items-center">
-                History <KbdShort keys={["⌘", "O"]} additionalStyles="ml-2" />
+              <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                Prev
+                <KbdShort keys={["⌘", "["]} additionalStyles="ml-2" />
+              </span>
+            </button>
+          )}
+
+          {!hideHistory && (
+            <button
+              className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
+              onClick={navigateToNextChat}
+            >
+              <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                Prev
+                <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
               </span>
             </button>
           )}
           <button
-            className="px-2 py-1 bg-transparent font-mono hover:bg-primaryBtnHover rounded"
+            className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
+            onClick={hideHistory ? handleEscape : onClickHistory}
+          >
+            <span className="text-sm font-normal text-secondary font-sans flex items-center">
+              {hideHistory ? "Back" : "History"}{" "}
+              <KbdShort keys={historyKbd} additionalStyles="ml-2" />
+            </span>
+          </button>
+
+          <button
+            className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded"
             onClick={onClickNew}
           >
-            <span className="text-sm font-normal text-secondary flex items-center">
+            <span className="text-sm font-normal font-sans text-secondary flex items-center">
               New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
             </span>
           </button>
+          <div className="px-2 py-1 bg-action cursor-default select-none hover:brightness-105 font-mono text-sm text-secondary rounded ml-4">
+            ${totalCost}
+          </div>
         </div>
       </div>
     </header>

@@ -55,6 +55,7 @@ const ChatPage = () => {
       if (conversation) {
         const parsedConversation = JSON.parse(conversation);
         setConv(parsedConversation);
+        setQueryErrored(false);
       }
     }
   }, [id]);
@@ -125,7 +126,7 @@ const ChatPage = () => {
     messages.length === 0 && conv.length > 0 ? conv : messages;
 
   return (
-    <React.Fragment>
+    <React.Fragment key={id}>
       <Header haltNew={chatConversations.length === 0} />
       <div
         className="p-4 overflow-y-auto max-h-[540px] duration-150"

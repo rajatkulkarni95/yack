@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "spot-gpt",
+    "productName": "yack",
     "version": "../package.json"
   },
   "tauri": {
@@ -71,7 +71,7 @@
       {
         "fullscreen": false,
         "resizable": false,
-        "title": "spot-gpt",
+        "title": "yack",
         "width": 800,
         "height": 640,
         "center": true

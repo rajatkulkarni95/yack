@@ -8,8 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "m1-build": "tauri build --release --target aarch64-apple-darwin",
-    "m2-build": "tauri build --release --target x86_64-apple-darwin"
+    "m1-build": "tauri build --target aarch64-apple-darwin",
+    "m2-build": "tauri build --target x86_64-apple-darwin"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",

@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+releases
+updater.cjs
+.tauri
+updater.json

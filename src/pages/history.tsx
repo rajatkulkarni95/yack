@@ -83,6 +83,11 @@ const HistoryPage = () => {
 
       <div className="p-4 overflow-y-auto flex flex-col">
         <h2 className="text-2xl font-bold mb-4 text-secondary">History</h2>
+        {historyMessages.length === 0 && (
+          <div className="text-base font-normal text-tertiary">
+            No history yet
+          </div>
+        )}
         {Object.entries(parsedConversations).map(([id, conversation], i) => (
           <button
             key={id}

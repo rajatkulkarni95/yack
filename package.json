@@ -8,8 +8,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "m1-build": "tauri build --target aarch64-apple-darwin",
-    "m2-build": "tauri build --target x86_64-apple-darwin"
+    "m1-build": "CARGO_TARGET_DIR=target/$npm_package_version/ tauri build --target aarch64-apple-darwin",
+    "m2-build": "CARGO_TARGET_DIR=target/$npm_package_version/ tauri build --target x86_64-apple-darwin",
+    "build-package": "pnpm run m1-build && pnpm run m2-build && node updater.cjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",

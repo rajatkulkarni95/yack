@@ -1,13 +1,15 @@
 {
-  "name": "spot-gpt",
+  "name": "yack",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "m1-build": "tauri build --release --target aarch64-apple-darwin",
+    "m2-build": "tauri build --release --target x86_64-apple-darwin"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",

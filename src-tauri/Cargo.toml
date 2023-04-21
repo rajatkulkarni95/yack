@@ -1,11 +1,11 @@
 [package]
-name = "spot-gpt"
-version = "0.0.0"
-description = "A Tauri App"
+name = "yack"
+version = "0.1.0"
+description = "Instantly access ChatGPT on your Mac, spotlight style!"
 authors = ["you"]
 license = ""
 repository = ""
-edition = "2021"
+edition = "2023"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

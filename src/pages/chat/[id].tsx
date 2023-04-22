@@ -14,6 +14,8 @@ import {
   OpenAIChatMessage,
   useChatCompletion,
 } from "../../hooks/useChatCompletion";
+import KbdShort from "../../components/KbdShort";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const ChatPage = () => {
   const { id } = useParams();
@@ -123,6 +125,8 @@ const ChatPage = () => {
     }
   };
 
+  useHotkeys("meta+e", closeStream);
+
   const chatConversations =
     messages.length === 0 && conv.length > 0 ? conv : messages;
 
@@ -144,10 +148,22 @@ const ChatPage = () => {
           </div>
         )}
       </div>
+      {messages?.[messages.length - 1]?.meta?.loading && (
+        <button
+          className="px-3 py-2 bg-tertiary absolute bottom-20 z-10 left-1/2 -translate-x-1/2 border border-primary hover:bg-primaryBtnHover rounded mr-1"
+          onClick={closeStream}
+        >
+          <span className="text-sm font-normal text-secondary font-sans flex items-center">
+            Stop Generating
+            <KbdShort keys={["⌘", "E"]} additionalStyles="ml-2" />
+          </span>
+        </button>
+      )}
       <section className="absolute bottom-0 w-full p-4 bg-primary">
         <PromptInput
           sendPrompt={sendPrompt}
           disabled={messages?.[messages.length - 1]?.meta?.loading}
+          stopStream={closeStream}
         />
       </section>
     </React.Fragment>

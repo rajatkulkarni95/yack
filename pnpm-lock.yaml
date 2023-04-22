@@ -7,9 +7,6 @@ dependencies:
   highlight.js:
     specifier: ^11.7.0
     version: 11.7.0
-  openai-streaming-hooks:
-    specifier: ^1.0.2
-    version: 1.0.2
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -28,6 +25,9 @@ dependencies:
   showdown-highlight:
     specifier: ^3.1.0
     version: 3.1.0
+  sse:
+    specifier: github:mpetazzoni/sse.js
+    version: github.com/mpetazzoni/sse.js/cfe70a36d49009e403e1cd2419b097497ab693da
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -1210,13 +1210,6 @@ packages:
     dependencies:
       wrappy: 1.0.2
     dev: true
-
-  /openai-streaming-hooks@1.0.2:
-    resolution: {integrity: sha512-kfk4U5mWjZfdtvled1RkFN+3+UWLczSyLLdndcO8B3ZCsIoRwwMGyORWgbpvqawfMFOzTCwQaVDCdl1M0Bsrrg==}
-    dependencies:
-      react: 18.2.0
-      sse: github.com/mpetazzoni/sse.js/cfe70a36d49009e403e1cd2419b097497ab693da
-    dev: false
 
   /path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}

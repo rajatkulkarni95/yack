@@ -10,32 +10,23 @@ import {
 } from "../../helpers/localstorage";
 import Header from "../../components/Header";
 import {
-  useChatCompletion,
-  GPT35,
   ChatMessageParams,
-} from "openai-streaming-hooks";
-
-export type TConversation = {
-  created: Date;
-  conversation: TMessage;
-};
-
-export type TMessage = {
-  role: string;
-  content: string;
-  timestamp: number;
-};
+  OpenAIChatMessage,
+  useChatCompletion,
+} from "../../hooks/useChatCompletion";
 
 const ChatPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [conv, setConv] = useState<TMessage[]>([]);
+  const [conv, setConv] = useState<ChatMessageParams[]>([]);
   const [queryErrored, setQueryErrored] = useState(false);
 
-  const [messages, submitQuery] = useChatCompletion({
-    model: GPT35.TURBO,
-    apiKey: window.localStorage.getItem("api_key") || "",
-  });
+  const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
+    {
+      model: "gpt-3.5-turbo",
+      apiKey: window.localStorage.getItem("api_key") || "",
+    }
+  );
 
   if (!id) return null;
 
@@ -55,13 +46,17 @@ const ChatPage = () => {
       if (conversation) {
         const parsedConversation = JSON.parse(conversation);
         setConv(parsedConversation);
+        resetMessages();
         setQueryErrored(false);
       }
     }
   }, [id]);
 
   useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+    // window.scrollTo(0, document.body.scrollHeight);
+    const currentScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    window.scrollTo(0, currentScroll);
     if (
       !messages?.[messages.length - 1]?.meta?.loading &&
       messages?.length > 0
@@ -86,7 +81,7 @@ const ChatPage = () => {
   }, [messages]);
 
   const sendPrompt = async (prompt: string) => {
-    const payload: ChatMessageParams = {
+    const payload: OpenAIChatMessage = {
       role: "user",
       content: prompt,
     };
@@ -103,12 +98,11 @@ const ChatPage = () => {
       }
     }
 
-    const chatContainer = document.getElementById("chat-container");
-    if (chatContainer) {
-      setTimeout(() => {
-        chatContainer.scrollTop = 99999999;
-      }, 600);
-    }
+    // if (chatContainer) {
+    //   setTimeout(() => {
+    //     chatContainer.scrollTop = 99999999;
+    //   }, 600);
+    // }
 
     let messagePayload;
     if (conv.length > 0 && messages.length === 0) {

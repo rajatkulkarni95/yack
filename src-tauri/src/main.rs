@@ -71,7 +71,7 @@ fn set_review_count(app_handle: tauri::AppHandle, count: &str) {
 }
 
 fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit BuildLog");
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let tray_menu = SystemTrayMenu::new().add_item(quit);
     let system_tray = SystemTray::new()
         .with_menu(tray_menu)

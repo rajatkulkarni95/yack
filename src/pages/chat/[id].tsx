@@ -10,32 +10,25 @@ import {
 } from "../../helpers/localstorage";
 import Header from "../../components/Header";
 import {
-  useChatCompletion,
-  GPT35,
   ChatMessageParams,
-} from "openai-streaming-hooks";
-
-export type TConversation = {
-  created: Date;
-  conversation: TMessage;
-};
-
-export type TMessage = {
-  role: string;
-  content: string;
-  timestamp: number;
-};
+  OpenAIChatMessage,
+  useChatCompletion,
+} from "../../hooks/useChatCompletion";
+import KbdShort from "../../components/KbdShort";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const ChatPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [conv, setConv] = useState<TMessage[]>([]);
+  const [conv, setConv] = useState<ChatMessageParams[]>([]);
   const [queryErrored, setQueryErrored] = useState(false);
 
-  const [messages, submitQuery] = useChatCompletion({
-    model: GPT35.TURBO,
-    apiKey: window.localStorage.getItem("api_key") || "",
-  });
+  const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
+    {
+      model: "gpt-3.5-turbo",
+      apiKey: window.localStorage.getItem("api_key") || "",
+    }
+  );
 
   if (!id) return null;
 
@@ -55,13 +48,21 @@ const ChatPage = () => {
       if (conversation) {
         const parsedConversation = JSON.parse(conversation);
         setConv(parsedConversation);
+        resetMessages();
         setQueryErrored(false);
       }
     }
   }, [id]);
 
+  const chatContainer = document.getElementById("chat-container");
+
   useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+    if (chatContainer) {
+      setTimeout(() => {
+        chatContainer.scrollTop = 99999999;
+      }, 100);
+    }
+
     if (
       !messages?.[messages.length - 1]?.meta?.loading &&
       messages?.length > 0
@@ -86,7 +87,7 @@ const ChatPage = () => {
   }, [messages]);
 
   const sendPrompt = async (prompt: string) => {
-    const payload: ChatMessageParams = {
+    const payload: OpenAIChatMessage = {
       role: "user",
       content: prompt,
     };
@@ -103,12 +104,11 @@ const ChatPage = () => {
       }
     }
 
-    const chatContainer = document.getElementById("chat-container");
-    if (chatContainer) {
-      setTimeout(() => {
-        chatContainer.scrollTop = 99999999;
-      }, 600);
-    }
+    // if (chatContainer) {
+    //   setTimeout(() => {
+    //     chatContainer.scrollTop = 99999999;
+    //   }, 600);
+    // }
 
     let messagePayload;
     if (conv.length > 0 && messages.length === 0) {
@@ -124,6 +124,8 @@ const ChatPage = () => {
       console.error(e);
     }
   };
+
+  useHotkeys("meta+e", closeStream);
 
   const chatConversations =
     messages.length === 0 && conv.length > 0 ? conv : messages;
@@ -146,10 +148,22 @@ const ChatPage = () => {
           </div>
         )}
       </div>
+      {messages?.[messages.length - 1]?.meta?.loading && (
+        <button
+          className="px-3 py-2 bg-tertiary absolute bottom-20 z-10 left-1/2 -translate-x-1/2 border border-primary hover:bg-primaryBtnHover rounded mr-1"
+          onClick={closeStream}
+        >
+          <span className="text-sm font-normal text-secondary font-sans flex items-center">
+            Stop Generating
+            <KbdShort keys={["⌘", "E"]} additionalStyles="ml-2" />
+          </span>
+        </button>
+      )}
       <section className="absolute bottom-0 w-full p-4 bg-primary">
         <PromptInput
           sendPrompt={sendPrompt}
           disabled={messages?.[messages.length - 1]?.meta?.loading}
+          stopStream={closeStream}
         />
       </section>
     </React.Fragment>

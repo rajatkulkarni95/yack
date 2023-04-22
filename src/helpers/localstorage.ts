@@ -1,4 +1,4 @@
-import { TConversation, TMessage } from "../pages/chat/[id]";
+import { ChatMessageParams } from "../hooks/useChatCompletion";
 
 export type TUsage = {
   total_tokens: number;
@@ -19,7 +19,10 @@ export const incrementUsage = (usage: TUsage) => {
   }
 };
 
-export const saveConversation = (conversation: TMessage[], chatId: string) => {
+export const saveConversation = (
+  conversation: ChatMessageParams[],
+  chatId: string
+) => {
   localStorage.setItem(chatId, JSON.stringify(conversation));
 };
 

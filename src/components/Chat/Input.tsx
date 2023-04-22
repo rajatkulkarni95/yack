@@ -5,9 +5,14 @@ import { useNavigation } from "../../hooks/useNavigation";
 type TProps = {
   sendPrompt: (prompt: string) => void;
   disabled?: boolean;
+  stopStream: () => void;
 };
 
-export const PromptInput = ({ sendPrompt, disabled = false }: TProps) => {
+export const PromptInput = ({
+  sendPrompt,
+  disabled = false,
+  stopStream,
+}: TProps) => {
   const [value, setValue] = useState<string>("");
   const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =
     useNavigation();
@@ -25,7 +30,7 @@ export const PromptInput = ({ sendPrompt, disabled = false }: TProps) => {
       sendPrompt(value);
     }
 
-    if (e.key === "Escape") {
+    if (e.key === "Escape" && !e.metaKey) {
       setValue("");
       if (value.trim() === "") {
         hideApp();
@@ -46,6 +51,10 @@ export const PromptInput = ({ sendPrompt, disabled = false }: TProps) => {
 
     if (e.key === "]" && e.metaKey) {
       navigateToNextChat();
+    }
+
+    if (e.key === "e" && e.metaKey) {
+      stopStream();
     }
   };
 

@@ -1,11 +1,11 @@
-import { TMessage } from "../../pages/chat/[id]";
 import showdown from "showdown";
 import showdownHighlight from "showdown-highlight";
 import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css";
+import { ChatMessageParams } from "../../hooks/useChatCompletion";
 
 type TChatBubble = {
-  message?: TMessage;
+  message?: ChatMessageParams;
   loading?: boolean;
 };
 

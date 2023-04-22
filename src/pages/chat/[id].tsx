@@ -52,11 +52,15 @@ const ChatPage = () => {
     }
   }, [id]);
 
+  const chatContainer = document.getElementById("chat-container");
+
   useEffect(() => {
-    // window.scrollTo(0, document.body.scrollHeight);
-    const currentScroll =
-      document.documentElement.scrollHeight - window.innerHeight;
-    window.scrollTo(0, currentScroll);
+    if (chatContainer) {
+      setTimeout(() => {
+        chatContainer.scrollTop = 99999999;
+      }, 100);
+    }
+
     if (
       !messages?.[messages.length - 1]?.meta?.loading &&
       messages?.length > 0

@@ -57,7 +57,7 @@ const ChatPage = () => {
   const chatContainer = document.getElementById("chat-container");
 
   useEffect(() => {
-    if (chatContainer) {
+    if (chatContainer && messages?.length > 0) {
       setTimeout(() => {
         chatContainer.scrollTop = 99999999;
       }, 100);

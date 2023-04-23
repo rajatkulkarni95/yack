@@ -14,6 +14,7 @@ import KbdShort from "../../components/KbdShort";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   getApiKey,
+  getConversation,
   incrementUsage,
   saveConversation,
   saveConversationIDToHistory,
@@ -30,7 +31,7 @@ const ChatPage = () => {
   const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
     {
       model: "gpt-3.5-turbo",
-      apiKey: window.localStorage.getItem("api_key") || "",
+      apiKey: apiKey,
     }
   );
 
@@ -51,18 +52,21 @@ const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    if (id === "new") {
-      setConv([]);
-    } else {
-      const conversation = window.localStorage.getItem(id);
+    async function checkForExistingConversation() {
+      if (id === "new") {
+        setConv([]);
+      } else {
+        const conversation = await getConversation(id as string);
 
-      if (conversation) {
-        const parsedConversation = JSON.parse(conversation);
-        setConv(parsedConversation);
-        resetMessages();
-        setQueryErrored(false);
+        if (conversation) {
+          setConv(conversation);
+          resetMessages();
+          setQueryErrored(false);
+        }
       }
     }
+
+    checkForExistingConversation();
   }, [id]);
 
   const chatContainer = document.getElementById("chat-container");

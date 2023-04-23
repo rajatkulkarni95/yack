@@ -30,8 +30,12 @@ export const removeApiKey = async () => {
   await store.save();
 };
 
+export const getUsage = async () => await store.get<TUsage>("usage");
+
 export const incrementUsage = async (usage: TUsage) => {
   const currentUsage: TUsage | null = await store.get("usage");
+  console.log({ currentUsage, usage });
+
   if (currentUsage) {
     const { total_tokens } = currentUsage;
     await store.set("usage", {
@@ -50,6 +54,9 @@ export const saveConversation = async (
   await store.set(chatId, conversation);
   await store.save();
 };
+
+export const getConversation = async (chatId: string) =>
+  await store.get<Promise<ChatMessageParams[]>>(chatId);
 
 export const saveConversationIDToHistory = async ({
   id,
@@ -77,3 +84,5 @@ export const saveConversationIDToHistory = async ({
   }
   await store.save();
 };
+
+export const getHistory = async () => await store.get<THistory>("history");

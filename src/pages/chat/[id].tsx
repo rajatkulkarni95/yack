@@ -3,11 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PromptInput } from "../../components/Chat/Input";
 import ChatBubble from "../../components/Chat/Bubble";
-import {
-  incrementUsage,
-  saveConversation,
-  saveConversationIDToHistory,
-} from "../../helpers/localstorage";
+
 import Header from "../../components/Header";
 import {
   ChatMessageParams,
@@ -16,12 +12,20 @@ import {
 } from "../../hooks/useChatCompletion";
 import KbdShort from "../../components/KbdShort";
 import { useHotkeys } from "react-hotkeys-hook";
+import {
+  getApiKey,
+  incrementUsage,
+  saveConversation,
+  saveConversationIDToHistory,
+  store,
+} from "../../helpers/store";
 
 const ChatPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [conv, setConv] = useState<ChatMessageParams[]>([]);
   const [queryErrored, setQueryErrored] = useState(false);
+  const [apiKey, setApiKey] = useState("");
 
   const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
     {
@@ -33,10 +37,17 @@ const ChatPage = () => {
   if (!id) return null;
 
   useEffect(() => {
-    const apiKey = window.localStorage.getItem("api_key");
-    if (!apiKey) {
-      navigate("/");
+    async function checkAPIKey() {
+      const key = await getApiKey();
+
+      if (!key) {
+        navigate("/");
+      } else {
+        setApiKey(key);
+      }
     }
+
+    checkAPIKey();
   }, []);
 
   useEffect(() => {
@@ -63,27 +74,32 @@ const ChatPage = () => {
       }, 100);
     }
 
-    if (
-      !messages?.[messages.length - 1]?.meta?.loading &&
-      messages?.length > 0
-    ) {
-      const lastMessage = messages[messages.length - 1];
+    async function saveMessages() {
+      if (
+        !messages?.[messages.length - 1]?.meta?.loading &&
+        messages?.length > 0 &&
+        id
+      ) {
+        const lastMessage = messages[messages.length - 1];
 
-      if (lastMessage.content === "" && lastMessage.role === "") {
-        setQueryErrored(true);
-        messages.pop();
-        return;
+        if (lastMessage.content === "" && lastMessage.role === "") {
+          setQueryErrored(true);
+          messages.pop();
+          return;
+        }
+
+        await incrementUsage({ total_tokens: lastMessage.meta.chunks.length });
+        const tonedMessages = messages.map((message) => ({
+          content: message.content,
+          role: message.role,
+          timestamp: message.timestamp,
+        }));
+
+        await saveConversation(tonedMessages, id);
       }
-
-      incrementUsage({ total_tokens: lastMessage.meta.chunks.length });
-      const tonedMessages = messages.map((message) => ({
-        content: message.content,
-        role: message.role,
-        timestamp: message.timestamp,
-      }));
-
-      saveConversation(tonedMessages, id);
     }
+
+    saveMessages();
   }, [messages]);
 
   const sendPrompt = async (prompt: string) => {
@@ -95,7 +111,7 @@ const ChatPage = () => {
     if (messages.length === 0 && conv.length === 0) {
       if (id === "new") {
         const uuid = uuidv4();
-        saveConversationIDToHistory({
+        await saveConversationIDToHistory({
           id: uuid,
           created: new Date().getTime(),
           title: prompt,
@@ -103,12 +119,6 @@ const ChatPage = () => {
         navigate(`/chat/${uuid}`);
       }
     }
-
-    // if (chatContainer) {
-    //   setTimeout(() => {
-    //     chatContainer.scrollTop = 99999999;
-    //   }, 600);
-    // }
 
     let messagePayload;
     if (conv.length > 0 && messages.length === 0) {

@@ -1,8 +1,10 @@
+import { getApiKey } from "./store";
+
 export default async function fetcher<JSON = any>(
   input: RequestInfo,
   init?: RequestInit
 ): Promise<JSON> {
-  const apiKey = localStorage.getItem("api_key");
+  const apiKey = await getApiKey();
 
   if (!apiKey) {
     throw new Error("No token found");

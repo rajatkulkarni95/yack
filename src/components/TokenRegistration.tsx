@@ -3,6 +3,7 @@ import { useState } from "react";
 import { MODELS_API } from "../constants/API";
 import fetcher from "../helpers/fetcher";
 import { useNavigate } from "react-router-dom";
+import { incrementUsage, setApiKey } from "../helpers/store";
 
 const TokenRegistration = () => {
   const [token, setToken] = useState("");
@@ -14,21 +15,17 @@ const TokenRegistration = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    localStorage.setItem("api_key", token);
-    localStorage.setItem(
-      "usage",
-      JSON.stringify({
-        prompt_tokens: 0,
-        completion_tokens: 0,
-        total_tokens: 0,
-      })
-    );
+
+    await setApiKey(token);
+    await incrementUsage({
+      total_tokens: 0,
+    });
+
     try {
       await fetcher(MODELS_API);
       navigate("/chat/new");
     } catch (error: any) {
       setError(error.message);
-      localStorage.removeItem("api_key");
     } finally {
       setIsSubmitting(false);
     }

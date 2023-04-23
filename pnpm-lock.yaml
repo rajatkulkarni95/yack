@@ -28,6 +28,9 @@ dependencies:
   sse:
     specifier: github:mpetazzoni/sse.js
     version: github.com/mpetazzoni/sse.js/cfe70a36d49009e403e1cd2419b097497ab693da
+  tauri-plugin-store-api:
+    specifier: github:tauri-apps/tauri-plugin-store
+    version: github.com/tauri-apps/tauri-plugin-store/df267506bf12de451762f3f4b7f929ebed1421c9
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -1623,4 +1626,12 @@ packages:
     resolution: {tarball: https://codeload.github.com/mpetazzoni/sse.js/tar.gz/cfe70a36d49009e403e1cd2419b097497ab693da}
     name: sse.js
     version: 0.6.1
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-store/df267506bf12de451762f3f4b7f929ebed1421c9:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/df267506bf12de451762f3f4b7f929ebed1421c9}
+    name: tauri-plugin-store-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.2.0
     dev: false

@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Header from "../components/Header";
 import KbdShort from "../components/KbdShort";
 import { useKeyPress } from "../hooks/useKeyPress";
 import { useNavigate } from "react-router-dom";
+import { THistory, getHistory } from "../helpers/store";
 
 type THistoryMessage = {
   created: number;
@@ -10,14 +11,19 @@ type THistoryMessage = {
 };
 
 const HistoryPage = () => {
-  const conversations = window.localStorage.getItem("history");
-  const parsedConversations: {
-    [key: string]: {
-      created: number;
-      title: string;
-    };
-  } = conversations ? JSON.parse(conversations) : {};
-  const historyMessages: THistoryMessage[] = Object.values(parsedConversations);
+  const [convHistory, setConvHistory] = useState<THistory>({});
+
+  useEffect(() => {
+    async function fetchHistory() {
+      const history = await getHistory();
+
+      if (history) setConvHistory(history);
+    }
+
+    fetchHistory();
+  }, []);
+
+  const historyMessages: THistoryMessage[] = Object.values(convHistory);
 
   const navigate = useNavigate();
 
@@ -45,7 +51,7 @@ const HistoryPage = () => {
       case "select":
         return { selectedIndex: action.payload };
       case "enter": {
-        navigate(`/chat/${Object.keys(parsedConversations)[action.payload]}`);
+        navigate(`/chat/${Object.keys(convHistory)[action.payload]}`);
         return { selectedIndex: action.payload };
       }
 
@@ -88,7 +94,7 @@ const HistoryPage = () => {
             No history yet
           </div>
         )}
-        {Object.entries(parsedConversations).map(([id, conversation], i) => (
+        {Object.entries(convHistory).map(([id, conversation], i) => (
           <button
             key={id}
             className={`hover:bg-secondary ${

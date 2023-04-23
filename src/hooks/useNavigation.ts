@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getHistory } from "../helpers/store";
 
 export const useNavigation = () => {
   const navigate = useNavigate();
@@ -18,18 +19,21 @@ export const useNavigation = () => {
   };
 
   useEffect(() => {
-    const conversations = localStorage.getItem("history");
-    const historyMessages: string[] = Object.keys(
-      JSON.parse(conversations || "{}")
-    );
+    async function calcRollingChat() {
+      const history = await getHistory();
+      if (history) {
+        const historyMessages: string[] = Object.keys(history);
 
-    const currentChat = location.pathname.replace("/chat/", "");
-    const currentChatIndex = historyMessages.indexOf(currentChat);
+        const currentChat = location.pathname.replace("/chat/", "");
+        const currentChatIndex = historyMessages.indexOf(currentChat);
 
-    setRollingChat({
-      nextChat: historyMessages[currentChatIndex + 1],
-      prevChat: historyMessages[currentChatIndex - 1],
-    });
+        setRollingChat({
+          nextChat: historyMessages[currentChatIndex + 1],
+          prevChat: historyMessages[currentChatIndex - 1],
+        });
+      }
+    }
+    calcRollingChat();
   }, [location]);
 
   const navigateToNextChat = () => {

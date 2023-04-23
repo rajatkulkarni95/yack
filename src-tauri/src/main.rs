@@ -123,6 +123,7 @@ fn main() {
             }
             _ => {}
         })
+        .plugin(tauri_plugin_store::Builder::default().build())
         .invoke_handler(tauri::generate_handler![set_review_count])
         .setup(|app| {
             #[cfg(target_os = "macos")]

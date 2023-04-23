@@ -2,16 +2,21 @@ import { Fragment, useEffect } from "react";
 import TokenRegistration from "../components/TokenRegistration";
 import { useNavigate } from "react-router-dom";
 import { LogoIcon } from "../svg";
+import { getApiKey } from "../helpers/store";
 
 function Index() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const apiKey = localStorage.getItem("api_key");
+    async function checkAPIKey() {
+      const key = await getApiKey();
 
-    if (apiKey) {
-      navigate("/chat/new");
+      if (key) {
+        navigate("/chat/new");
+      }
     }
+
+    checkAPIKey();
   }, []);
 
   return (

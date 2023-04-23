@@ -34,7 +34,6 @@ export const getUsage = async () => await store.get<TUsage>("usage");
 
 export const incrementUsage = async (usage: TUsage) => {
   const currentUsage: TUsage | null = await store.get("usage");
-  console.log({ currentUsage, usage });
 
   if (currentUsage) {
     const { total_tokens } = currentUsage;

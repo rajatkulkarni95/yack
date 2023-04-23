@@ -18,7 +18,6 @@ export const hideApp = async () => {
 
 const Header = ({ hideHistory }: IHeaderProps) => {
   const { totalCost } = useUsage();
-  console.log({ totalCost });
 
   const navigate = useNavigate();
   const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =

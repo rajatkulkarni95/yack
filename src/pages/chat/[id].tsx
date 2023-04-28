@@ -55,6 +55,7 @@ const ChatPage = () => {
     async function checkForExistingConversation() {
       if (id === "new") {
         setConv([]);
+        resetMessages();
       } else {
         const conversation = await getConversation(id as string);
 

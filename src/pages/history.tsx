@@ -97,8 +97,8 @@ const HistoryPage = () => {
         {Object.entries(convHistory).map(([id, conversation], i) => (
           <button
             key={id}
-            className={`hover:bg-secondary ${
-              i === state.selectedIndex ? "bg-secondary" : "bg-primary"
+            className={`hover:bg-hover ${
+              i === state.selectedIndex ? "bg-hover" : "bg-primary"
             } py-2 border-primary border-l border-b border-r text-left flex items-center justify-between px-4 ${
               i === 0 ? "border-t rounded-t" : ""
             } ${i === historyMessages.length - 1 ? "rounded-b" : ""}`}
@@ -106,7 +106,7 @@ const HistoryPage = () => {
               navigate(`/chat/${id}`);
             }}
           >
-            <span className="text-base font-normal text-primary">
+            <span className="text-base font-normal text-primary truncate">
               {conversation.title}
             </span>
             <KbdShort

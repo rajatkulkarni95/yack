@@ -33,13 +33,13 @@ const Header = ({ hideHistory }: IHeaderProps) => {
 
   useHotkeys("escape", handleEscape);
 
-  useHotkeys("meta+o", onClickHistory);
+  useHotkeys("meta+p", onClickHistory);
   useHotkeys("meta+n", onClickNew);
 
   useHotkeys("meta+[", navigateToPrevChat);
   useHotkeys("meta+]", navigateToNextChat);
 
-  const historyKbd = hideHistory ? ["Esc"] : ["⌘", "O"];
+  const historyKbd = hideHistory ? ["Esc"] : ["⌘", "P"];
 
   return (
     <header className="p-4 flex bg-primary border-b border-primary h-12">

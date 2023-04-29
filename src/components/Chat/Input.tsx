@@ -37,7 +37,7 @@ export const PromptInput = ({
       }
     }
 
-    if (e.key === "o" && e.metaKey) {
+    if (e.key === "p" && e.metaKey) {
       onClickHistory();
     }
 

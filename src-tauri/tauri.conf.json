@@ -77,7 +77,7 @@
         "fullscreen": false,
         "resizable": false,
         "title": "yack",
-        "width": 800,
+        "width": 640,
         "height": 640,
         "center": true
       }

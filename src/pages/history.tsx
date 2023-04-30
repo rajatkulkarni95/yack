@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import Header from "../components/Header";
 import KbdShort from "../components/KbdShort";
 import { useKeyPress } from "../hooks/useKeyPress";
@@ -12,6 +12,7 @@ type THistoryMessage = {
 
 const HistoryPage = () => {
   const [convHistory, setConvHistory] = useState<THistory>({});
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchHistory() {
@@ -29,6 +30,20 @@ const HistoryPage = () => {
 
   const navigate = useNavigate();
 
+  const scrollIfNeeded = (idx: number) => {
+    const container = containerRef.current;
+    if (container) {
+      const selected = container.children[idx];
+      const rect = selected.getBoundingClientRect();
+
+      if (rect.bottom > container.clientHeight) {
+        container.scrollTop += rect.bottom - container.clientHeight;
+      } else if (rect.top < 0) {
+        container.scrollTop += rect.top;
+      }
+    }
+  };
+
   const initialState = { selectedIndex: 0 };
 
   function reducer(
@@ -36,20 +51,26 @@ const HistoryPage = () => {
     action: { type: any; payload?: any }
   ) {
     switch (action.type) {
-      case "arrowUp":
+      case "arrowUp": {
+        if (state.selectedIndex !== 0) {
+          scrollIfNeeded(state.selectedIndex - 1);
+        }
         return {
           selectedIndex:
             state.selectedIndex !== 0
               ? state.selectedIndex - 1
               : historyMessages.length - 1,
         };
-      case "arrowDown":
+      }
+      case "arrowDown": {
+        scrollIfNeeded(state.selectedIndex + 1);
         return {
           selectedIndex:
             state.selectedIndex !== historyMessages.length - 1
               ? state.selectedIndex + 1
               : 0,
         };
+      }
       case "select":
         return { selectedIndex: action.payload };
       case "enter": {
@@ -85,20 +106,20 @@ const HistoryPage = () => {
     }
   }, [enterPressed]);
 
-  console.log({ historyMessages });
-
   return (
     <React.Fragment>
       <Header hideHistory />
 
-      <div className="p-4 flex flex-col">
-        <h2 className="text-2xl font-bold mb-4 text-secondary">History</h2>
+      <div className="flex flex-col overflow-y-auto h-[580px] pb-2">
+        <p className="text-2xl font-medium mb-2 px-4 pt-4 text-secondary">
+          History
+        </p>
         {historyMessages.length === 0 && (
           <div className="text-base font-normal text-tertiary">
             No history yet
           </div>
         )}
-        <div className="flex flex-col overflow-y-auto h-[520px]">
+        <div className="flex flex-col px-4" ref={containerRef}>
           {Object.entries(convHistory)
             .sort((a, b) => b[1].created - a[1].created)
             .map(([id, conversation], i) => {
@@ -124,14 +145,16 @@ const HistoryPage = () => {
               return (
                 <React.Fragment key={id}>
                   {showDate && (
-                    <div className="text-xs font-normal text-tertiary mt-4 mb-2">
+                    <div className="text-xs font-normal text-tertiary mt-4 mb-2 px-3 py-1 rounded-full bg-secondary w-fit">
                       {dateString}
                     </div>
                   )}
                   <button
                     key={id}
-                    className={`hover:bg-hover ${
-                      i === state.selectedIndex ? "bg-hover" : "bg-primary"
+                    className={`hover:bg-hover hover:text-primary ${
+                      i === state.selectedIndex
+                        ? "bg-hover text-primary"
+                        : "bg-primary text-secondary"
                     } py-2 border-primary border-b border-l border-r text-left flex items-center justify-between px-4 ${
                       showDate ? "border-t" : ""
                     }`}
@@ -139,7 +162,7 @@ const HistoryPage = () => {
                       navigate(`/chat/${id}`);
                     }}
                   >
-                    <span className="text-base font-normal text-primary truncate">
+                    <span className="text-base font-normal truncate">
                       {conversation.title}
                     </span>
                     <KbdShort

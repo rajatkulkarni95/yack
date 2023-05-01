@@ -165,7 +165,7 @@ const ChatPage = () => {
       </div>
       {messages?.[messages.length - 1]?.meta?.loading && (
         <button
-          className="px-3 py-2 bg-tertiary absolute bottom-20 z-10 left-1/2 -translate-x-1/2 border border-primary hover:bg-primaryBtnHover rounded mr-1"
+          className="px-3 py-2 bg-tertiary absolute bottom-24 z-10 left-1/2 -translate-x-1/2 border border-primary hover:bg-primaryBtnHover rounded mr-1"
           onClick={closeStream}
         >
           <span className="text-sm font-normal text-secondary font-sans flex items-center">

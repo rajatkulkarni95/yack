@@ -3,8 +3,12 @@
     windows_subsystem = "windows"
 )]
 
+use open;
 use tauri::Manager;
-use tauri::{CustomMenuItem, GlobalShortcutManager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use tauri::{
+    CustomMenuItem, GlobalShortcutManager, SystemTray, SystemTrayEvent, SystemTrayMenu,
+    SystemTrayMenuItem,
+};
 
 #[cfg(target_os = "macos")]
 use cocoa::appkit::{NSWindow, NSWindowButton, NSWindowStyleMask, NSWindowTitleVisibility};
@@ -71,42 +75,76 @@ fn set_review_count(app_handle: tauri::AppHandle, count: &str) {
 }
 
 fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit Yack").accelerator("Cmd+Q");
-    let tray_menu = SystemTrayMenu::new().add_item(quit);
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit").accelerator("Cmd+Q");
+    let open_yack =
+        CustomMenuItem::new("open_yack".to_string(), "Open Yack").accelerator("Ctrl+Shift+Space");
+    let version = CustomMenuItem::new(
+        "version".to_string(),
+        format!("Version {}", env!("CARGO_PKG_VERSION")),
+    )
+    .disabled();
+    let check_updates = CustomMenuItem::new("check_updates".to_string(), "Check for Updates");
+    let send_feedback = CustomMenuItem::new("send_feedback".to_string(), "Send Feedback");
+    let history = CustomMenuItem::new("history".to_string(), "History").accelerator("Cmd+P");
+    let new_chat = CustomMenuItem::new("new_chat".to_string(), "New Chat").accelerator("Cmd+N");
+
+    let tray_menu = SystemTrayMenu::new()
+        .add_item(open_yack)
+        .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(new_chat)
+        .add_item(history)
+        .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(send_feedback)
+        .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(version)
+        .add_item(check_updates)
+        .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(quit);
+
     let system_tray = SystemTray::new()
         .with_menu(tray_menu)
-        .with_menu_on_left_click(false);
+        .with_menu_on_left_click(true);
 
     tauri::Builder::default()
         .system_tray(system_tray)
         .on_system_tray_event(move |app, event| match event {
-            SystemTrayEvent::LeftClick { .. } => {
-                let w = app.get_window("main").unwrap();
-                let visible = w.is_visible().unwrap();
-                if visible {
-                    w.hide().unwrap();
-                } else {
-                    w.show().unwrap();
-                    w.set_focus().unwrap();
-                }
-            }
-            SystemTrayEvent::RightClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                println!("system tray received a right click");
-            }
-            SystemTrayEvent::DoubleClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                println!("system tray received a double click");
-            }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "open_yack" => {
+                    let w = app.get_window("main").unwrap();
+                    let visible = w.is_visible().unwrap();
+                    if visible {
+                        w.hide().unwrap();
+                    } else {
+                        w.show().unwrap();
+                        w.set_focus().unwrap();
+                    }
+                }
                 "quit" => {
                     std::process::exit(0);
+                }
+                "new_chat" => {
+                    let w = app.get_window("main").unwrap();
+                    w.show().unwrap();
+                    w.set_focus().unwrap();
+                    w.eval("window.location.href='/chat/new'").unwrap();
+                }
+                "history" => {
+                    let w = app.get_window("main").unwrap();
+                    w.show().unwrap();
+                    w.set_focus().unwrap();
+                    w.eval("window.location.href='/history'").unwrap();
+                }
+                "send_feedback" => {
+                    // Open mail app
+                    let email_id = "rajatkulkarni95@gmail.com";
+                    let email_url = format!(
+                        "mailto:{}?subject=Feedback on Yack v{}",
+                        email_id,
+                        env!("CARGO_PKG_VERSION")
+                    );
+                    if let Err(e) = open::that(email_url) {
+                        eprintln!("Error launching mail client: {}", e);
+                    }
                 }
                 _ => {}
             },

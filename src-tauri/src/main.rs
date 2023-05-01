@@ -146,6 +146,10 @@ fn main() {
                         eprintln!("Error launching mail client: {}", e);
                     }
                 }
+                "check_updates" => {
+                    let w = app.get_window("main").unwrap();
+                    w.emit("tauri://update", "");
+                }
                 _ => {}
             },
             _ => {}

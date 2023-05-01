@@ -70,6 +70,7 @@ export const saveConversationIDToHistory = async ({
         [id]: {
           title,
           created,
+          id,
         },
       });
     }
@@ -78,6 +79,7 @@ export const saveConversationIDToHistory = async ({
       [id]: {
         title,
         created,
+        id,
       },
     });
   }

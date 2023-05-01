@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import KbdShort from "../components/KbdShort";
 import { useKeyPress } from "../hooks/useKeyPress";
 import { useNavigate } from "react-router-dom";
-import { THistory, getHistory } from "../helpers/store";
+import { THistoryMessageProps, getHistory } from "../helpers/store";
 
 type THistoryMessage = {
   created: number;
@@ -11,22 +11,23 @@ type THistoryMessage = {
 };
 
 const HistoryPage = () => {
-  const [convHistory, setConvHistory] = useState<THistory>({});
+  const [convHistory, setConvHistory] = useState<THistoryMessageProps[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchHistory() {
       const history = await getHistory();
 
-      if (history) setConvHistory(history);
+      if (history) {
+        const sortedHistory = Object.values(history).sort(
+          (a, b) => b.created - a.created
+        );
+        setConvHistory(sortedHistory);
+      }
     }
 
     fetchHistory();
   }, []);
-
-  const historyMessages: THistoryMessage[] = Object.values(convHistory).sort(
-    (a, b) => b.created - a.created
-  );
 
   const navigate = useNavigate();
 
@@ -59,14 +60,14 @@ const HistoryPage = () => {
           selectedIndex:
             state.selectedIndex !== 0
               ? state.selectedIndex - 1
-              : historyMessages.length - 1,
+              : convHistory.length - 1,
         };
       }
       case "arrowDown": {
         scrollIfNeeded(state.selectedIndex + 1);
         return {
           selectedIndex:
-            state.selectedIndex !== historyMessages.length - 1
+            state.selectedIndex !== convHistory.length - 1
               ? state.selectedIndex + 1
               : 0,
         };
@@ -74,7 +75,7 @@ const HistoryPage = () => {
       case "select":
         return { selectedIndex: action.payload };
       case "enter": {
-        navigate(`/chat/${Object.keys(convHistory)[action.payload]}`);
+        navigate(`/chat/${convHistory[action.payload].id}`);
         return { selectedIndex: action.payload };
       }
 
@@ -114,69 +115,67 @@ const HistoryPage = () => {
         <p className="text-2xl font-medium mb-2 px-4 pt-4 text-secondary">
           History
         </p>
-        {historyMessages.length === 0 && (
+        {convHistory.length === 0 && (
           <div className="text-base font-normal text-tertiary">
             No history yet
           </div>
         )}
         <div className="flex flex-col px-4" ref={containerRef}>
-          {Object.entries(convHistory)
-            .sort((a, b) => b[1].created - a[1].created)
-            .map(([id, conversation], i) => {
-              const date = new Date(conversation.created);
-              const dateString = date.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-              });
+          {convHistory.map((conversation, i) => {
+            const date = new Date(conversation.created);
+            const dateString = date.toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            });
 
-              const showDate =
-                i === 0 ||
-                dateString !==
-                  new Date(historyMessages[i - 1].created).toLocaleDateString(
-                    "en-US",
-                    {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    }
-                  );
+            const showDate =
+              i === 0 ||
+              dateString !==
+                new Date(convHistory[i - 1].created).toLocaleDateString(
+                  "en-US",
+                  {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  }
+                );
 
-              return (
-                <React.Fragment key={id}>
-                  {showDate && (
-                    <div className="text-xs font-normal text-tertiary mt-4 mb-2 px-3 py-1 rounded-full bg-secondary w-fit">
-                      {dateString}
-                    </div>
-                  )}
-                  <button
-                    key={id}
-                    className={`hover:bg-hover hover:text-primary ${
+            return (
+              <React.Fragment key={conversation.id}>
+                {showDate && (
+                  <div className="text-xs font-normal text-tertiary mt-4 mb-2 px-3 py-1 rounded-full bg-secondary w-fit">
+                    {dateString}
+                  </div>
+                )}
+                <button
+                  key={conversation.id}
+                  className={`hover:bg-hover hover:text-primary ${
+                    i === state.selectedIndex
+                      ? "bg-hover text-primary"
+                      : "bg-primary text-secondary"
+                  } py-2 border-primary border-b border-l border-r text-left flex items-center justify-between px-4 ${
+                    showDate ? "border-t" : ""
+                  }`}
+                  onClick={() => {
+                    navigate(`/chat/${conversation.id}`);
+                  }}
+                >
+                  <span className="text-base font-normal truncate">
+                    {conversation.title}
+                  </span>
+                  <KbdShort
+                    keys={["↵"]}
+                    additionalStyles={
                       i === state.selectedIndex
-                        ? "bg-hover text-primary"
-                        : "bg-primary text-secondary"
-                    } py-2 border-primary border-b border-l border-r text-left flex items-center justify-between px-4 ${
-                      showDate ? "border-t" : ""
-                    }`}
-                    onClick={() => {
-                      navigate(`/chat/${id}`);
-                    }}
-                  >
-                    <span className="text-base font-normal truncate">
-                      {conversation.title}
-                    </span>
-                    <KbdShort
-                      keys={["↵"]}
-                      additionalStyles={
-                        i === state.selectedIndex
-                          ? "visible ml-2"
-                          : "invisible ml-2"
-                      }
-                    />
-                  </button>
-                </React.Fragment>
-              );
-            })}
+                        ? "visible ml-2"
+                        : "invisible ml-2"
+                    }
+                  />
+                </button>
+              </React.Fragment>
+            );
+          })}
         </div>
       </div>
     </React.Fragment>

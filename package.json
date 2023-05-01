@@ -13,6 +13,7 @@
     "build-package": "pnpm run intel-build && pnpm run arm-build && node updater.cjs"
   },
   "dependencies": {
+    "@radix-ui/react-tooltip": "^1.0.5",
     "@tauri-apps/api": "^1.2.0",
     "highlight.js": "^11.7.0",
     "react": "^18.2.0",

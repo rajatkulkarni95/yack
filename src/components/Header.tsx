@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import KbdShort from "./KbdShort";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useUsage } from "../hooks/useUsage";
-import { LogoIcon } from "../svg";
+import { LeftArrow, LogoIcon, RightArrow } from "../svg";
 import { useNavigation } from "../hooks/useNavigation";
+import Tooltip from "./Tooltip";
 
 interface IHeaderProps {
   haltNew?: boolean;
@@ -46,31 +47,42 @@ const Header = ({ hideHistory }: IHeaderProps) => {
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center">
           <LogoIcon className="w-20 h-10 text-primary" />{" "}
+          {!hideHistory && (
+            <Tooltip
+              tooltip={
+                <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                  Prev
+                  <KbdShort keys={["⌘", "["]} additionalStyles="ml-2" />
+                </span>
+              }
+            >
+              <button
+                className="px-2 ml-4 py-1 bg-transparent group border border-primary hover:bg-primaryBtnHover rounded mr-1"
+                onClick={navigateToPrevChat}
+              >
+                <LeftArrow className="w-4 h-4 text-tertiary group-hover:text-primary" />
+              </button>
+            </Tooltip>
+          )}
+          {!hideHistory && (
+            <Tooltip
+              tooltip={
+                <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                  Next
+                  <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
+                </span>
+              }
+            >
+              <button
+                className="px-2 py-1 bg-transparent border group border-primary hover:bg-primaryBtnHover rounded mr-1"
+                onClick={navigateToNextChat}
+              >
+                <RightArrow className="w-4 h-4 text-tertiary group-hover:text-primary" />
+              </button>
+            </Tooltip>
+          )}
         </div>
         <div className="flex items-center">
-          {!hideHistory && (
-            <button
-              className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
-              onClick={navigateToPrevChat}
-            >
-              <span className="text-sm font-normal text-secondary font-sans flex items-center">
-                Prev
-                <KbdShort keys={["⌘", "["]} additionalStyles="ml-2" />
-              </span>
-            </button>
-          )}
-
-          {!hideHistory && (
-            <button
-              className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
-              onClick={navigateToNextChat}
-            >
-              <span className="text-sm font-normal text-secondary font-sans flex items-center">
-                Next
-                <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
-              </span>
-            </button>
-          )}
           <button
             className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
             onClick={hideHistory ? handleEscape : onClickHistory}

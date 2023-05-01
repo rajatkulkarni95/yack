@@ -149,7 +149,7 @@ const ChatPage = () => {
     <React.Fragment key={id}>
       <Header />
       <div
-        className="p-4 overflow-y-auto max-h-[540px] duration-150"
+        className="p-4 overflow-y-auto max-h-[510px] duration-150"
         id="chat-container"
       >
         {chatConversations

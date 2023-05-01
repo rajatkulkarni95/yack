@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { hideApp } from "../Header";
 import { useNavigation } from "../../hooks/useNavigation";
+import KbdShort from "../KbdShort";
 
 type TProps = {
   sendPrompt: (prompt: string) => void;
@@ -21,8 +22,15 @@ export const PromptInput = ({
     setValue(e.target.value);
   };
 
+  const handleSubmit = () => {
+    setValue("");
+    if (value.trim() === "") return;
+
+    sendPrompt(value);
+  };
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && e.metaKey) {
       setValue("");
       e.preventDefault();
       if (value.trim() === "") return;
@@ -59,9 +67,9 @@ export const PromptInput = ({
   };
 
   return (
-    <div className="grow-wrap" data-replicated-value={value}>
+    <div className="grow-wrap relative" data-replicated-value={value}>
       <textarea
-        className={`rounded-md w-full resize-none focus-within:border-secondary border border-primary bg-secondary p-3 font-sans text-sm text-primary hover:border-secondary placeholder:text-placeholder
+        className={`rounded-md w-full resize-none focus-within:border-secondary border border-primary bg-secondary p-3  font-sans text-sm text-primary hover:border-secondary placeholder:text-placeholder
       `}
         style={{ scrollPaddingBlock: "8px" }}
         value={value}
@@ -74,6 +82,16 @@ export const PromptInput = ({
         rows={1}
         disabled={disabled}
       />
+      <button
+        className="px-3 py-1.5 bg-tertiary z-20 right-3 bottom-2 disabled:cursor-not-allowed disabled:opacity-50 absolute w-fit hover:brightness-110 rounded"
+        onClick={handleSubmit}
+        disabled={value.trim() === ""}
+      >
+        <span className="text-sm font-normal text-secondary font-sans flex items-center">
+          Send
+          <KbdShort keys={["⌘", "↵"]} additionalStyles="ml-2" />
+        </span>
+      </button>
     </div>
   );
 };

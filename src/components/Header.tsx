@@ -21,8 +21,14 @@ const Header = ({ hideHistory }: IHeaderProps) => {
   const { totalCost } = useUsage();
 
   const navigate = useNavigate();
-  const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =
-    useNavigation();
+  const {
+    navigateToNextChat,
+    navigateToPrevChat,
+    onClickHistory,
+    onClickNew,
+    isLeftDisabled,
+    isRightDisabled,
+  } = useNavigation();
 
   const handleEscape = () => {
     if (hideHistory) {
@@ -50,15 +56,20 @@ const Header = ({ hideHistory }: IHeaderProps) => {
           {!hideHistory && (
             <Tooltip
               tooltip={
-                <span className="text-sm font-normal text-secondary font-sans flex items-center">
-                  Prev
-                  <KbdShort keys={["⌘", "["]} additionalStyles="ml-2" />
-                </span>
+                !isLeftDisabled ? (
+                  <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                    Prev
+                    <KbdShort keys={["⌘", "["]} additionalStyles="ml-2" />
+                  </span>
+                ) : (
+                  ""
+                )
               }
             >
               <button
-                className="px-2 ml-4 py-1 bg-transparent group border border-primary hover:bg-primaryBtnHover rounded mr-1"
+                className="px-2 ml-4 py-1 bg-transparent disabled:opacity-40 disabled:cursor-not-allowed group border border-primary hover:bg-primaryBtnHover rounded mr-1"
                 onClick={navigateToPrevChat}
+                disabled={isLeftDisabled}
               >
                 <LeftArrow className="w-4 h-4 text-tertiary group-hover:text-primary" />
               </button>
@@ -67,15 +78,20 @@ const Header = ({ hideHistory }: IHeaderProps) => {
           {!hideHistory && (
             <Tooltip
               tooltip={
-                <span className="text-sm font-normal text-secondary font-sans flex items-center">
-                  Next
-                  <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
-                </span>
+                !isRightDisabled ? (
+                  <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                    Next
+                    <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
+                  </span>
+                ) : (
+                  ""
+                )
               }
             >
               <button
-                className="px-2 py-1 bg-transparent border group border-primary hover:bg-primaryBtnHover rounded mr-1"
+                className="px-2 py-1 bg-transparent border disabled:opacity-40 disabled:cursor-not-allowed group border-primary hover:bg-primaryBtnHover rounded mr-1"
                 onClick={navigateToNextChat}
+                disabled={isRightDisabled}
               >
                 <RightArrow className="w-4 h-4 text-tertiary group-hover:text-primary" />
               </button>

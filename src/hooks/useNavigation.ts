@@ -9,6 +9,8 @@ export const useNavigation = () => {
     nextChat: "",
     prevChat: "",
   });
+  const [isLeftDisabled, setIsLeftDisabled] = useState(false);
+  const [isRightDisabled, setIsRightDisabled] = useState(false);
 
   const onClickHistory = () => {
     navigate("/history");
@@ -26,6 +28,18 @@ export const useNavigation = () => {
 
         const currentChat = location.pathname.replace("/chat/", "");
         const currentChatIndex = historyMessages.indexOf(currentChat);
+
+        if (currentChatIndex === 0) {
+          setIsLeftDisabled(true);
+        } else {
+          setIsLeftDisabled(false);
+        }
+
+        if (currentChatIndex === historyMessages.length - 1) {
+          setIsRightDisabled(true);
+        } else {
+          setIsRightDisabled(false);
+        }
 
         setRollingChat({
           nextChat: historyMessages[currentChatIndex + 1],
@@ -53,5 +67,7 @@ export const useNavigation = () => {
     onClickNew,
     navigateToNextChat,
     navigateToPrevChat,
+    isLeftDisabled,
+    isRightDisabled,
   };
 };

@@ -22,7 +22,7 @@ body {
   outline: none;
 }
 
-:root {
+[data-theme="dark"] {
   --color-text-primary: #fafafa;
   --color-text-secondary: #d4d4d8;
   --color-text-tertiary: #a1a1aa;
@@ -52,6 +52,65 @@ body {
   --color-bg-kbd: #27272a;
   --color-bg-tooltip: #1a1a1a;
   --color-bg-tooltip-kbd: #343333;
+}
+
+[data-theme="light"] {
+  --color-text-primary: #18181b;
+  --color-text-secondary: #3f3f46;
+  --color-text-tertiary: #52525b;
+
+  --color-app-sidebar: #ffffff;
+  --color-bg-primary: #fafafa;
+  --color-bg-secondary: #f4f4f5;
+  --color-bg-tertiary: #e4e4e7;
+  --color-bg-hover: #f4f4f5;
+  --color-bg-primary-btn: #ffffff;
+  --color-bg-primary-btn-hover: #f4f5f8;
+  --color-bg-action: rgba(139, 92, 246, 0.4);
+
+  --color-border-primary: #d4d4d8;
+  --color-border-secondary: #a1a1aa;
+  --color-border-selected: #2563eb;
+  --color-border-error: #ef4444;
+
+  --color-icon: #3c4149;
+  --color-bg-code: #edebe5;
+  --color-text-inline-code: #ea580c;
+  --color-bg-error: #b91c1c;
+  --color-text-error: #f87171;
+
+  --color-bg-kbd: #f4f4f5;
+  --color-bg-tooltip: #f5f6f8;
+  --color-bg-tooltip-kbd: #dfdfe2;
+}
+
+[data-theme="andromeda"] {
+  --color-text-primary: rgb(255, 255, 255);
+  --color-text-secondary: rgb(165, 171, 168);
+  --color-text-tertiary: rgb(174, 171, 177);
+
+  --color-app-sidebar: rgb(33, 36, 42);
+  --color-bg-primary: rgb(30, 32, 37);
+  --color-bg-secondary: rgb(39, 42, 50);
+  --color-bg-tertiary: rgb(34, 36, 42);
+  --color-bg-hover: rgb(38, 41, 48);
+  --color-bg-primary-btn: rgb(32, 32, 32);
+  --color-bg-primary-btn-hover: rgb(51, 51, 51);
+
+  --color-border-primary: rgb(43, 46, 55);
+  --color-border-secondary: rgb(36, 38, 45);
+  --color-border-selected: rgb(37, 99, 235);
+  --color-border-error: rgb(239, 68, 68);
+
+  --color-icon: #c3c4c6;
+  --color-bg-code: rgb(30, 32, 37);
+  --color-text-inline-code: rgb(230, 160, 60);
+  --color-bg-error: rgb(104, 23, 44);
+  --color-text-error: rgb(228, 64, 115);
+
+  --color-bg-kbd: rgb(52, 51, 51);
+  --color-bg-tooltip: #1a1a1a;
+  --color-bg-tooltip-kbd: rgb(52, 51, 51);
 }
 
 .grow-wrap {
@@ -107,7 +166,7 @@ body {
 }
 
 a {
-  @apply text-amber-400 underline hover:text-amber-500;
+  @apply border-b-2 border-sky-400 text-primary no-underline;
 }
 
 p {

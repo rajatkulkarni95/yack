@@ -7,7 +7,7 @@ use open;
 use tauri::Manager;
 use tauri::{
     CustomMenuItem, GlobalShortcutManager, SystemTray, SystemTrayEvent, SystemTrayMenu,
-    SystemTrayMenuItem,
+    SystemTrayMenuItem, SystemTraySubmenu,
 };
 
 #[cfg(target_os = "macos")]
@@ -87,12 +87,24 @@ fn main() {
     let send_feedback = CustomMenuItem::new("send_feedback".to_string(), "Send Feedback");
     let history = CustomMenuItem::new("history".to_string(), "History").accelerator("Cmd+P");
     let new_chat = CustomMenuItem::new("new_chat".to_string(), "New Chat").accelerator("Cmd+N");
+    let light_theme = CustomMenuItem::new("light_theme".to_string(), "Light");
+    let dark_theme = CustomMenuItem::new("dark_theme".to_string(), "Dark");
+    let andromeda_theme = CustomMenuItem::new("andromeda_theme".to_string(), "Andromeda");
+
+    let themes = SystemTraySubmenu::new(
+        "Themes",
+        SystemTrayMenu::new()
+            .add_item(light_theme)
+            .add_item(dark_theme)
+            .add_item(andromeda_theme),
+    );
 
     let tray_menu = SystemTrayMenu::new()
         .add_item(open_yack)
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(new_chat)
         .add_item(history)
+        .add_submenu(themes)
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(send_feedback)
         .add_native_item(SystemTrayMenuItem::Separator)
@@ -149,6 +161,27 @@ fn main() {
                 "check_updates" => {
                     let w = app.get_window("main").unwrap();
                     w.emit("tauri://update", "");
+                }
+                "light_theme" => {
+                    let w = app.get_window("main").unwrap();
+                    w.show().unwrap();
+                    w.set_focus().unwrap();
+                    w.eval("document.documentElement.setAttribute('data-theme', 'light')")
+                        .unwrap();
+                }
+                "dark_theme" => {
+                    let w = app.get_window("main").unwrap();
+                    w.show().unwrap();
+                    w.set_focus().unwrap();
+                    w.eval("document.documentElement.setAttribute('data-theme', 'dark')")
+                        .unwrap();
+                }
+                "andromeda_theme" => {
+                    let w = app.get_window("main").unwrap();
+                    w.show().unwrap();
+                    w.set_focus().unwrap();
+                    w.eval("document.documentElement.setAttribute('data-theme', 'andromeda')")
+                        .unwrap();
                 }
                 _ => {}
             },

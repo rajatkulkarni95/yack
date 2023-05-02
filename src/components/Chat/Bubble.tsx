@@ -1,7 +1,6 @@
 import showdown from "showdown";
 import showdownHighlight from "showdown-highlight";
 import hljs from "highlight.js";
-import "highlight.js/styles/github-dark.css";
 import { ChatMessageParams } from "../../hooks/useChatCompletion";
 
 type TChatBubble = {
@@ -16,6 +15,8 @@ type TChatBubble = {
 // }
 
 const ChatBubble = ({ message, loading }: TChatBubble) => {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+
   const converter = new showdown.Converter({
     extensions: [
       showdownHighlight({
@@ -26,6 +27,7 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
       }),
     ],
   });
+
   const html = converter.makeHtml(message?.content || "");
 
   const regexPattern = /(https:\/\/\S+)/g;

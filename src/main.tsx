@@ -16,6 +16,8 @@ const Main = () => {
       60 * 60 * 1000
     );
 
+    document.documentElement.setAttribute("data-theme", "dark");
+
     return () => clearInterval(intervalId);
   }, []);
 

@@ -57,6 +57,23 @@ export const saveConversation = async (
 export const getConversation = async (chatId: string) =>
   await store.get<Promise<ChatMessageParams[]>>(chatId);
 
+// export const onTimeRefactor = async () => {
+//   const chatHistory: THistory | null = await store.get("history");
+//   if (chatHistory) {
+//     const newChatHistory: THistory = {};
+//     for (const [key, value] of Object.entries(chatHistory)) {
+//       newChatHistory[key] = {
+//         ...value,
+//         id: key,
+//       };
+//     }
+//     console.log({ newChatHistory });
+
+//     await store.set("history", newChatHistory);
+//     await store.save();
+//   }
+// };
+
 export const saveConversationIDToHistory = async ({
   id,
   title,

@@ -5,11 +5,6 @@ import { useKeyPress } from "../hooks/useKeyPress";
 import { useNavigate } from "react-router-dom";
 import { THistoryMessageProps, getHistory } from "../helpers/store";
 
-type THistoryMessage = {
-  created: number;
-  title: string;
-};
-
 const HistoryPage = () => {
   const [convHistory, setConvHistory] = useState<THistoryMessageProps[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);

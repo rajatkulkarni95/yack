@@ -35,8 +35,10 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
 
   return (
     <div
-      className={`py-2 px-3 text-bubble break-words w-fit !max-w-[70%] overflow-hidden rounded-lg mb-3 ${
-        message?.role === "user" ? "bg-action ml-auto" : "bg-hover mr-auto"
+      className={`py-2 px-3 text-bubble break-words w-fit !max-w-[70%] overflow-hidden mb-3 ${
+        message?.role === "user"
+          ? "bg-action ml-auto rounded-l-xl rounded-tr-xl"
+          : "bg-secondary mr-auto rounded-tl-xl rounded-r-xl"
       }`}
       dangerouslySetInnerHTML={{ __html: filteredHtml }}
     >

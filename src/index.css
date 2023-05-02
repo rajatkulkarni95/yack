@@ -110,7 +110,10 @@ a {
   @apply text-amber-400 underline hover:text-amber-500;
 }
 
-p,
+p {
+  @apply !text-primary !text-base leading-6;
+}
+
 li {
   @apply !text-primary !text-base !mb-1 leading-6;
 }

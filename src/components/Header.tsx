@@ -117,7 +117,7 @@ const Header = ({ hideHistory }: IHeaderProps) => {
               New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
             </span>
           </button>
-          <div className="px-2 py-1 bg-action cursor-default select-none hover:brightness-105 font-mono text-sm text-secondary rounded ml-4">
+          <div className="px-2 py-1 bg-action cursor-default select-none hover:brightness-105 font-mono text-sm text-secondary rounded ml-2">
             ${totalCost}
           </div>
         </div>

@@ -67,9 +67,12 @@ export const PromptInput = ({
   };
 
   return (
-    <div className="grow-wrap relative" data-replicated-value={value}>
+    <div
+      className="grow-wrap relative rounded-md w-full focus-within:border-secondary border border-primary bg-secondary hover:border-secondary"
+      data-replicated-value={value}
+    >
       <textarea
-        className={`rounded-md w-full resize-none focus-within:border-secondary border border-primary bg-secondary p-3  font-sans text-sm text-primary hover:border-secondary placeholder:text-placeholder
+        className={`resize-none bg-transparent p-0 font-sans text-sm text-primary placeholder:text-placeholder
       `}
         style={{ scrollPaddingBlock: "8px" }}
         value={value}
@@ -83,7 +86,7 @@ export const PromptInput = ({
         disabled={disabled}
       />
       <button
-        className="px-3 py-1.5 bg-tertiary z-20 right-3 bottom-2 disabled:cursor-not-allowed disabled:opacity-50 absolute w-fit hover:brightness-110 rounded"
+        className="px-3 py-1.5 bg-tertiary ml-auto mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50 w-fit hover:brightness-110 rounded"
         onClick={handleSubmit}
         disabled={value.trim() === ""}
       >

@@ -68,7 +68,7 @@ body {
   /* Hidden from view, clicks, and screen readers */
   visibility: hidden;
   max-height: 180px;
-  min-height: 56px;
+  /* min-height: 56px; */
 }
 .grow-wrap > textarea {
   /* You could leave this, but after a user resizes, then it ruins the auto sizing */

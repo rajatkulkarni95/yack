@@ -26,20 +26,6 @@ const HistoryPage = () => {
 
   const navigate = useNavigate();
 
-  const scrollIfNeeded = (idx: number) => {
-    const container = containerRef.current;
-    if (container) {
-      const selected = container.children[idx];
-      const rect = selected.getBoundingClientRect();
-
-      if (rect.bottom > container.clientHeight) {
-        container.scrollTop += rect.bottom - container.clientHeight;
-      } else if (rect.top < 0) {
-        container.scrollTop += rect.top;
-      }
-    }
-  };
-
   const initialState = { selectedIndex: 0 };
 
   function reducer(
@@ -49,7 +35,16 @@ const HistoryPage = () => {
     switch (action.type) {
       case "arrowUp": {
         if (state.selectedIndex !== 0) {
-          scrollIfNeeded(state.selectedIndex - 1);
+          const currentSelectedElement = document.getElementById(
+            state.selectedIndex.toString()
+          );
+          if (currentSelectedElement) {
+            currentSelectedElement.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+              inline: "start",
+            });
+          }
         }
         return {
           selectedIndex:
@@ -59,7 +54,16 @@ const HistoryPage = () => {
         };
       }
       case "arrowDown": {
-        scrollIfNeeded(state.selectedIndex + 1);
+        const currentSelectedElement = document.getElementById(
+          state.selectedIndex.toString()
+        );
+        if (currentSelectedElement) {
+          currentSelectedElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "center",
+          });
+        }
         return {
           selectedIndex:
             state.selectedIndex !== convHistory.length - 1
@@ -155,6 +159,7 @@ const HistoryPage = () => {
                   onClick={() => {
                     navigate(`/chat/${conversation.id}`);
                   }}
+                  id={i.toString()}
                 >
                   <span className="text-base font-normal truncate">
                     {conversation.title}

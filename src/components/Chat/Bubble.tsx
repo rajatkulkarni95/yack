@@ -32,11 +32,14 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
 
   const anchorRegex = /(https:\/\/\S+)/g;
   const anchorReplacement = "<a href='$1' target='_blank'>$1</a>";
-  const lineBreakRegex = /\r?\n/g;
-  const lineBreakReplacement = "<br />";
-  const filteredHtml = html
-    .replace(anchorRegex, anchorReplacement)
-    .replace(lineBreakRegex, lineBreakReplacement);
+
+  let filteredHtml = html.replace(anchorRegex, anchorReplacement);
+
+  if (message?.role === "user") {
+    const lineBreakRegex = /\r?\n/g;
+    const lineBreakReplacement = "<br />";
+    filteredHtml.replace(lineBreakRegex, lineBreakReplacement);
+  }
 
   return (
     <div

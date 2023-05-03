@@ -176,6 +176,18 @@ li > p {
   @apply contents;
 }
 
+h1 {
+  @apply !text-primary !text-2xl !font-bold !mt-4 !mb-2;
+}
+
+h2 {
+  @apply !text-primary !text-xl !font-bold !mt-4 !mb-2;
+}
+
+h3 {
+  @apply !text-primary !text-lg !font-bold !mt-4 !mb-2;
+}
+
 ol {
   @apply !list-decimal !list-inside leading-4 my-2;
 }

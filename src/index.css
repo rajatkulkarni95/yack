@@ -28,19 +28,15 @@ body {
   --color-text-tertiary: #a1a1aa;
   --color-text-placeholder: #71717a;
 
-  --color-app-sidebar: #141515;
   --color-bg-primary: #18181b;
   --color-bg-secondary: #27272a;
   --color-bg-tertiary: #3f3f46;
-  --color-bg-fade: #1e1e1e;
   --color-bg-hover: #232324;
-  --color-bg-primary-btn: #202020;
   --color-bg-primary-btn-hover: #333333;
   --color-bg-action: rgba(67, 56, 202, 0.6);
 
   --color-border-primary: #2e2e2f;
   --color-border-secondary: #52525b;
-  --color-border-selected: #2563eb;
   --color-border-error: #ef4444;
 
   --color-icon: #c3c4c6;
@@ -60,18 +56,15 @@ body {
   --color-text-tertiary: #52525b;
   --color-text-placeholder: #71717a;
 
-  --color-app-sidebar: #ffffff;
   --color-bg-primary: #fafafa;
   --color-bg-secondary: #f4f4f5;
   --color-bg-tertiary: #e4e4e7;
   --color-bg-hover: #f4f4f5;
-  --color-bg-primary-btn: #ffffff;
   --color-bg-primary-btn-hover: #f4f5f8;
-  --color-bg-action: rgba(139, 92, 246, 0.4);
+  --color-bg-action: rgba(165, 180, 252, 0.4);
 
   --color-border-primary: #d4d4d8;
   --color-border-secondary: #a1a1aa;
-  --color-border-selected: #2563eb;
   --color-border-error: #ef4444;
 
   --color-icon: #3c4149;
@@ -87,16 +80,17 @@ body {
 
 [data-theme="andromeda"] {
   --color-text-primary: rgb(255, 255, 255);
-  --color-text-secondary: rgb(165, 171, 168);
+  --color-text-secondary: rgb(206, 215, 210);
   --color-text-tertiary: rgb(174, 171, 177);
+  --color-text-placeholder: rgb(113, 113, 122);
 
-  --color-app-sidebar: rgb(33, 36, 42);
   --color-bg-primary: rgb(30, 32, 37);
   --color-bg-secondary: rgb(39, 42, 50);
   --color-bg-tertiary: rgb(34, 36, 42);
   --color-bg-hover: rgb(38, 41, 48);
   --color-bg-primary-btn: rgb(32, 32, 32);
-  --color-bg-primary-btn-hover: rgb(51, 51, 51);
+  --color-bg-primary-btn-hover: rgb(74, 71, 71);
+  --color-bg-action: rgba(79, 217, 184, 0.6);
 
   --color-border-primary: rgb(43, 46, 55);
   --color-border-secondary: rgb(36, 38, 45);
@@ -199,5 +193,5 @@ code {
 }
 
 pre {
-  @apply !bg-code !text-primary !p-2 !rounded-md !mb-2 !overflow-x-auto !text-sm;
+  @apply !bg-code !text-primary !p-2 !rounded-md !overflow-x-auto !text-sm;
 }

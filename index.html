@@ -15,6 +15,11 @@
       href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css"
       id="light-theme"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/night-owl.min.css"
+      id="andromeda-theme"
+    />
     <title>Yack</title>
   </head>
 
@@ -24,6 +29,7 @@
     <script>
       const darkThemeLink = document.getElementById("dark-theme");
       const lightThemeLink = document.getElementById("light-theme");
+      const andromedaThemeLink = document.getElementById("andromeda-theme");
       const html = document.querySelector("html");
 
       // Create a new MutationObserver
@@ -33,12 +39,22 @@
           // Check if the data-theme attribute was changed
           if (mutation.attributeName === "data-theme") {
             // If the data-theme is not light, disable the highlightjsLink
-            if (html.dataset.theme !== "light") {
-              darkThemeLink.disabled = false;
-              lightThemeLink.disabled = true;
-            } else {
-              darkThemeLink.disabled = true;
-              lightThemeLink.disabled = false;
+            switch (html.dataset.theme) {
+              case "dark":
+                darkThemeLink.disabled = false;
+                lightThemeLink.disabled = true;
+                andromedaThemeLink.disabled = true;
+                break;
+              case "light":
+                darkThemeLink.disabled = true;
+                lightThemeLink.disabled = false;
+                andromedaThemeLink.disabled = true;
+                break;
+              case "andromeda":
+                darkThemeLink.disabled = true;
+                lightThemeLink.disabled = true;
+                andromedaThemeLink.disabled = false;
+                break;
             }
           }
         }

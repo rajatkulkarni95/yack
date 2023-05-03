@@ -90,16 +90,15 @@ body {
   --color-bg-hover: rgb(38, 41, 48);
   --color-bg-primary-btn: rgb(32, 32, 32);
   --color-bg-primary-btn-hover: rgb(74, 71, 71);
-  --color-bg-action: rgba(79, 217, 184, 0.6);
+  --color-bg-action: rgba(57, 139, 233, 0.6);
 
   --color-border-primary: rgb(43, 46, 55);
-  --color-border-secondary: rgb(36, 38, 45);
-  --color-border-selected: rgb(37, 99, 235);
-  --color-border-error: rgb(239, 68, 68);
+  --color-border-secondary: rgb(73, 77, 90);
+  --color-border-error: rgb(132, 8, 8);
 
   --color-icon: #c3c4c6;
   --color-bg-code: rgb(30, 32, 37);
-  --color-text-inline-code: rgb(230, 160, 60);
+  --color-text-inline-code: rgb(225, 108, 85);
   --color-bg-error: rgb(104, 23, 44);
   --color-text-error: rgb(228, 64, 115);
 
@@ -205,5 +204,5 @@ code {
 }
 
 pre {
-  @apply !bg-code !text-primary !p-2 !rounded-md !overflow-x-auto !text-sm;
+  @apply !bg-code !text-primary !p-2 !rounded-md !overflow-x-auto !text-sm my-2;
 }

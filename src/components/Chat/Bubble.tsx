@@ -30,10 +30,13 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
 
   const html = converter.makeHtml(message?.content || "");
 
-  const regexPattern = /(https:\/\/\S+)/g;
-  const replacementString = "<a href='$1' target='_blank'>$1</a>";
-
-  const filteredHtml = html.replace(regexPattern, replacementString);
+  const anchorRegex = /(https:\/\/\S+)/g;
+  const anchorReplacement = "<a href='$1' target='_blank'>$1</a>";
+  const lineBreakRegex = /\r?\n/g;
+  const lineBreakReplacement = "<br />";
+  const filteredHtml = html
+    .replace(anchorRegex, anchorReplacement)
+    .replace(lineBreakRegex, lineBreakReplacement);
 
   return (
     <div

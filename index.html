@@ -5,11 +5,63 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    <title>Tauri + React + TS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark.min.css"
+      id="dark-theme"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css"
+      id="light-theme"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/night-owl.min.css"
+      id="andromeda-theme"
+    />
+    <title>Yack</title>
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      const darkThemeLink = document.getElementById("dark-theme");
+      const lightThemeLink = document.getElementById("light-theme");
+      const andromedaThemeLink = document.getElementById("andromeda-theme");
+      const html = document.querySelector("html");
+
+      // Create a new MutationObserver
+      const observer = new MutationObserver((mutationsList, observer) => {
+        // Iterate over each mutation
+        for (let mutation of mutationsList) {
+          // Check if the data-theme attribute was changed
+          if (mutation.attributeName === "data-theme") {
+            // If the data-theme is not light, disable the highlightjsLink
+            switch (html.dataset.theme) {
+              case "dark":
+                darkThemeLink.disabled = false;
+                lightThemeLink.disabled = true;
+                andromedaThemeLink.disabled = true;
+                break;
+              case "light":
+                darkThemeLink.disabled = true;
+                lightThemeLink.disabled = false;
+                andromedaThemeLink.disabled = true;
+                break;
+              case "andromeda":
+                darkThemeLink.disabled = true;
+                lightThemeLink.disabled = true;
+                andromedaThemeLink.disabled = false;
+                break;
+            }
+          }
+        }
+      });
+
+      // Observe changes to the html element
+      observer.observe(html, { attributes: true });
+    </script>
   </body>
 </html>

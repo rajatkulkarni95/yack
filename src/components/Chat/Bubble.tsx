@@ -1,7 +1,6 @@
 import showdown from "showdown";
 import showdownHighlight from "showdown-highlight";
 import hljs from "highlight.js";
-import "highlight.js/styles/github-dark.css";
 import { ChatMessageParams } from "../../hooks/useChatCompletion";
 
 type TChatBubble = {
@@ -16,6 +15,8 @@ type TChatBubble = {
 // }
 
 const ChatBubble = ({ message, loading }: TChatBubble) => {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+
   const converter = new showdown.Converter({
     extensions: [
       showdownHighlight({
@@ -26,16 +27,23 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
       }),
     ],
   });
+
   const html = converter.makeHtml(message?.content || "");
 
-  const regexPattern = /(https:\/\/\S+)/g;
-  const replacementString = "<a href='$1' target='_blank'>$1</a>";
+  const anchorRegex = /(https:\/\/\S+)/g;
+  const anchorReplacement = "<a href='$1' target='_blank'>$1</a>";
 
-  const filteredHtml = html.replace(regexPattern, replacementString);
+  let filteredHtml = html.replace(anchorRegex, anchorReplacement);
+
+  if (message?.role === "user") {
+    const lineBreakRegex = /\r?\n/g;
+    const lineBreakReplacement = "<br />";
+    filteredHtml.replace(lineBreakRegex, lineBreakReplacement);
+  }
 
   return (
     <div
-      className={`py-2 px-3 text-bubble break-words w-fit !max-w-[70%] overflow-hidden mb-3 ${
+      className={`py-2 px-3 text-bubble break-words w-fit !max-w-[70%] overflow-hidden shadow-sm mb-3 ${
         message?.role === "user"
           ? "bg-action ml-auto rounded-l-xl rounded-tr-xl"
           : "bg-secondary mr-auto rounded-tl-xl rounded-r-xl"

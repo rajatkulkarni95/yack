@@ -33,7 +33,7 @@ body {
   --color-bg-tertiary: #3f3f46;
   --color-bg-hover: #232324;
   --color-bg-primary-btn-hover: #333333;
-  --color-bg-action: rgba(67, 56, 202, 0.6);
+  --color-bg-action: #5f20bd;
 
   --color-border-primary: #2e2e2f;
   --color-border-secondary: #52525b;
@@ -61,7 +61,7 @@ body {
   --color-bg-tertiary: #e4e4e7;
   --color-bg-hover: #f4f4f5;
   --color-bg-primary-btn-hover: #f4f5f8;
-  --color-bg-action: rgba(165, 180, 252, 0.4);
+  --color-bg-action: rgba(95, 32, 189, 0.4);
 
   --color-border-primary: #d4d4d8;
   --color-border-secondary: #a1a1aa;

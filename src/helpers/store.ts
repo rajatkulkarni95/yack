@@ -104,3 +104,10 @@ export const saveConversationIDToHistory = async ({
 };
 
 export const getHistory = async () => await store.get<THistory>("history");
+
+export const saveTheme = async (value: string) => {
+  await store.set("theme", value);
+  await store.save();
+};
+
+export const getSavedTheme = async () => await store.get<string>("theme");

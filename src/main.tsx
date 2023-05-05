@@ -5,10 +5,13 @@ import routes from "./routes";
 import "./index.css";
 
 import { HotkeysProvider } from "react-hotkeys-hook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { emit } from "@tauri-apps/api/event";
+import { getSavedTheme, saveTheme } from "./helpers/store";
 
 const Main = () => {
+  const [theme, setTheme] = useState<string>("");
+
   useEffect(() => {
     // Check for updates every hour
     const intervalId = setInterval(
@@ -16,10 +19,47 @@ const Main = () => {
       60 * 60 * 1000
     );
 
-    document.documentElement.setAttribute("data-theme", "dark");
+    async function setStoredTheme() {
+      const storedTheme = await getSavedTheme();
+
+      if (storedTheme) {
+        console.log({ storedTheme });
+
+        setTheme(storedTheme);
+      }
+    }
+
+    setStoredTheme();
 
     return () => clearInterval(intervalId);
   }, []);
+
+  const html = document.querySelector("html");
+  if (html) {
+    const observer = new MutationObserver((mutationsList, observer) => {
+      // Iterate over each mutation
+      for (let mutation of mutationsList) {
+        // Check if the data-theme attribute was changed
+        if (mutation.attributeName === "data-theme" && html.dataset.theme) {
+          setTheme(html.dataset.theme);
+          saveTheme(html.dataset.theme);
+        }
+      }
+    });
+
+    // Observe changes to the html element
+    observer.observe(html, { attributes: true });
+  }
+
+  useEffect(() => {
+    const htmlTheme = document.querySelector("html")?.dataset.theme;
+    if (htmlTheme !== theme) {
+      document.querySelector("html")?.setAttribute("data-theme", theme);
+      console.log({ theme });
+
+      saveTheme(theme);
+    }
+  }, [theme]);
 
   return (
     <HotkeysProvider>

@@ -35,9 +35,10 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
     const codeBlocks = document.querySelectorAll("pre > code");
     codeBlocks.forEach((codeBlock) => {
       if (codeBlock.parentElement?.querySelector(".copy-button")) return;
+
       const copyButton = document.createElement("button");
       copyButton.className =
-        "copy-button absolute top-1 right-1 flex z-10 p-1 bg-secondary rounded bg-transparent hover:bg-tertiary group";
+        "copy-button absolute top-1 right-1 flex z-10 p-1 bg-secondary rounded bg-transparent hover:bg-tertiary group opacity-0 transition-opacity duration-200";
       copyButton.style.cursor = "pointer";
       copyButton.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-icon group-hover:text-primary">

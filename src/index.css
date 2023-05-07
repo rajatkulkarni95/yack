@@ -204,5 +204,5 @@ code {
 }
 
 pre {
-  @apply !bg-code !text-primary !p-2 !rounded-md !overflow-x-auto !text-sm my-2;
+  @apply !bg-code !text-primary !p-2 !rounded-md !overflow-x-auto !text-sm my-2 relative;
 }

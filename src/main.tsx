@@ -23,9 +23,9 @@ const Main = () => {
       const storedTheme = await getSavedTheme();
 
       if (storedTheme) {
-        console.log({ storedTheme });
-
         setTheme(storedTheme);
+      } else {
+        setTheme("dark");
       }
     }
 
@@ -55,7 +55,6 @@ const Main = () => {
     const htmlTheme = document.querySelector("html")?.dataset.theme;
     if (htmlTheme !== theme) {
       document.querySelector("html")?.setAttribute("data-theme", theme);
-      console.log({ theme });
 
       saveTheme(theme);
     }

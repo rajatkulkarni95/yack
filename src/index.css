@@ -199,10 +199,10 @@ pre > code {
   @apply !bg-code !text-primary;
 }
 
-code {
-  @apply text-inlineCode;
+:not(pre) > code {
+  @apply bg-tertiary text-sm text-primary px-1 py-0.5 border rounded border-primary;
 }
 
 pre {
-  @apply !bg-code !text-primary !rounded-md !overflow-x-auto !text-sm my-2 relative flex flex-col-reverse border border-primary;
+  @apply !bg-code !text-primary !rounded-md  !overflow-x-auto !text-sm my-2 relative flex flex-col-reverse border border-primary;
 }

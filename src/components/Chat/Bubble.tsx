@@ -71,7 +71,7 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
 
       const langDiv = document.createElement("div");
       langDiv.className =
-        "text-xs w-full text-secondary overflow-y-hidden bg-secondary box-border rounded-t px-3 py-1 flex items-center justify-between";
+        "text-xs w-full border-b border-primary text-secondary overflow-y-hidden bg-secondary box-border rounded-t-md px-3 py-1 flex items-center justify-between";
       langDiv.innerHTML = `<span>${lang}</span>`;
 
       langDiv.appendChild(addCopyButtons(codeBlock));

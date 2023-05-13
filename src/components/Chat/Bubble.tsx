@@ -11,7 +11,7 @@ type TChatBubble = {
 
 function extractLanguageFromCodeBlock(inputString: string): string | null {
   const splitString = inputString.split(" ");
-  return splitString[0] || "Unknown";
+  return splitString[0] || "";
 }
 
 const ChatBubble = ({ message, loading }: TChatBubble) => {

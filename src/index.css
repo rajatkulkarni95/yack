@@ -22,6 +22,10 @@ body {
   outline: none;
 }
 
+button {
+  cursor: default;
+}
+
 [data-theme="dark"] {
   --color-text-primary: #fafafa;
   --color-text-secondary: #d4d4d8;

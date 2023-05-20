@@ -33,7 +33,7 @@ export const useNavigation = () => {
     }
 
     saveHistoryToLocalState();
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     async function calcRollingChat() {

@@ -107,6 +107,7 @@ export const getHistory = async () => await store.get<THistory>("history");
 
 export const saveTheme = async (value: string) => {
   await store.set("theme", value);
+  window.localStorage.setItem("theme", value);
   await store.save();
 };
 

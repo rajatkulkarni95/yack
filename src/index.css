@@ -63,7 +63,7 @@ button {
   --color-bg-primary: #fafafa;
   --color-bg-secondary: #ebebef;
   --color-bg-tertiary: #e4e4e7;
-  --color-bg-hover: #f4f4f5;
+  --color-bg-hover: #f5f5f5;
   --color-bg-primary-btn-hover: #f4f5f8;
   --color-bg-action: rgba(95, 32, 189, 0.4);
 
@@ -200,7 +200,7 @@ ul {
 }
 
 pre > code {
-  @apply max-h-[320px] !bg-code !text-primary;
+  @apply max-h-[320px] !bg-code px-3 py-2 !text-primary;
 }
 
 :not(pre) > code {
@@ -208,7 +208,7 @@ pre > code {
 }
 
 pre {
-  @apply relative my-2 flex  flex-col-reverse !overflow-x-auto !rounded-md border border-primary !bg-code !text-sm !text-primary;
+  @apply relative my-2 flex flex-col !overflow-x-auto !rounded-md border border-primary !bg-code !text-sm !text-primary;
 }
 
 table {

@@ -42,11 +42,11 @@ const TokenRegistration = () => {
   };
 
   return (
-    <section className="flex flex-col w-full p-4">
-      <form className="flex flex-col w-full mt-3" onSubmit={handleSubmit}>
+    <section className="flex w-full flex-col p-4">
+      <form className="mt-3 flex w-full flex-col" onSubmit={handleSubmit}>
         <label
           htmlFor="token"
-          className="text-base font-normal text-secondary mb-1"
+          className="mb-1 text-base font-normal text-secondary"
         >
           OpenAI API Key
         </label>
@@ -57,7 +57,7 @@ const TokenRegistration = () => {
             name="token"
             value={token}
             onChange={(e) => setToken(e.target.value)}
-            className={`rounded-md focus-within:border-secondary border border-primary bg-primary h-fit w-[460px] px-4 py-2 font-sans text-base text-primary hover:border-secondary placeholder:text-placeholder`}
+            className={`h-fit w-[460px] rounded-md border border-primary bg-primary px-4 py-2 font-sans text-base text-primary placeholder:text-placeholder focus-within:border-secondary hover:border-secondary`}
             placeholder="sk-xxxxxxxxxxxxxxxxxxxxx"
             disabled={isSubmitting}
             autoCapitalize="none"
@@ -68,7 +68,7 @@ const TokenRegistration = () => {
           />
           <button
             type="submit"
-            className={`ml-2 py-2 px-3 border w-fit border-primary rounded-md bg-secondary text-primary font-medium text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:border-transparent ${
+            className={`ml-2 w-fit rounded-md border border-primary bg-secondary px-3 py-2 text-base font-medium text-primary focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 ${
               isSubmitting || !token
                 ? "cursor-not-allowed"
                 : "cursor-default hover:bg-action"
@@ -78,10 +78,10 @@ const TokenRegistration = () => {
             Get Started
           </button>
         </div>
-        {error && <p className="text-sm font-normal text-err mt-2">{error}</p>}
+        {error && <p className="mt-2 text-sm font-normal text-err">{error}</p>}
       </form>
 
-      <p className="text-base text-secondary mt-8">
+      <p className="mt-8 text-base text-secondary">
         The OpenAI API uses API keys for authentication. Visit your{" "}
         <a
           target="_blank"
@@ -93,9 +93,9 @@ const TokenRegistration = () => {
         </a>{" "}
         to retrieve the API key you'll use in your requests.
       </p>
-      <div className="border border-dashed border-primary my-2" />
-      <h2 className="text-xl text-primary font-bold mt-2">Disclaimer</h2>
-      <ul className="text-base text-secondary mt-2">
+      <div className="my-2 border border-dashed border-primary" />
+      <h2 className="mt-2 text-xl font-bold text-primary">Disclaimer</h2>
+      <ul className="mt-2 text-base text-secondary">
         <li>
           We do not store your API key on our servers.{" "}
           <i>Hell I don't even have a server.</i>
@@ -108,8 +108,8 @@ const TokenRegistration = () => {
           <i>Not in that business as well.</i>
         </li>{" "}
       </ul>
-      <div className="border border-dashed border-primary my-4" />
-      <p className="text-base text-secondary mt-8">
+      <div className="my-4 border border-dashed border-primary" />
+      <p className="mt-8 text-base text-secondary">
         Yack is merely a wrapper around the ChatGPT API, all your questions and
         answers are either stored on your device in the browser's local storage
         or on OpenAI's servers.

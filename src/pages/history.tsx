@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
 import KbdShort from "../components/KbdShort";
 import { useKeyPress } from "../hooks/useKeyPress";
@@ -7,7 +7,15 @@ import { THistoryMessageProps, getHistory } from "../helpers/store";
 
 const HistoryPage = () => {
   const [convHistory, setConvHistory] = useState<THistoryMessageProps[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const moveSelectedIndex = (direction: number) => {
+    const newIndex = selectedIndex + direction;
+    if (newIndex < 0 || newIndex > convHistory.length - 1) return;
+
+    setSelectedIndex(newIndex);
+  };
 
   useEffect(() => {
     async function fetchHistory() {
@@ -26,100 +34,60 @@ const HistoryPage = () => {
 
   const navigate = useNavigate();
 
-  const initialState = { selectedIndex: 0 };
-
-  function reducer(
-    state: { selectedIndex: number },
-    action: { type: any; payload?: any }
-  ) {
-    switch (action.type) {
-      case "arrowUp": {
-        if (state.selectedIndex !== 0) {
-          const currentSelectedElement = document.getElementById(
-            state.selectedIndex.toString()
-          );
-          if (currentSelectedElement) {
-            currentSelectedElement.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-              inline: "start",
-            });
-          }
-        }
-        return {
-          selectedIndex:
-            state.selectedIndex !== 0
-              ? state.selectedIndex - 1
-              : convHistory.length - 1,
-        };
-      }
-      case "arrowDown": {
-        const currentSelectedElement = document.getElementById(
-          state.selectedIndex.toString()
-        );
-        if (currentSelectedElement) {
-          currentSelectedElement.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "center",
-          });
-        }
-        return {
-          selectedIndex:
-            state.selectedIndex !== convHistory.length - 1
-              ? state.selectedIndex + 1
-              : 0,
-        };
-      }
-      case "select":
-        return { selectedIndex: action.payload };
-      case "enter": {
-        navigate(`/chat/${convHistory[action.payload].id}`);
-        return { selectedIndex: action.payload };
-      }
-
-      default:
-        throw new Error();
-    }
-  }
-
-  const arrowUpPressed = useKeyPress("ArrowUp");
-  const arrowDownPressed = useKeyPress("ArrowDown");
+  const arrowUpPressed = useKeyPress("ArrowUp", true);
+  const arrowDownPressed = useKeyPress("ArrowDown", true);
   const enterPressed = useKeyPress("Enter");
-  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (arrowUpPressed) {
-      dispatch({ type: "arrowUp" });
+      moveSelectedIndex(-1);
     }
   }, [arrowUpPressed]);
 
   useEffect(() => {
     if (arrowDownPressed) {
-      dispatch({ type: "arrowDown" });
+      moveSelectedIndex(1);
     }
   }, [arrowDownPressed]);
 
   useEffect(() => {
     if (enterPressed) {
-      dispatch({ type: "enter", payload: state.selectedIndex });
+      const selectedElement = document.querySelector(".activeElement");
+      if (!selectedElement) return;
+
+      const id = selectedElement.id;
+      navigate(`/chat/${id}`);
     }
   }, [enterPressed]);
+
+  useEffect(() => {
+    const selectedElement = document.querySelector(".activeElement");
+    if (!selectedElement) return;
+
+    selectedElement.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
+    });
+  }, [selectedIndex]);
 
   return (
     <React.Fragment>
       <Header hideHistory />
 
-      <div className="flex flex-col overflow-y-auto h-[580px] pb-2">
-        <p className="text-2xl font-medium mb-2 px-4 pt-4 text-secondary">
-          History
+      <div className="flex h-[580px] flex-col overflow-y-auto pb-2">
+        <p className="px-4 pt-4 text-lg font-medium text-secondary">
+          History{" "}
+          <span className="font-mono text-tertiary">
+            ({convHistory.length})
+          </span>
         </p>
         {convHistory.length === 0 && (
           <div className="text-base font-normal text-tertiary">
             No history yet
           </div>
         )}
-        <div className="flex flex-col px-4" ref={containerRef}>
+        <div className="flex flex-col px-4">
           {convHistory.map((conversation, i) => {
             const date = new Date(conversation.created);
             const dateString = date.toLocaleDateString("en-US", {
@@ -140,36 +108,36 @@ const HistoryPage = () => {
                   }
                 );
 
+            const isSelected = i === selectedIndex;
+
             return (
               <React.Fragment key={conversation.id}>
                 {showDate && (
-                  <div className="text-xs font-normal text-tertiary mt-4 mb-2 px-3 py-1 rounded-full bg-secondary w-fit">
+                  <div className="mb-2 mt-4 w-fit rounded-full bg-secondary px-3 py-1 text-xs font-normal text-tertiary">
                     {dateString}
                   </div>
                 )}
                 <button
                   key={conversation.id}
-                  className={`hover:bg-hover hover:text-primary ${
-                    i === state.selectedIndex
-                      ? "bg-hover text-primary"
-                      : "bg-primary text-secondary"
-                  } py-2 border-primary border-b border-l border-r text-left flex items-center justify-between px-4 ${
-                    showDate ? "border-t" : ""
-                  }`}
+                  className={`flex items-center justify-between border px-4 py-2 text-left hover:bg-hover hover:text-primary
+                  ${
+                    isSelected
+                      ? "activeElement !border-secondary bg-hover text-primary"
+                      : "border-b-primary border-l-primary border-r-primary border-t-transparent bg-primary text-secondary"
+                  } ${showDate && !isSelected ? "!border-t-primary" : ""}
+                  `}
                   onClick={() => {
                     navigate(`/chat/${conversation.id}`);
                   }}
-                  id={i.toString()}
+                  id={conversation.id}
                 >
-                  <span className="text-base font-normal truncate">
+                  <span className="truncate text-base font-normal">
                     {conversation.title}
                   </span>
                   <KbdShort
                     keys={["↵"]}
                     additionalStyles={
-                      i === state.selectedIndex
-                        ? "visible ml-2"
-                        : "invisible ml-2"
+                      isSelected ? "visible ml-2" : "invisible ml-2"
                     }
                   />
                 </button>

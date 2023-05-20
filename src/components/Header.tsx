@@ -49,15 +49,15 @@ const Header = ({ hideHistory }: IHeaderProps) => {
   const historyKbd = hideHistory ? ["Esc"] : ["⌘", "P"];
 
   return (
-    <header className="p-4 flex bg-primary border-b border-primary h-12">
-      <div className="flex items-center justify-between w-full">
+    <header className="flex h-12 border-b border-primary bg-primary p-4">
+      <div className="flex w-full items-center justify-between">
         <div className="flex items-center">
-          <LogoIcon className="w-20 h-10 text-primary" />{" "}
+          <LogoIcon className="h-10 w-20 text-primary" />{" "}
           {!hideHistory && (
             <Tooltip
               tooltip={
                 !isLeftDisabled ? (
-                  <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                  <span className="flex items-center font-sans text-sm font-normal text-secondary">
                     Prev
                     <KbdShort keys={["⌘", "["]} additionalStyles="ml-2" />
                   </span>
@@ -67,11 +67,11 @@ const Header = ({ hideHistory }: IHeaderProps) => {
               }
             >
               <button
-                className="px-2 ml-4 py-1 bg-transparent disabled:opacity-40 disabled:cursor-not-allowed group border border-primary hover:bg-primaryBtnHover rounded mr-1"
+                className="group ml-4 mr-1 rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={navigateToPrevChat}
                 disabled={isLeftDisabled}
               >
-                <LeftArrow className="w-4 h-4 text-tertiary group-hover:text-primary" />
+                <LeftArrow className="h-4 w-4 text-tertiary group-hover:text-primary" />
               </button>
             </Tooltip>
           )}
@@ -79,7 +79,7 @@ const Header = ({ hideHistory }: IHeaderProps) => {
             <Tooltip
               tooltip={
                 !isRightDisabled ? (
-                  <span className="text-sm font-normal text-secondary font-sans flex items-center">
+                  <span className="flex items-center font-sans text-sm font-normal text-secondary">
                     Next
                     <KbdShort keys={["⌘", "]"]} additionalStyles="ml-2" />
                   </span>
@@ -89,35 +89,35 @@ const Header = ({ hideHistory }: IHeaderProps) => {
               }
             >
               <button
-                className="px-2 py-1 bg-transparent border disabled:opacity-40 disabled:cursor-not-allowed group border-primary hover:bg-primaryBtnHover rounded mr-1"
+                className="group mr-1 rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={navigateToNextChat}
                 disabled={isRightDisabled}
               >
-                <RightArrow className="w-4 h-4 text-tertiary group-hover:text-primary" />
+                <RightArrow className="h-4 w-4 text-tertiary group-hover:text-primary" />
               </button>
             </Tooltip>
           )}
         </div>
         <div className="flex items-center">
           <button
-            className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded mr-1"
+            className="mr-1 rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"
             onClick={hideHistory ? handleEscape : onClickHistory}
           >
-            <span className="text-sm font-normal text-secondary font-sans flex items-center">
+            <span className="flex items-center font-sans text-sm font-normal text-secondary">
               {hideHistory ? "Back" : "History"}{" "}
               <KbdShort keys={historyKbd} additionalStyles="ml-2" />
             </span>
           </button>
 
           <button
-            className="px-2 py-1 bg-transparent border border-primary hover:bg-primaryBtnHover rounded"
+            className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"
             onClick={onClickNew}
           >
-            <span className="text-sm font-normal font-sans text-secondary flex items-center">
+            <span className="flex items-center font-sans text-sm font-normal text-secondary">
               New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />
             </span>
           </button>
-          <div className="px-2 py-1 bg-action cursor-default select-none hover:brightness-105 font-mono text-sm text-secondary rounded ml-2">
+          <div className="ml-2 cursor-default select-none rounded bg-action px-2 py-1 font-mono text-sm text-secondary hover:brightness-105">
             ${totalCost}
           </div>
         </div>

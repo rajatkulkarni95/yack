@@ -22,6 +22,10 @@ body {
   outline: none;
 }
 
+button {
+  cursor: default;
+}
+
 [data-theme="dark"] {
   --color-text-primary: #fafafa;
   --color-text-secondary: #d4d4d8;
@@ -33,7 +37,7 @@ body {
   --color-bg-tertiary: #3f3f46;
   --color-bg-hover: #232324;
   --color-bg-primary-btn-hover: #333333;
-  --color-bg-action: #5f20bd;
+  --color-bg-action: rgba(95, 32, 189, 0.7);
 
   --color-border-primary: #2e2e2f;
   --color-border-secondary: #52525b;
@@ -164,11 +168,11 @@ a {
 }
 
 p {
-  @apply !text-primary !text-base leading-6;
+  @apply text-base leading-6 !text-primary;
 }
 
 li {
-  @apply !text-primary !text-base !mb-1 leading-6;
+  @apply !mb-1 !text-base leading-6 !text-primary;
 }
 
 li > p {
@@ -176,33 +180,33 @@ li > p {
 }
 
 h1 {
-  @apply !text-primary !text-2xl !font-bold !mt-4 !mb-2;
+  @apply !mb-2 !mt-4 !text-2xl !font-bold !text-primary;
 }
 
 h2 {
-  @apply !text-primary !text-xl !font-bold !mt-4 !mb-2;
+  @apply !mb-2 !mt-4 !text-xl !font-bold !text-primary;
 }
 
 h3 {
-  @apply !text-primary !text-lg !font-bold !mt-4 !mb-2;
+  @apply !mb-2 !mt-4 !text-lg !font-bold !text-primary;
 }
 
 ol {
-  @apply !list-decimal !list-inside leading-4 my-2;
+  @apply my-2 !list-inside !list-decimal leading-4;
 }
 
 ul {
-  @apply !list-disc !list-inside leading-4 my-2;
+  @apply my-2 !list-inside !list-disc leading-4;
 }
 
 pre > code {
-  @apply !bg-code !text-primary;
+  @apply max-h-[320px] !bg-code !text-primary;
 }
 
 :not(pre) > code {
-  @apply bg-tertiary text-sm text-primary px-1 py-0.5 border rounded border-primary;
+  @apply rounded border border-primary bg-tertiary px-1 py-0.5 text-sm text-primary;
 }
 
 pre {
-  @apply !bg-code !text-primary !rounded-md  !overflow-x-auto !text-sm my-2 relative flex flex-col-reverse border border-primary;
+  @apply relative my-2 flex  flex-col-reverse !overflow-x-auto !rounded-md border border-primary !bg-code !text-sm !text-primary;
 }

@@ -68,7 +68,7 @@ export const PromptInput = ({
 
   return (
     <div
-      className="grow-wrap relative rounded-md w-full focus-within:border-secondary border border-primary bg-secondary hover:border-secondary"
+      className="grow-wrap relative w-full rounded-md border border-primary bg-secondary focus-within:border-secondary hover:border-secondary"
       data-replicated-value={value}
     >
       <textarea
@@ -86,11 +86,11 @@ export const PromptInput = ({
         disabled={disabled}
       />
       <button
-        className="px-3 py-1.5 bg-tertiary ml-auto mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50 w-fit hover:brightness-110 rounded"
+        className="mb-2 ml-auto mr-2 w-fit rounded bg-tertiary px-3 py-1.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
         onClick={handleSubmit}
         disabled={value.trim() === ""}
       >
-        <span className="text-sm font-normal text-secondary font-sans flex items-center">
+        <span className="flex items-center font-sans text-sm font-normal text-secondary">
           Send
           <KbdShort keys={["⌘", "↵"]} additionalStyles="ml-2" />
         </span>

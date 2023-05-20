@@ -34,7 +34,7 @@ button {
 
   --color-bg-primary: #18181b;
   --color-bg-secondary: #27272a;
-  --color-bg-tertiary: #2c2c30;
+  --color-bg-tertiary: #3f3f46;
   --color-bg-hover: #232324;
   --color-bg-primary-btn-hover: #333333;
   --color-bg-action: rgba(95, 32, 189, 0.7);
@@ -63,7 +63,7 @@ button {
   --color-bg-primary: #fafafa;
   --color-bg-secondary: #ebebef;
   --color-bg-tertiary: #e4e4e7;
-  --color-bg-hover: #f5f5f5;
+  --color-bg-hover: #f4f4f5;
   --color-bg-primary-btn-hover: #f4f5f8;
   --color-bg-action: rgba(95, 32, 189, 0.4);
 

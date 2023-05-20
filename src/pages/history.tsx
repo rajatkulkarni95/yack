@@ -51,6 +51,16 @@ const HistoryPage = () => {
   }, [arrowDownPressed]);
 
   useEffect(() => {
+    if (enterPressed) {
+      const selectedElement = document.querySelector(".activeElement");
+      if (!selectedElement) return;
+
+      const id = selectedElement.id;
+      navigate(`/chat/${id}`);
+    }
+  }, [enterPressed]);
+
+  useEffect(() => {
     const selectedElement = document.querySelector(".activeElement");
     if (!selectedElement) return;
 
@@ -95,6 +105,8 @@ const HistoryPage = () => {
                   }
                 );
 
+            const isSelected = i === selectedIndex;
+
             return (
               <React.Fragment key={conversation.id}>
                 {showDate && (
@@ -102,18 +114,17 @@ const HistoryPage = () => {
                     {dateString}
                   </div>
                 )}
-                <a
-                  href={`/chat/${conversation.id}`}
+                <button
                   key={conversation.id}
-                  className={`flex items-center justify-between border-b border-l border-r px-4 py-2 text-left hover:bg-hover hover:text-primary ${
-                    i === selectedIndex
+                  className={`flex items-center justify-between border px-4 py-2 text-left hover:bg-hover hover:text-primary ${
+                    isSelected
                       ? "activeElement border-secondary bg-hover text-primary"
-                      : "border-primary bg-primary text-secondary"
-                  }  ${showDate ? "border-t" : ""}`}
+                      : "border-b-primary border-l-primary border-r-primary border-t-transparent bg-primary text-secondary "
+                  } ${showDate && !isSelected ? "border-t-primary" : ""} `}
                   onClick={() => {
                     navigate(`/chat/${conversation.id}`);
                   }}
-                  id={i.toString()}
+                  id={conversation.id}
                 >
                   <span className="truncate text-base font-normal">
                     {conversation.title}
@@ -121,10 +132,10 @@ const HistoryPage = () => {
                   <KbdShort
                     keys={["↵"]}
                     additionalStyles={
-                      i === selectedIndex ? "visible ml-2" : "invisible ml-2"
+                      isSelected ? "visible ml-2" : "invisible ml-2"
                     }
                   />
-                </a>
+                </button>
               </React.Fragment>
             );
           })}

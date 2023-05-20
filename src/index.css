@@ -200,7 +200,7 @@ ul {
 }
 
 pre > code {
-  @apply max-h-[320px] !bg-code px-3 py-2 !text-primary;
+  @apply max-h-[320px] overflow-y-auto !bg-code px-3 py-2 !text-primary;
 }
 
 :not(pre) > code {
@@ -208,7 +208,7 @@ pre > code {
 }
 
 pre {
-  @apply relative my-2 flex flex-col !overflow-x-auto !rounded-md border border-primary !bg-code !text-sm !text-primary;
+  @apply relative my-2 flex flex-col !overflow-hidden !rounded-md border border-primary !bg-code !text-sm !text-primary;
 }
 
 table {

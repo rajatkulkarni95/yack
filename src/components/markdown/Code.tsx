@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import {
   nightOwl,
@@ -26,10 +26,25 @@ const MarkdownCode = ({ inline, className, children, ...props }: TProps) => {
       }
     );
   };
+
   const match = /language-(\w+)/.exec(className || "");
+
+  const syntaxHighlighter = useMemo(() => {
+    return (
+      <SyntaxHighlighter
+        language={match?.[1]}
+        style={theme === "light" ? a11yLight : nightOwl}
+        PreTag={({ children }) => <React.Fragment>{children}</React.Fragment>}
+        wrapLongLines
+      >
+        {String(children).replace(/\n$/, "")}
+      </SyntaxHighlighter>
+    );
+  }, []);
+
   return !inline && match ? (
     <React.Fragment>
-      <div className="box-border flex items-center justify-between overflow-y-hidden rounded-t-md border-b border-primary bg-hover px-3 py-1 text-xs text-secondary">
+      <div className="sticky top-0 box-border flex w-full items-center justify-between overflow-y-hidden rounded-t-md border-b border-primary bg-secondary px-3 py-1 text-xs text-secondary">
         <span>{match[1]}</span>
         {isCopied ? (
           <span className="flex items-center p-1 text-xs">
@@ -44,13 +59,7 @@ const MarkdownCode = ({ inline, className, children, ...props }: TProps) => {
           </button>
         )}
       </div>
-      <SyntaxHighlighter
-        language={match[1]}
-        style={theme === "light" ? a11yLight : nightOwl}
-        PreTag={({ children }) => <React.Fragment>{children}</React.Fragment>}
-      >
-        {String(children).replace(/\n$/, "")}
-      </SyntaxHighlighter>
+      {syntaxHighlighter}
     </React.Fragment>
   ) : (
     <code className={className} {...props}>

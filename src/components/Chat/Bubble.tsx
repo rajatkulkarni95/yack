@@ -1,6 +1,4 @@
-import hljs from "highlight.js";
 import { ChatMessageParams } from "../../hooks/useChatCompletion";
-import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { MarkdownCode } from "../markdown";
@@ -36,7 +34,7 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
           );
         },
       }}
-      className={`text-bubble mb-3 w-fit !max-w-[70%] overflow-hidden break-words px-3 py-2 shadow-sm ${
+      className={`text-bubble mb-3 w-fit !max-w-[70%] overflow-hidden break-words px-3 py-2 ${
         message?.role === "user"
           ? "ml-auto rounded-l-xl rounded-tr-xl bg-action"
           : "mr-auto rounded-r-xl rounded-tl-xl bg-hover"

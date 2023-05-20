@@ -34,7 +34,7 @@ button {
 
   --color-bg-primary: #18181b;
   --color-bg-secondary: #27272a;
-  --color-bg-tertiary: #3f3f46;
+  --color-bg-tertiary: #2c2c30;
   --color-bg-hover: #232324;
   --color-bg-primary-btn-hover: #333333;
   --color-bg-action: rgba(95, 32, 189, 0.7);
@@ -61,7 +61,7 @@ button {
   --color-text-placeholder: #71717a;
 
   --color-bg-primary: #fafafa;
-  --color-bg-secondary: #f4f4f5;
+  --color-bg-secondary: #ebebef;
   --color-bg-tertiary: #e4e4e7;
   --color-bg-hover: #f4f4f5;
   --color-bg-primary-btn-hover: #f4f5f8;
@@ -209,4 +209,32 @@ pre > code {
 
 pre {
   @apply relative my-2 flex  flex-col-reverse !overflow-x-auto !rounded-md border border-primary !bg-code !text-sm !text-primary;
+}
+
+table {
+  @apply my-2 !border-collapse !border !border-primary text-primary;
+}
+
+table > thead {
+  @apply border-b border-primary !bg-tertiary !text-secondary;
+}
+
+table > thead > tr > th {
+  @apply border-r border-primary px-2 py-1;
+}
+
+table > tbody > tr > td {
+  @apply border-b border-r border-primary px-2 py-1;
+}
+
+table > tbody > tr > td:first-child {
+  @apply border-l-0;
+}
+
+table > tbody > tr:last-child > td {
+  @apply border-b-0;
+}
+
+table > tbody > :nth-child(2n) {
+  @apply bg-secondary;
 }

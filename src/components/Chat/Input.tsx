@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hideApp } from "../Header";
 import { useNavigation } from "../../hooks/useNavigation";
 import KbdShort from "../KbdShort";
@@ -17,6 +17,13 @@ export const PromptInput = ({
   const [value, setValue] = useState<string>("");
   const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =
     useNavigation();
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.focus();
+    }
+  }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -84,6 +91,7 @@ export const PromptInput = ({
         onKeyDown={onKeyDown}
         rows={1}
         disabled={disabled}
+        ref={textAreaRef}
       />
       <button
         className="mb-2 ml-auto mr-2 w-fit rounded bg-tertiary px-3 py-1.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"

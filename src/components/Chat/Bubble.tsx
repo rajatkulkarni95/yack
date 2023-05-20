@@ -24,6 +24,7 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
         auto_detection: true,
       }),
     ],
+    tables: true,
   });
 
   const html = converter.makeHtml(message?.content || "");

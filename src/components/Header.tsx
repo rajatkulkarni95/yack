@@ -46,8 +46,6 @@ const Header = ({ hideHistory }: IHeaderProps) => {
   useHotkeys("meta+[", navigateToPrevChat);
   useHotkeys("meta+]", navigateToNextChat);
 
-  const historyKbd = hideHistory ? ["Esc"] : ["⌘", "P"];
-
   return (
     <header className="flex h-12 border-b border-primary bg-primary p-4">
       <div className="flex w-full items-center justify-between">
@@ -99,15 +97,17 @@ const Header = ({ hideHistory }: IHeaderProps) => {
           )}
         </div>
         <div className="flex items-center">
-          <button
-            className="mr-1 rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"
-            onClick={hideHistory ? handleEscape : onClickHistory}
-          >
-            <span className="flex items-center font-sans text-sm font-normal text-secondary">
-              {hideHistory ? "Back" : "History"}{" "}
-              <KbdShort keys={historyKbd} additionalStyles="ml-2" />
-            </span>
-          </button>
+          {!hideHistory && (
+            <button
+              className="mr-1 rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"
+              onClick={onClickHistory}
+            >
+              <span className="flex items-center font-sans text-sm font-normal text-secondary">
+                History
+                <KbdShort keys={["⌘", "P"]} additionalStyles="ml-2" />
+              </span>
+            </button>
+          )}
 
           <button
             className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"

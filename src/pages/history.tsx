@@ -75,7 +75,7 @@ const HistoryPage = () => {
     <React.Fragment>
       <Header hideHistory />
 
-      <div className="flex h-[580px] flex-col overflow-y-auto pb-2">
+      <div className="flex h-[560px] flex-col overflow-y-auto pb-2">
         <p className="px-4 pt-4 text-lg font-medium text-secondary">
           History{" "}
           <span className="font-mono text-tertiary">
@@ -146,6 +146,17 @@ const HistoryPage = () => {
           })}
         </div>
       </div>
+      <footer className="flex h-12 items-center border-t border-primary bg-primary px-4">
+        <span className="flex items-center text-sm font-normal text-tertiary">
+          <KbdShort keys={["↑", "↓"]} additionalStyles="mr-2" /> to navigate{" "}
+        </span>
+        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+          <KbdShort keys={["↵"]} additionalStyles="mr-2" /> to select{" "}
+        </span>
+        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+          <KbdShort keys={["Esc"]} additionalStyles="mr-2" /> to back{" "}
+        </span>
+      </footer>
     </React.Fragment>
   );
 };

@@ -27,6 +27,7 @@ const ChatPage = () => {
   const [conv, setConv] = useState<ChatMessageParams[]>([]);
   const [queryErrored, setQueryErrored] = useState(false);
   const [apiKey, setApiKey] = useState("");
+  const [streamClosed, setStreamClosed] = useState(false);
 
   const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
     {
@@ -72,6 +73,11 @@ const ChatPage = () => {
 
   const chatContainer = document.getElementById("chat-container");
 
+  const handleCloseStream = () => {
+    setStreamClosed(true);
+    closeStream();
+  };
+
   useEffect(() => {
     if (chatContainer && messages?.length > 0) {
       setTimeout(() => {
@@ -113,6 +119,10 @@ const ChatPage = () => {
       content: prompt,
     };
 
+    if (streamClosed) {
+      setStreamClosed(false);
+    }
+
     if (messages.length === 0 && conv.length === 0) {
       if (id === "new") {
         const uuid = uuidv4();
@@ -140,7 +150,7 @@ const ChatPage = () => {
     }
   };
 
-  useHotkeys("meta+e", closeStream);
+  useHotkeys("meta+e", handleCloseStream);
 
   const chatConversations =
     messages.length === 0 && conv.length > 0 ? conv : messages;
@@ -163,22 +173,32 @@ const ChatPage = () => {
           </div>
         )}
       </div>
-      {messages?.[messages.length - 1]?.meta?.loading && (
-        <button
-          className="absolute bottom-24 left-1/2 z-10 mr-1 -translate-x-1/2 rounded border border-primary bg-tertiary px-3 py-2 hover:bg-primaryBtnHover"
-          onClick={closeStream}
-        >
-          <span className="flex items-center font-sans text-sm font-normal text-secondary">
-            Stop Generating
-            <KbdShort keys={["⌘", "E"]} additionalStyles="ml-2" />
-          </span>
-        </button>
+      {streamClosed && (
+        <span className="absolute bottom-24 z-10 mb-2 w-full bg-tertiary py-1.5 text-center font-sans text-sm text-secondary">
+          You have stopped generating. You can start again by typing in the
+          input below.
+        </span>
       )}
+      <button
+        className={`fixed left-1/2 z-10 -translate-x-1/2 transform rounded border border-primary bg-tertiary px-3 py-2 transition duration-300 ease-in-out hover:bg-primaryBtnHover
+           ${
+             messages?.[messages.length - 1]?.meta?.loading
+               ? "bottom-20 -translate-y-full opacity-100"
+               : "-translate-y-0 opacity-0"
+           }
+          `}
+        onClick={handleCloseStream}
+      >
+        <span className="flex items-center font-sans text-sm font-normal text-secondary">
+          Stop Generating
+          <KbdShort keys={["⌘", "E"]} additionalStyles="ml-2" />
+        </span>
+      </button>
       <section className="absolute bottom-0 w-full bg-primary p-4">
         <PromptInput
           sendPrompt={sendPrompt}
           disabled={messages?.[messages.length - 1]?.meta?.loading}
-          stopStream={closeStream}
+          stopStream={handleCloseStream}
         />
       </section>
     </React.Fragment>

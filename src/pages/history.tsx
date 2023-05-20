@@ -76,8 +76,11 @@ const HistoryPage = () => {
       <Header hideHistory />
 
       <div className="flex h-[580px] flex-col overflow-y-auto pb-2">
-        <p className="mb-2 px-4 pt-4 text-2xl font-medium text-secondary">
-          History
+        <p className="px-4 pt-4 text-lg font-medium text-secondary">
+          History{" "}
+          <span className="font-mono text-tertiary">
+            ({convHistory.length})
+          </span>
         </p>
         {convHistory.length === 0 && (
           <div className="text-base font-normal text-tertiary">
@@ -116,11 +119,13 @@ const HistoryPage = () => {
                 )}
                 <button
                   key={conversation.id}
-                  className={`flex items-center justify-between border px-4 py-2 text-left hover:bg-hover hover:text-primary ${
+                  className={`flex items-center justify-between border px-4 py-2 text-left hover:bg-hover hover:text-primary
+                  ${
                     isSelected
-                      ? "activeElement border-secondary bg-hover text-primary"
-                      : "border-b-primary border-l-primary border-r-primary border-t-transparent bg-primary text-secondary "
-                  } ${showDate && !isSelected ? "border-t-primary" : ""} `}
+                      ? "activeElement !border-secondary bg-hover text-primary"
+                      : "border-b-primary border-l-primary border-r-primary border-t-transparent bg-primary text-secondary"
+                  } ${showDate && !isSelected ? "!border-t-primary" : ""}
+                  `}
                   onClick={() => {
                     navigate(`/chat/${conversation.id}`);
                   }}

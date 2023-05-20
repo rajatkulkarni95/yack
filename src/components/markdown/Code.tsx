@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import {
+  nightOwl,
+  a11yLight,
+} from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { CheckIcon, CopyIcon } from "../../svg";
 
 type TProps = {
@@ -11,6 +14,7 @@ type TProps = {
 
 const MarkdownCode = ({ inline, className, children, ...props }: TProps) => {
   const [isCopied, setIsCopied] = useState(false);
+  const theme = window.localStorage.getItem("theme");
   const copyCode = (codeBlock: string) => {
     navigator.clipboard.writeText(codeBlock).then(
       () => {
@@ -42,7 +46,7 @@ const MarkdownCode = ({ inline, className, children, ...props }: TProps) => {
       </div>
       <SyntaxHighlighter
         language={match[1]}
-        style={nightOwl}
+        style={theme === "light" ? a11yLight : nightOwl}
         PreTag={({ children }) => <React.Fragment>{children}</React.Fragment>}
       >
         {String(children).replace(/\n$/, "")}

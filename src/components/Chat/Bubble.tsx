@@ -1,27 +1,18 @@
 import { ChatMessageParams } from "../../hooks/useChatCompletion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import { MarkdownCode } from "../markdown";
 
 type TChatBubble = {
   message?: ChatMessageParams;
-  loading?: boolean;
 };
 
-const ChatBubble = ({ message, loading }: TChatBubble) => {
-  const anchorRegex = /(https:\/\/\S+)/g;
-  const anchorReplacement = "<a href='$1' target='_blank'>$1</a>";
-
-  // if (message?.role === "user") {
-  //   const lineBreakRegex = /\r?\n/g;
-  //   const lineBreakReplacement = "<br />";
-  //   filteredHtml.replace(lineBreakRegex, lineBreakReplacement);
-  // }
-
+const ChatBubble = ({ message }: TChatBubble) => {
   return (
     <ReactMarkdown
       children={message?.content || ""}
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkBreaks]}
       components={{
         code({ node, inline, className, children, ...props }) {
           return (
@@ -31,6 +22,13 @@ const ChatBubble = ({ message, loading }: TChatBubble) => {
               children={children}
               {...props}
             />
+          );
+        },
+        a({ node, href, children, ...props }) {
+          return (
+            <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+              {children}
+            </a>
           );
         },
       }}

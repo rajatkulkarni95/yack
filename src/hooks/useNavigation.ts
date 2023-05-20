@@ -5,6 +5,7 @@ import { getHistory } from "../helpers/store";
 export const useNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [history, setHistory] = useState<string[]>([]);
   const [rollingChat, setRollingChat] = useState({
     nextChat: "",
     prevChat: "",
@@ -21,34 +22,48 @@ export const useNavigation = () => {
   };
 
   useEffect(() => {
+    async function saveHistoryToLocalState() {
+      const storedHistory = await getHistory();
+      if (storedHistory) {
+        const sortedHistoryMessages: string[] = Object.values(storedHistory)
+          .sort((a, b) => b.created - a.created)
+          .map((item) => item.id);
+        setHistory(sortedHistoryMessages);
+      }
+    }
+
+    saveHistoryToLocalState();
+  }, []);
+
+  useEffect(() => {
     async function calcRollingChat() {
-      const history = await getHistory();
       if (history) {
-        const historyMessages: string[] = Object.keys(history);
-
         const currentChat = location.pathname.replace("/chat/", "");
-        const currentChatIndex = historyMessages.indexOf(currentChat);
+        const currentChatIndex = history.indexOf(currentChat);
 
-        if (currentChatIndex === 0) {
-          setIsLeftDisabled(true);
-        } else {
-          setIsLeftDisabled(false);
-        }
-
-        if (currentChatIndex === historyMessages.length - 1) {
+        if (currentChatIndex === 0 || currentChatIndex === -1) {
           setIsRightDisabled(true);
         } else {
           setIsRightDisabled(false);
         }
 
+        if (currentChatIndex === history.length - 1) {
+          setIsLeftDisabled(true);
+        } else {
+          setIsLeftDisabled(false);
+        }
+
         setRollingChat({
-          nextChat: historyMessages[currentChatIndex + 1],
-          prevChat: historyMessages[currentChatIndex - 1],
+          prevChat:
+            currentChatIndex === -1
+              ? history[0]
+              : history[currentChatIndex + 1],
+          nextChat: history[currentChatIndex - 1],
         });
       }
     }
     calcRollingChat();
-  }, [location]);
+  }, [location, history]);
 
   const navigateToNextChat = () => {
     if (rollingChat.nextChat) {

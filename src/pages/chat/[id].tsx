@@ -146,7 +146,7 @@ const ChatPage = () => {
     messages.length === 0 && conv.length > 0 ? conv : messages;
 
   return (
-    <React.Fragment key={id}>
+    <React.Fragment>
       <Header />
       <div
         className="max-h-[510px] overflow-y-auto p-4 duration-150"

@@ -32,7 +32,7 @@ const ChatBubble = ({ message }: TChatBubble) => {
           );
         },
       }}
-      className={`text-bubble mb-3 w-fit !max-w-[70%] overflow-hidden break-words px-3 py-2 ${
+      className={`text-bubble mb-3 w-fit !max-w-[80%] overflow-hidden break-words px-3 py-2 ${
         message?.role === "user"
           ? "ml-auto rounded-l-xl rounded-tr-xl bg-action"
           : "mr-auto rounded-r-xl rounded-tl-xl bg-hover"

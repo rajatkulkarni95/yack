@@ -21,9 +21,9 @@ function Index() {
 
   return (
     <Fragment>
-      <header className="px-4 py-2 flex bg-secondary border-b border-primary flex-col ">
+      <header className="flex flex-col border-b border-primary bg-secondary px-4 py-2 ">
         <div className="flex items-center">
-          <LogoIcon className="w-20 h-10 text-primary" />{" "}
+          <LogoIcon className="h-10 w-20 text-primary" />{" "}
         </div>
         <p className="text-base font-normal text-secondary">
           Instantly access ChatGPT on your Mac - get quick answers to anything

@@ -65,8 +65,8 @@ const HistoryPage = () => {
     <React.Fragment>
       <Header hideHistory />
 
-      <div className="flex flex-col overflow-y-auto h-[580px] pb-2">
-        <p className="text-2xl font-medium mb-2 px-4 pt-4 text-secondary">
+      <div className="flex h-[580px] flex-col overflow-y-auto pb-2">
+        <p className="mb-2 px-4 pt-4 text-2xl font-medium text-secondary">
           History
         </p>
         {convHistory.length === 0 && (
@@ -98,26 +98,24 @@ const HistoryPage = () => {
             return (
               <React.Fragment key={conversation.id}>
                 {showDate && (
-                  <div className="text-xs font-normal text-tertiary mt-4 mb-2 px-3 py-1 rounded-full bg-secondary w-fit">
+                  <div className="mb-2 mt-4 w-fit rounded-full bg-secondary px-3 py-1 text-xs font-normal text-tertiary">
                     {dateString}
                   </div>
                 )}
                 <a
                   href={`/chat/${conversation.id}`}
                   key={conversation.id}
-                  className={`hover:bg-hover hover:text-primary ${
+                  className={`flex items-center justify-between border-b border-l border-r px-4 py-2 text-left hover:bg-hover hover:text-primary ${
                     i === selectedIndex
-                      ? "bg-secondary text-primary activeElement border-secondary"
-                      : "bg-primary text-secondary border-primary"
-                  } py-2  border-b border-l border-r text-left flex items-center justify-between px-4 ${
-                    showDate ? "border-t" : ""
-                  }`}
+                      ? "activeElement border-secondary bg-hover text-primary"
+                      : "border-primary bg-primary text-secondary"
+                  }  ${showDate ? "border-t" : ""}`}
                   onClick={() => {
                     navigate(`/chat/${conversation.id}`);
                   }}
                   id={i.toString()}
                 >
-                  <span className="text-base font-normal truncate">
+                  <span className="truncate text-base font-normal">
                     {conversation.title}
                   </span>
                   <KbdShort

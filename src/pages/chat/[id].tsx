@@ -149,7 +149,7 @@ const ChatPage = () => {
     <React.Fragment key={id}>
       <Header />
       <div
-        className="p-4 overflow-y-auto max-h-[510px] duration-150"
+        className="max-h-[510px] overflow-y-auto p-4 duration-150"
         id="chat-container"
       >
         {chatConversations
@@ -158,23 +158,23 @@ const ChatPage = () => {
             <ChatBubble message={message} key={index} />
           ))}
         {queryErrored && (
-          <div className="px-4 py-3 border rounded-md mt-4 text-sm text-primary border-red-500 bg-red-600/25">
+          <div className="mt-4 rounded-md border border-red-500 bg-red-600/25 px-4 py-3 text-sm text-primary">
             Something went wrong with the network call. Please try again.
           </div>
         )}
       </div>
       {messages?.[messages.length - 1]?.meta?.loading && (
         <button
-          className="px-3 py-2 bg-tertiary absolute bottom-24 z-10 left-1/2 -translate-x-1/2 border border-primary hover:bg-primaryBtnHover rounded mr-1"
+          className="absolute bottom-24 left-1/2 z-10 mr-1 -translate-x-1/2 rounded border border-primary bg-tertiary px-3 py-2 hover:bg-primaryBtnHover"
           onClick={closeStream}
         >
-          <span className="text-sm font-normal text-secondary font-sans flex items-center">
+          <span className="flex items-center font-sans text-sm font-normal text-secondary">
             Stop Generating
             <KbdShort keys={["⌘", "E"]} additionalStyles="ml-2" />
           </span>
         </button>
       )}
-      <section className="absolute bottom-0 w-full p-4 bg-primary">
+      <section className="absolute bottom-0 w-full bg-primary p-4">
         <PromptInput
           sendPrompt={sendPrompt}
           disabled={messages?.[messages.length - 1]?.meta?.loading}

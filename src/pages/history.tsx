@@ -3,7 +3,12 @@ import Header from "../components/Header";
 import KbdShort from "../components/KbdShort";
 import { useKeyPress } from "../hooks/useKeyPress";
 import { useNavigate } from "react-router-dom";
-import { THistoryMessageProps, getHistory } from "../helpers/store";
+import {
+  THistoryMessageProps,
+  deleteConversationFromHistory,
+  getHistory,
+} from "../helpers/store";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const HistoryPage = () => {
   const [convHistory, setConvHistory] = useState<THistoryMessageProps[]>([]);
@@ -17,26 +22,39 @@ const HistoryPage = () => {
     setSelectedIndex(newIndex);
   };
 
-  useEffect(() => {
-    async function fetchHistory() {
-      const history = await getHistory();
+  async function fetchHistory() {
+    const history = await getHistory();
 
-      if (history) {
-        const sortedHistory = Object.values(history).sort(
-          (a, b) => b.created - a.created
-        );
-        setConvHistory(sortedHistory);
-      }
+    if (history) {
+      const sortedHistory = Object.values(history).sort(
+        (a, b) => b.created - a.created
+      );
+      setConvHistory(sortedHistory);
     }
+  }
 
+  useEffect(() => {
     fetchHistory();
   }, []);
 
   const navigate = useNavigate();
 
+  const handleDelete = async () => {
+    console.log("hello delete");
+
+    const selectedElement = document.querySelector(".activeElement");
+    if (!selectedElement) return;
+
+    const id = selectedElement.id;
+    await deleteConversationFromHistory(id);
+    fetchHistory();
+  };
+
   const arrowUpPressed = useKeyPress("ArrowUp", true);
   const arrowDownPressed = useKeyPress("ArrowDown", true);
   const enterPressed = useKeyPress("Enter");
+
+  useHotkeys("meta+backspace", handleDelete);
 
   useEffect(() => {
     if (arrowUpPressed) {
@@ -154,6 +172,9 @@ const HistoryPage = () => {
           <KbdShort keys={["↵"]} additionalStyles="mr-2" /> to select{" "}
         </span>
         <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+          <KbdShort keys={["⌘", "⌫"]} additionalStyles="mr-2" /> to delete{" "}
+        </span>
+        <span className="ml-auto flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["Esc"]} additionalStyles="mr-2" /> to back{" "}
         </span>
       </footer>

@@ -105,6 +105,15 @@ export const saveConversationIDToHistory = async ({
 
 export const getHistory = async () => await store.get<THistory>("history");
 
+export const deleteConversationFromHistory = async (id: string) => {
+  const chatHistory: THistory | null = await store.get("history");
+  if (chatHistory) {
+    delete chatHistory[id];
+    await store.set("history", chatHistory);
+    await store.save();
+  }
+};
+
 export const saveTheme = async (value: string) => {
   await store.set("theme", value);
   window.localStorage.setItem("theme", value);

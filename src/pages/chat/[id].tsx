@@ -67,7 +67,9 @@ const ChatPage = () => {
         }
       }
     }
-
+    if (streamClosed) {
+      setStreamClosed(false);
+    }
     checkForExistingConversation();
   }, [id]);
 

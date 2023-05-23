@@ -9,6 +9,7 @@ import Tooltip from "./Tooltip";
 interface IHeaderProps {
   haltNew?: boolean;
   hideHistory?: boolean;
+  streamOngoing?: boolean;
 }
 
 export const hideApp = async () => {
@@ -17,7 +18,7 @@ export const hideApp = async () => {
   await appWindow.hide();
 };
 
-const Header = ({ hideHistory }: IHeaderProps) => {
+const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
   const { totalCost } = useUsage();
 
   const navigate = useNavigate();
@@ -41,7 +42,11 @@ const Header = ({ hideHistory }: IHeaderProps) => {
   useHotkeys("escape", handleEscape);
 
   useHotkeys("meta+p", onClickHistory);
-  useHotkeys("meta+n", onClickNew);
+  useHotkeys("meta+n", () => {
+    if (!streamOngoing) {
+      onClickNew();
+    }
+  });
 
   useHotkeys("meta+[", navigateToPrevChat);
   useHotkeys("meta+]", navigateToNextChat);
@@ -110,8 +115,9 @@ const Header = ({ hideHistory }: IHeaderProps) => {
           )}
 
           <button
-            className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"
+            className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
             onClick={onClickNew}
+            disabled={streamOngoing}
           >
             <span className="flex items-center font-sans text-sm font-normal text-secondary">
               New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />

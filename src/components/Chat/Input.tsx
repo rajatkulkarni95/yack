@@ -7,12 +7,14 @@ type TProps = {
   sendPrompt: (prompt: string) => void;
   disabled?: boolean;
   stopStream: () => void;
+  streamOngoing?: boolean;
 };
 
 export const PromptInput = ({
   sendPrompt,
   disabled = false,
   stopStream,
+  streamOngoing,
 }: TProps) => {
   const [value, setValue] = useState<string>("");
   const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =
@@ -56,7 +58,7 @@ export const PromptInput = ({
       onClickHistory();
     }
 
-    if (e.key === "n" && e.metaKey) {
+    if (e.key === "n" && e.metaKey && !streamOngoing) {
       onClickNew();
     }
 

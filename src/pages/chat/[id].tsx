@@ -157,9 +157,11 @@ const ChatPage = () => {
   const chatConversations =
     messages.length === 0 && conv.length > 0 ? conv : messages;
 
+  const streamOngoing = messages?.[messages.length - 1]?.meta?.loading;
+
   return (
     <React.Fragment>
-      <Header />
+      <Header streamOngoing={streamOngoing} />
       <div
         className="max-h-[510px] overflow-y-auto p-4 duration-150"
         id="chat-container"
@@ -190,7 +192,7 @@ const ChatPage = () => {
       <button
         className={`fixed left-1/2 z-10 -translate-x-1/2 transform rounded border border-primary bg-tertiary px-3 py-2 transition duration-300 ease-in-out hover:bg-primaryBtnHover
            ${
-             messages?.[messages.length - 1]?.meta?.loading
+             streamOngoing
                ? "bottom-20 -translate-y-full opacity-100"
                : "-translate-y-0 opacity-0"
            }

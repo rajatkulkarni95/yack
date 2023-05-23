@@ -1,6 +1,6 @@
 [package]
 name = "yack"
-version = "0.5.4"
+version = "0.5.5"
 description = "Instantly access ChatGPT on your Mac, spotlight style!"
 authors = ["you"]
 license = ""

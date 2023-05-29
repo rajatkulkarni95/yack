@@ -163,7 +163,7 @@ const ChatPage = () => {
     <React.Fragment>
       <Header streamOngoing={streamOngoing} />
       <div
-        className="max-h-[510px] overflow-y-auto p-4 duration-150"
+        className="h-[calc(100vh-130px)] overflow-y-auto p-4 duration-150"
         id="chat-container"
       >
         {chatConversations

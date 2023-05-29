@@ -163,7 +163,7 @@ const ChatPage = () => {
     <React.Fragment>
       <Header streamOngoing={streamOngoing} />
       <div
-        className="h-[calc(100vh-130px)] overflow-y-auto p-4 duration-150"
+        className="h-[calc(100vh-130px)] overflow-y-auto overflow-x-hidden p-4 duration-150"
         id="chat-container"
       >
         {chatConversations
@@ -176,19 +176,21 @@ const ChatPage = () => {
             Something went wrong with the network call. Please try again.
           </div>
         )}
+        {streamClosed && (
+          <span className="absolute bottom-24 z-10 mb-2 w-full bg-tertiary py-1.5 text-center font-sans text-sm text-secondary">
+            You have stopped generating. You can start again by typing in the
+            input below.
+          </span>
+        )}
+        {id === "new" && (
+          <span className="mx-auto mb-2 block w-screen py-1.5 text-center font-sans text-sm text-tertiary">
+            <strong className="mr-1">Note:</strong> AI may give incorrect
+            information due to not being trained with data beyond September
+            2021.
+          </span>
+        )}
       </div>
-      {streamClosed && (
-        <span className="absolute bottom-24 z-10 mb-2 w-full bg-tertiary py-1.5 text-center font-sans text-sm text-secondary">
-          You have stopped generating. You can start again by typing in the
-          input below.
-        </span>
-      )}
-      {id === "new" && (
-        <span className="mx-auto mb-2 block w-screen py-1.5 text-center font-sans text-sm text-tertiary">
-          <strong className="mr-1">Note:</strong> AI may give incorrect
-          information due to not being trained with data beyond September 2021.
-        </span>
-      )}
+
       <button
         className={`fixed left-1/2 z-10 -translate-x-1/2 transform rounded border border-primary bg-tertiary px-3 py-2 transition duration-300 ease-in-out hover:bg-primaryBtnHover
            ${

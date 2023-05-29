@@ -26,6 +26,7 @@
     "remark-gfm": "^3.0.1",
     "sse": "github:mpetazzoni/sse.js",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store",
+    "tauri-plugin-window-state-api": "github:tauri-apps/tauri-plugin-window-state",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

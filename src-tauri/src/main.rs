@@ -9,6 +9,7 @@ use tauri::{
     CustomMenuItem, GlobalShortcutManager, SystemTray, SystemTrayEvent, SystemTrayMenu,
     SystemTrayMenuItem, SystemTraySubmenu,
 };
+use tauri_plugin_window_state::{AppHandleExt, StateFlags};
 
 #[cfg(target_os = "macos")]
 use cocoa::appkit::{NSWindow, NSWindowButton, NSWindowStyleMask, NSWindowTitleVisibility};
@@ -132,6 +133,7 @@ fn main() {
                     }
                 }
                 "quit" => {
+                    app.save_window_state(StateFlags::all()).unwrap();
                     std::process::exit(0);
                 }
                 "new_chat" => {
@@ -200,6 +202,7 @@ fn main() {
             _ => {}
         })
         .plugin(tauri_plugin_store::Builder::default().build())
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .invoke_handler(tauri::generate_handler![set_review_count])
         .setup(|app| {
             #[cfg(target_os = "macos")]

@@ -20,6 +20,7 @@ cocoa = "0.24.1"
 objc = "0.2.7"
 open = "4.1.0"
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
+tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

@@ -21,7 +21,10 @@ function Index() {
 
   return (
     <Fragment>
-      <header className="flex flex-col border-b border-primary bg-secondary px-4 py-2 ">
+      <header
+        className="flex flex-col border-b border-primary bg-secondary px-4 py-2"
+        data-tauri-drag-region
+      >
         <div className="flex items-center">
           <LogoIcon className="h-10 w-20 text-primary" />{" "}
         </div>

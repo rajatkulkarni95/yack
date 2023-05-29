@@ -160,7 +160,8 @@ fn main() {
                 }
                 "check_updates" => {
                     let w = app.get_window("main").unwrap();
-                    w.emit("tauri://update", "");
+                    w.trigger_global("tauri://update", None);
+                    // w.emit("tauri://update", "");
                 }
                 "light_theme" => {
                     let w = app.get_window("main").unwrap();

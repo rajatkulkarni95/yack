@@ -40,8 +40,6 @@ const HistoryPage = () => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    console.log("hello delete");
-
     const selectedElement = document.querySelector(".activeElement");
     if (!selectedElement) return;
 
@@ -93,7 +91,7 @@ const HistoryPage = () => {
     <React.Fragment>
       <Header hideHistory />
 
-      <div className="flex h-[560px] flex-col overflow-y-auto pb-2">
+      <div className="flex h-[calc(100vh-80px)] flex-col overflow-y-auto pb-2">
         <p className="px-4 pt-4 text-lg font-medium text-secondary">
           History{" "}
           <span className="font-mono text-tertiary">

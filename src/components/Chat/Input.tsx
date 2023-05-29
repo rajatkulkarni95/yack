@@ -39,7 +39,7 @@ export const PromptInput = ({
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && e.metaKey) {
+    if (e.key === "Enter" && !e.shiftKey && !e.metaKey) {
       setValue("");
       e.preventDefault();
       if (value.trim() === "") return;
@@ -102,7 +102,7 @@ export const PromptInput = ({
       >
         <span className="flex items-center font-sans text-sm font-normal text-secondary">
           Send
-          <KbdShort keys={["⌘", "↵"]} additionalStyles="ml-2" />
+          <KbdShort keys={["↵"]} additionalStyles="ml-2" />
         </span>
       </button>
     </div>

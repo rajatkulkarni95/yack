@@ -163,7 +163,7 @@ const ChatPage = () => {
     <React.Fragment>
       <Header streamOngoing={streamOngoing} />
       <div
-        className="max-h-[510px] overflow-y-auto p-4 duration-150"
+        className="h-[calc(100vh-130px)] overflow-y-auto p-4 duration-150"
         id="chat-container"
       >
         {chatConversations
@@ -172,7 +172,7 @@ const ChatPage = () => {
             <ChatBubble message={message} key={index} />
           ))}
         {queryErrored && (
-          <div className="mt-4 rounded-md border border-red-500 bg-red-600/25 px-4 py-3 text-sm text-primary">
+          <div className="mt-4 rounded-md bg-red-600/40 px-4 py-3 text-sm text-primary">
             Something went wrong with the network call. Please try again.
           </div>
         )}
@@ -184,7 +184,7 @@ const ChatPage = () => {
         </span>
       )}
       {id === "new" && (
-        <span className="mb-2 flex w-full justify-center py-1.5 text-center font-sans text-sm text-tertiary">
+        <span className="mx-auto mb-2 block w-screen py-1.5 text-center font-sans text-sm text-tertiary">
           <strong className="mr-1">Note:</strong> AI may give incorrect
           information due to not being trained with data beyond September 2021.
         </span>

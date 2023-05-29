@@ -172,7 +172,7 @@ const ChatPage = () => {
             <ChatBubble message={message} key={index} />
           ))}
         {queryErrored && (
-          <div className="mt-4 rounded-md border border-red-500 bg-red-600/25 px-4 py-3 text-sm text-primary">
+          <div className="mt-4 rounded-md bg-red-600/40 px-4 py-3 text-sm text-primary">
             Something went wrong with the network call. Please try again.
           </div>
         )}

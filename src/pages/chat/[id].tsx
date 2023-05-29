@@ -184,7 +184,7 @@ const ChatPage = () => {
         </span>
       )}
       {id === "new" && (
-        <span className="mb-2 flex w-full justify-center py-1.5 text-center font-sans text-sm text-tertiary">
+        <span className="mx-auto mb-2 block w-screen py-1.5 text-center font-sans text-sm text-tertiary">
           <strong className="mr-1">Note:</strong> AI may give incorrect
           information due to not being trained with data beyond September 2021.
         </span>

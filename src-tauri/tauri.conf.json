@@ -75,10 +75,12 @@
     "windows": [
       {
         "fullscreen": false,
-        "resizable": false,
+        "resizable": true,
         "title": "yack",
         "width": 640,
         "height": 640,
+        "minWidth": 480,
+        "minHeight": 640,
         "center": true
       }
     ]

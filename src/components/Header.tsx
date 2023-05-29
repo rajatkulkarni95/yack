@@ -52,8 +52,14 @@ const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
   useHotkeys("meta+]", navigateToNextChat);
 
   return (
-    <header className="flex h-12 border-b border-primary bg-primary p-4">
-      <div className="flex w-full items-center justify-between">
+    <header
+      className="flex h-12 select-none border-b border-primary bg-primary px-4"
+      data-tauri-drag-region
+    >
+      <div
+        className="flex w-full items-center justify-between"
+        data-tauri-drag-region
+      >
         <div className="flex items-center">
           <LogoIcon className="h-10 w-20 text-primary" />{" "}
           {!hideHistory && (

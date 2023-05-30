@@ -16,10 +16,20 @@ import {
   getApiKey,
   getConversation,
   incrementUsage,
+  removeApiKey,
   saveConversation,
   saveConversationIDToHistory,
   store,
 } from "../../helpers/store";
+
+export type TErrorMessage = {
+  error: {
+    message: string;
+    type: string;
+    param: string;
+    code: string;
+  };
+};
 
 const ChatPage = () => {
   const { id } = useParams();
@@ -28,13 +38,34 @@ const ChatPage = () => {
   const [queryErrored, setQueryErrored] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [streamClosed, setStreamClosed] = useState(false);
+  const [queryErroredMessage, setQueryErroredMessage] = useState(
+    "Something went wrong. Please try again."
+  );
 
   const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
     {
       model: "gpt-3.5-turbo",
       apiKey: apiKey,
+      setErrorMessage: (message) => handleErrorMessage(message),
     }
   );
+
+  const handleErrorMessage = (message: string) => {
+    if (message !== "") {
+      const parsed = JSON.parse(message) as TErrorMessage;
+      if (parsed.error.code === "invalid_api_key") {
+        setQueryErroredMessage(
+          "Invalid API Key. Returning to home page in 5 seconds."
+        );
+        setTimeout(() => {
+          removeApiKey();
+          navigate("/");
+        }, 5000);
+      }
+    }
+    // if (message.)
+    // setQueryErrored(true);
+  };
 
   if (!id) return null;
 
@@ -172,8 +203,8 @@ const ChatPage = () => {
             <ChatBubble message={message} key={index} />
           ))}
         {queryErrored && (
-          <div className="mt-4 rounded-md bg-red-600/40 px-4 py-3 text-sm text-primary">
-            Something went wrong with the network call. Please try again.
+          <div className="mt-4 w-fit rounded-md bg-red-600/40 px-4 py-3 text-sm text-primary">
+            {queryErroredMessage}
           </div>
         )}
         {streamClosed && (

@@ -43,6 +43,7 @@ export type ChatMessage = DeepRequired<ChatMessageParams>;
 export type OpenAIStreamingProps = {
   apiKey: string;
   model: Model;
+  setErrorMessage: (message: string) => void;
 };
 
 type RequestOptions = {
@@ -103,7 +104,11 @@ const createChatMessage = ({
   },
 });
 
-export const useChatCompletion = ({ model, apiKey }: OpenAIStreamingProps) => {
+export const useChatCompletion = ({
+  model,
+  apiKey,
+  setErrorMessage,
+}: OpenAIStreamingProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [source, setSource] = useState<SSE>();
 
@@ -217,6 +222,11 @@ export const useChatCompletion = ({ model, apiKey }: OpenAIStreamingProps) => {
         if (event.readyState === 2) {
           handleCloseStream(startTimestamp);
         }
+      });
+
+      source.addEventListener("error", (error) => {
+        setErrorMessage(error.data);
+        closeStream();
       });
 
       source.stream();

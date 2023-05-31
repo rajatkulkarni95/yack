@@ -61,10 +61,10 @@ const ChatPage = () => {
           removeApiKey();
           navigate("/");
         }, 5000);
+      } else {
+        setQueryErroredMessage(parsed.error.message);
       }
     }
-    // if (message.)
-    // setQueryErrored(true);
   };
 
   if (!id) return null;
@@ -203,7 +203,7 @@ const ChatPage = () => {
             <ChatBubble message={message} key={index} />
           ))}
         {queryErrored && (
-          <div className="mt-4 w-fit rounded-md bg-red-600/40 px-4 py-3 text-sm text-primary">
+          <div className="mt-4 w-fit rounded-md border border-red-500 bg-red-500/20 px-4 py-3 text-sm text-primary">
             {queryErroredMessage}
           </div>
         )}

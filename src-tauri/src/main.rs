@@ -77,6 +77,7 @@ fn set_review_count(app_handle: tauri::AppHandle, count: &str) {
 
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit").accelerator("Cmd+Q");
+    let hide_app = CustomMenuItem::new("hide_app".to_string(), "Hide Yack").accelerator("Escape");
     let open_yack =
         CustomMenuItem::new("open_yack".to_string(), "Open Yack").accelerator("Ctrl+Shift+Space");
     let version = CustomMenuItem::new(
@@ -85,6 +86,7 @@ fn main() {
     )
     .disabled();
     let check_updates = CustomMenuItem::new("check_updates".to_string(), "Check for Updates");
+    let changelog = CustomMenuItem::new("changelog".to_string(), "See What's New");
     let send_feedback = CustomMenuItem::new("send_feedback".to_string(), "Send Feedback");
     let history = CustomMenuItem::new("history".to_string(), "History").accelerator("Cmd+P");
     let new_chat = CustomMenuItem::new("new_chat".to_string(), "New Chat").accelerator("Cmd+N");
@@ -110,8 +112,10 @@ fn main() {
         .add_item(send_feedback)
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(version)
+        .add_item(changelog)
         .add_item(check_updates)
         .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(hide_app)
         .add_item(quit);
 
     let system_tray = SystemTray::new()
@@ -142,6 +146,10 @@ fn main() {
                     w.set_focus().unwrap();
                     w.eval("window.location.href='/chat/new'").unwrap();
                 }
+                "hide_app" => {
+                    let w = app.get_window("main").unwrap();
+                    w.hide().unwrap();
+                }
                 "history" => {
                     let w = app.get_window("main").unwrap();
                     w.show().unwrap();
@@ -158,6 +166,12 @@ fn main() {
                     );
                     if let Err(e) = open::that(email_url) {
                         eprintln!("Error launching mail client: {}", e);
+                    }
+                }
+                "changelog" => {
+                    let changelog_url = "https://yack.fyi/changelog/";
+                    if let Err(e) = open::that(changelog_url) {
+                        eprintln!("Error launching browser client: {}", e);
                     }
                 }
                 "check_updates" => {
@@ -191,13 +205,9 @@ fn main() {
             _ => {}
         })
         .on_window_event(|event| match event.event() {
-            tauri::WindowEvent::CloseRequested { api, .. } => {
-                // don't kill the app when the user clicks close.
-                event.window().hide().unwrap();
-                api.prevent_close();
-            }
+            // Blur event
             tauri::WindowEvent::Focused(false) => {
-                event.window().hide().unwrap();
+                event.window().set_always_on_top(false).unwrap();
             }
             _ => {}
         })
@@ -226,13 +236,9 @@ fn main() {
                 shortcut_manager
                     .register("Ctrl+Shift+Space", move || {
                         let w = handle.get_window("main").unwrap();
-                        let visible = w.is_visible().unwrap();
-                        if visible {
-                            w.hide().unwrap();
-                        } else {
-                            w.show().unwrap();
-                            w.set_focus().unwrap();
-                        }
+
+                        w.show().unwrap();
+                        w.set_focus().unwrap();
                     })
                     .unwrap();
             }

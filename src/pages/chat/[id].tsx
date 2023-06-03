@@ -239,6 +239,7 @@ const ChatPage = () => {
       </button>
       <section className="absolute bottom-0 w-full bg-primary p-4">
         <PromptInput
+          key={id}
           sendPrompt={sendPrompt}
           disabled={messages?.[messages.length - 1]?.meta?.loading}
           stopStream={handleCloseStream}

@@ -86,6 +86,7 @@ fn main() {
     )
     .disabled();
     let check_updates = CustomMenuItem::new("check_updates".to_string(), "Check for Updates");
+    let changelog = CustomMenuItem::new("changelog".to_string(), "See What's New");
     let send_feedback = CustomMenuItem::new("send_feedback".to_string(), "Send Feedback");
     let history = CustomMenuItem::new("history".to_string(), "History").accelerator("Cmd+P");
     let new_chat = CustomMenuItem::new("new_chat".to_string(), "New Chat").accelerator("Cmd+N");
@@ -111,6 +112,7 @@ fn main() {
         .add_item(send_feedback)
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(version)
+        .add_item(changelog)
         .add_item(check_updates)
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(hide_app)
@@ -164,6 +166,12 @@ fn main() {
                     );
                     if let Err(e) = open::that(email_url) {
                         eprintln!("Error launching mail client: {}", e);
+                    }
+                }
+                "changelog" => {
+                    let changelog_url = "https://yack.fyi/changelog/";
+                    if let Err(e) = open::that(changelog_url) {
+                        eprintln!("Error launching browser client: {}", e);
                     }
                 }
                 "check_updates" => {

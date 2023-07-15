@@ -280,7 +280,7 @@ const ChatPage = () => {
           ${
             streamOngoing
               ? "bottom-20 -translate-y-full opacity-100"
-              : "-translate-y-0 opacity-0"
+              : "-bottom-10 -translate-y-0 opacity-0"
           }
           `}
         onClick={handleCloseStream}

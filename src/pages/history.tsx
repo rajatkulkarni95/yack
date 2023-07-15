@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
 import KbdShort from "../components/KbdShort";
-import { useKeyPress } from "../hooks/useKeyPress";
 import { useNavigate } from "react-router-dom";
 import {
   THistoryMessageProps,
@@ -12,6 +11,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 const HistoryPage = () => {
   const [convHistory, setConvHistory] = useState<THistoryMessageProps[]>([]);
+  const [search, setSearch] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -48,33 +49,38 @@ const HistoryPage = () => {
     fetchHistory();
   };
 
-  const arrowUpPressed = useKeyPress("ArrowUp", true);
-  const arrowDownPressed = useKeyPress("ArrowDown", true);
-  const enterPressed = useKeyPress("Enter");
-
-  useHotkeys("meta+backspace", handleDelete);
-
-  useEffect(() => {
-    if (arrowUpPressed) {
-      moveSelectedIndex(-1);
-    }
-  }, [arrowUpPressed]);
-
-  useEffect(() => {
-    if (arrowDownPressed) {
-      moveSelectedIndex(1);
-    }
-  }, [arrowDownPressed]);
-
-  useEffect(() => {
-    if (enterPressed) {
+  useHotkeys("ArrowUp", () => moveSelectedIndex(-1), {
+    preventDefault: true,
+  });
+  useHotkeys("ArrowDown", () => moveSelectedIndex(1), {
+    preventDefault: true,
+  });
+  useHotkeys(
+    "Enter",
+    () => {
       const selectedElement = document.querySelector(".activeElement");
       if (!selectedElement) return;
 
       const id = selectedElement.id;
       navigate(`/chat/${id}`);
+    },
+    {
+      preventDefault: true,
     }
-  }, [enterPressed]);
+  );
+
+  useHotkeys("meta+backspace", handleDelete);
+  useHotkeys("meta+f", () => inputRef.current?.focus());
+
+  const filteredHistory = convHistory.filter((conv) =>
+    conv.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleSearchKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      inputRef.current?.blur();
+    }
+  };
 
   useEffect(() => {
     const selectedElement = document.querySelector(".activeElement");
@@ -92,19 +98,34 @@ const HistoryPage = () => {
       <Header hideHistory />
 
       <div className="flex h-[calc(100vh-80px)] flex-col overflow-y-auto pb-2">
-        <p className="px-4 pt-4 text-lg font-medium text-secondary">
-          History{" "}
-          <span className="font-mono text-tertiary">
-            ({convHistory.length})
-          </span>
-        </p>
-        {convHistory.length === 0 && (
-          <div className="text-base font-normal text-tertiary">
-            No history yet
+        <div className="flex items-center justify-between px-4 pt-4">
+          <p className="font-mono text-lg text-secondary">
+            History
+            <span className="ml-1 font-mono text-tertiary">
+              ({filteredHistory.length})
+            </span>
+          </p>
+          <input
+            type="text"
+            id="search"
+            name="search"
+            className="rounded border border-primary bg-secondary px-2 py-1.5 text-primary focus-within:border-secondary hover:border-secondary"
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleSearchKeydown}
+            ref={inputRef}
+          />
+        </div>
+        {filteredHistory.length === 0 && (
+          <div className="flex h-20 w-full items-center justify-center text-base font-normal text-tertiary">
+            {search !== ""
+              ? `Nothing to be found with "${search}"`
+              : "No history yet"}
           </div>
         )}
         <div className="flex flex-col px-4">
-          {convHistory.map((conversation, i) => {
+          {filteredHistory.map((conversation, i) => {
             const date = new Date(conversation.created);
             const dateString = date.toLocaleDateString("en-US", {
               weekday: "long",
@@ -162,17 +183,20 @@ const HistoryPage = () => {
           })}
         </div>
       </div>
-      <footer className="flex h-12 items-center border-t border-primary bg-primary px-4">
+      <footer className="flex h-12 items-center justify-center gap-8 border-t border-primary bg-primary px-4">
         <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["↑", "↓"]} additionalStyles="mr-2" /> to navigate{" "}
         </span>
-        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+        <span className="flex items-center text-sm font-normal text-tertiary">
+          <KbdShort keys={["⌘", "F"]} additionalStyles="mr-2" /> to search{" "}
+        </span>
+        <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["↵"]} additionalStyles="mr-2" /> to select{" "}
         </span>
-        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+        <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["⌘", "⌫"]} additionalStyles="mr-2" /> to delete{" "}
         </span>
-        <span className="ml-auto flex items-center text-sm font-normal text-tertiary">
+        <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["Esc"]} additionalStyles="mr-2" /> to back{" "}
         </span>
       </footer>

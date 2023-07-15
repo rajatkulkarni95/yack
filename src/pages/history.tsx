@@ -102,14 +102,14 @@ const HistoryPage = () => {
           <p className="font-mono text-lg text-secondary">
             History
             <span className="ml-1 font-mono text-tertiary">
-              ({convHistory.length})
+              ({filteredHistory.length})
             </span>
           </p>
           <input
             type="text"
             id="search"
             name="search"
-            className="py- rounded border border-primary bg-secondary px-2 py-1.5 text-primary focus-within:border-secondary hover:border-secondary"
+            className="rounded border border-primary bg-secondary px-2 py-1.5 text-primary focus-within:border-secondary hover:border-secondary"
             placeholder="Search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -183,17 +183,20 @@ const HistoryPage = () => {
           })}
         </div>
       </div>
-      <footer className="flex h-12 items-center justify-center border-t border-primary bg-primary px-4">
+      <footer className="flex h-12 items-center justify-center gap-8 border-t border-primary bg-primary px-4">
         <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["↑", "↓"]} additionalStyles="mr-2" /> to navigate{" "}
         </span>
-        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+        <span className="flex items-center text-sm font-normal text-tertiary">
+          <KbdShort keys={["⌘", "F"]} additionalStyles="mr-2" /> to search{" "}
+        </span>
+        <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["↵"]} additionalStyles="mr-2" /> to select{" "}
         </span>
-        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+        <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["⌘", "⌫"]} additionalStyles="mr-2" /> to delete{" "}
         </span>
-        <span className="ml-8 flex items-center text-sm font-normal text-tertiary">
+        <span className="flex items-center text-sm font-normal text-tertiary">
           <KbdShort keys={["Esc"]} additionalStyles="mr-2" /> to back{" "}
         </span>
       </footer>

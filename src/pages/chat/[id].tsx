@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { PromptInput } from "../../components/Chat/Input";
@@ -22,6 +22,8 @@ import {
   store,
 } from "../../helpers/store";
 
+import { DownArrow } from "../../svg";
+
 export type TErrorMessage = {
   error: {
     message: string;
@@ -41,6 +43,10 @@ const ChatPage = () => {
   const [queryErroredMessage, setQueryErroredMessage] = useState(
     "Something went wrong. Please try again."
   );
+  const scrollableRef = useRef<HTMLDivElement>(null);
+  const [isProgrammaticallyScrolled, setProgrammaticScroll] = useState(true);
+  const [showDownArrow, setShowDownArrow] = useState(false);
+  const scrollTimeoutRef = useRef();
 
   const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
     {
@@ -49,6 +55,89 @@ const ChatPage = () => {
       setErrorMessage: (message) => handleErrorMessage(message),
     }
   );
+
+  const handleScroll = () => {
+    const scrollNode = scrollableRef.current;
+    if (scrollNode) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollNode;
+
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if (!isAtBottom) {
+        setProgrammaticScroll(false);
+      } else {
+        // Set isProgrammaticallyScrolled to true before scrolling programmatically
+        setProgrammaticScroll(true);
+      }
+
+      setShowDownArrow(!isAtBottom);
+    }
+  };
+
+  const handleDownArrowClick = () => {
+    const scrollNode = scrollableRef.current;
+    if (scrollNode) {
+      scrollNode.scrollTop = scrollNode.scrollHeight;
+      setProgrammaticScroll(true);
+      setShowDownArrow(false);
+      clearTimeout(scrollTimeoutRef.current);
+    }
+  };
+
+  useEffect(() => {
+    const scrollNode = scrollableRef.current;
+
+    if (scrollNode) {
+      scrollNode.addEventListener("scroll", handleScroll);
+
+      // Cleanup event listener on component unmount
+      return () => {
+        scrollNode.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      scrollableRef.current &&
+      messages?.length > 0 &&
+      isProgrammaticallyScrolled
+    ) {
+      const scrollNode = scrollableRef.current;
+
+      // Set isProgrammaticallyScrolled to true before scrolling programmatically
+      if (scrollNode) {
+        setProgrammaticScroll(true);
+        scrollNode.scrollTop = scrollNode.scrollHeight;
+      }
+    }
+    saveMessages();
+  }, [messages, isProgrammaticallyScrolled]);
+
+  async function saveMessages() {
+    if (
+      !messages?.[messages.length - 1]?.meta?.loading &&
+      messages?.length > 0 &&
+      id
+    ) {
+      const lastMessage = messages[messages.length - 1];
+
+      if (lastMessage.content === "" && lastMessage.role === "") {
+        setQueryErrored(true);
+        messages.pop();
+        return;
+      }
+
+      await incrementUsage({ total_tokens: lastMessage.meta.chunks.length });
+      const tonedMessages = messages.map((message) => ({
+        content: message.content,
+        role: message.role,
+        timestamp: message.timestamp,
+      }));
+
+      await saveConversation(tonedMessages, id);
+    }
+  }
 
   const handleErrorMessage = (message: string) => {
     if (message !== "") {
@@ -104,47 +193,10 @@ const ChatPage = () => {
     checkForExistingConversation();
   }, [id]);
 
-  const chatContainer = document.getElementById("chat-container");
-
   const handleCloseStream = () => {
     setStreamClosed(true);
     closeStream();
   };
-
-  useEffect(() => {
-    if (chatContainer && messages?.length > 0) {
-      setTimeout(() => {
-        chatContainer.scrollTop = 99999999;
-      }, 100);
-    }
-
-    async function saveMessages() {
-      if (
-        !messages?.[messages.length - 1]?.meta?.loading &&
-        messages?.length > 0 &&
-        id
-      ) {
-        const lastMessage = messages[messages.length - 1];
-
-        if (lastMessage.content === "" && lastMessage.role === "") {
-          setQueryErrored(true);
-          messages.pop();
-          return;
-        }
-
-        await incrementUsage({ total_tokens: lastMessage.meta.chunks.length });
-        const tonedMessages = messages.map((message) => ({
-          content: message.content,
-          role: message.role,
-          timestamp: message.timestamp,
-        }));
-
-        await saveConversation(tonedMessages, id);
-      }
-    }
-
-    saveMessages();
-  }, [messages]);
 
   const sendPrompt = async (prompt: string) => {
     const payload: OpenAIChatMessage = {
@@ -196,6 +248,7 @@ const ChatPage = () => {
       <div
         className="h-[calc(100vh-130px)] overflow-y-auto overflow-x-hidden p-4 duration-150"
         id="chat-container"
+        ref={scrollableRef}
       >
         {chatConversations
           .filter((message) => message.content !== "" && message.role !== "")
@@ -224,11 +277,11 @@ const ChatPage = () => {
 
       <button
         className={`fixed left-1/2 z-10 -translate-x-1/2 transform rounded border border-primary bg-tertiary px-3 py-2 transition duration-300 ease-in-out hover:bg-primaryBtnHover
-           ${
-             streamOngoing
-               ? "bottom-20 -translate-y-full opacity-100"
-               : "-translate-y-0 opacity-0"
-           }
+          ${
+            streamOngoing
+              ? "bottom-20 -translate-y-full opacity-100"
+              : "-translate-y-0 opacity-0"
+          }
           `}
         onClick={handleCloseStream}
       >
@@ -236,6 +289,18 @@ const ChatPage = () => {
           Stop Generating
           <KbdShort keys={["⌘", "E"]} additionalStyles="ml-2" />
         </span>
+      </button>
+      <button
+        className={`fixed right-12 z-10 transform rounded-full border border-secondary bg-primary p-2 transition duration-300 ease-in-out hover:bg-primaryBtnHover
+           ${
+             showDownArrow
+               ? "bottom-20 -translate-y-full opacity-100"
+               : "-translate-y-0 opacity-0"
+           }
+          `}
+        onClick={handleDownArrowClick}
+      >
+        <DownArrow className="h-5 w-5 text-icon" />
       </button>
       <section className="absolute bottom-0 w-full bg-primary p-4">
         <PromptInput

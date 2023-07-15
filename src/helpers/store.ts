@@ -1,7 +1,10 @@
 import { Store } from "tauri-plugin-store-api";
 import { ChatMessageParams } from "../hooks/useChatCompletion";
 
-export const store = new Store(".data.dat");
+export const store =
+  process.env.NODE_ENV === "production"
+    ? new Store(".data.dat")
+    : new Store(".data.dev.dat");
 
 export type TUsage = {
   total_tokens: number;

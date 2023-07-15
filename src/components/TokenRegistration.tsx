@@ -50,7 +50,7 @@ const TokenRegistration = () => {
         >
           OpenAI API Key
         </label>
-        <div className="flex flex-row items-center">
+        <div className="flex w-full flex-col gap-2 sm:flex-row md:items-center">
           <input
             type="text"
             id="token"
@@ -68,7 +68,7 @@ const TokenRegistration = () => {
           />
           <button
             type="submit"
-            className={`ml-2 w-fit rounded-md border border-primary bg-secondary px-3 py-2 text-base font-medium text-primary focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 ${
+            className={`w-fit rounded-md border border-primary bg-secondary px-3 py-2 text-base font-medium text-primary focus-visible:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 ${
               isSubmitting || !token
                 ? "cursor-not-allowed"
                 : "cursor-default hover:bg-action"
@@ -93,8 +93,8 @@ const TokenRegistration = () => {
         </a>{" "}
         to retrieve the API key you'll use in your requests.
       </p>
-      <div className="my-2 border border-dashed border-primary" />
-      <h2 className="mt-2 text-xl font-bold text-primary">Disclaimer</h2>
+      <div className="my-4 border border-dashed border-primary" />
+      <h2 className="text-xl font-bold text-primary">Disclaimer</h2>
       <ul className="mt-2 text-base text-secondary">
         <li>
           We do not store your API key on our servers.{" "}
@@ -111,8 +111,7 @@ const TokenRegistration = () => {
       <div className="my-4 border border-dashed border-primary" />
       <p className="mt-8 text-base text-secondary">
         Yack is merely a wrapper around the ChatGPT API, all your questions and
-        answers are either stored on your device in the browser's local storage
-        or on OpenAI's servers.
+        answers are either stored on your device or on OpenAI's servers.
       </p>
     </section>
   );

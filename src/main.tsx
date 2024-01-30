@@ -16,7 +16,7 @@ const Main = () => {
     // Check for updates every hour
     const intervalId = setInterval(
       () => emit("tauri://update"),
-      15 * 60 * 1000
+      24 * 60 * 60 * 1000
     );
 
     async function setStoredTheme() {

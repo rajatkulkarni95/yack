@@ -10,8 +10,7 @@
     "tauri": "tauri",
     "devd": "tauri dev",
     "arm-build": "CARGO_TARGET_DIR=target/$npm_package_version/ tauri build --target aarch64-apple-darwin",
-    "intel-build": "CARGO_TARGET_DIR=target/$npm_package_version/ tauri build --target x86_64-apple-darwin",
-    "build-package": "pnpm run intel-build && pnpm run arm-build && node updater.cjs"
+    "intel-build": "CARGO_TARGET_DIR=target/$npm_package_version/ tauri build --target x86_64-apple-darwin"
   },
   "dependencies": {
     "@radix-ui/react-tooltip": "^1.0.5",

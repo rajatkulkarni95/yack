@@ -6,6 +6,11 @@ Yack is a Mac app (currently) that lets you interact with GPT3 APIs in a Spotlig
 
 [Download the latest release (macOS)](https://www.yack.fyi/)
 
+Post Install hit `Ctrl + Shift + Space` to bring up Yack. Also look for the icon on the menu bar.
+
+https://github.com/rajatkulkarni95/yack/assets/57321156/5c09e1fe-c171-4fd6-a6ed-6bc287e66bff
+
+
 ## Development
 
 Build and run this app from source:

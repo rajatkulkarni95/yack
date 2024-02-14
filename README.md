@@ -24,6 +24,8 @@ pnpm i
 pnpm tauri dev
 ```
 
+If you like this, come support my new app [Octarine](https://octarine.app)
+
 ## License
 
 Yack is licensed under the MIT license. See [LICENSE](LICENSE) for more information.

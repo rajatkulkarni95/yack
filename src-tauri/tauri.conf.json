@@ -79,7 +79,7 @@
         "title": "yack",
         "width": 640,
         "height": 640,
-        "minWidth": 480,
+        "minWidth": 550,
         "minHeight": 640,
         "center": true
       }

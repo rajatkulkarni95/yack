@@ -21,6 +21,10 @@ export const useNavigation = () => {
     navigate("/chat/new");
   };
 
+  const onClickSettings = () => {
+    navigate("/settings");
+  };
+
   useEffect(() => {
     async function saveHistoryToLocalState() {
       const storedHistory = await getHistory();
@@ -80,6 +84,7 @@ export const useNavigation = () => {
   return {
     onClickHistory,
     onClickNew,
+    onClickSettings,
     navigateToNextChat,
     navigateToPrevChat,
     isLeftDisabled,

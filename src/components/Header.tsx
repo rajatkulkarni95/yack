@@ -8,8 +8,10 @@ import Tooltip from "./Tooltip";
 
 interface IHeaderProps {
   haltNew?: boolean;
-  hideHistory?: boolean;
+  backToChat?: boolean;
   streamOngoing?: boolean;
+  hideHistory?: boolean;
+  hideSettings?: boolean;
 }
 
 export const hideApp = async () => {
@@ -18,7 +20,12 @@ export const hideApp = async () => {
   await appWindow.hide();
 };
 
-const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
+const Header = ({
+  backToChat,
+  streamOngoing,
+  hideHistory,
+  hideSettings,
+}: IHeaderProps) => {
   const { totalCost } = useUsage();
 
   const navigate = useNavigate();
@@ -27,13 +34,14 @@ const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
     navigateToPrevChat,
     onClickHistory,
     onClickNew,
+    onClickSettings,
     isLeftDisabled,
     isRightDisabled,
   } = useNavigation();
 
   const handleEscape = () => {
-    if (hideHistory) {
-      navigate(-1);
+    if (backToChat) {
+      navigate("/");
     } else {
       hideApp();
     }
@@ -47,6 +55,7 @@ const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
       onClickNew();
     }
   });
+  useHotkeys("meta+,", onClickSettings);
 
   useHotkeys("meta+[", navigateToPrevChat);
   useHotkeys("meta+]", navigateToNextChat);
@@ -62,7 +71,7 @@ const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
       >
         <div className="flex items-center">
           <LogoIcon className="h-10 w-20 text-primary" />{" "}
-          {!hideHistory && (
+          {!backToChat && (
             <Tooltip
               tooltip={
                 !isLeftDisabled ? (
@@ -84,7 +93,7 @@ const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
               </button>
             </Tooltip>
           )}
-          {!hideHistory && (
+          {!backToChat && (
             <Tooltip
               tooltip={
                 !isRightDisabled ? (
@@ -119,7 +128,17 @@ const Header = ({ hideHistory, streamOngoing }: IHeaderProps) => {
               </span>
             </button>
           )}
-
+          {!hideSettings && (
+            <button
+              className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={onClickSettings}
+              disabled={streamOngoing}
+            >
+              <span className="flex items-center font-sans text-sm font-normal text-secondary">
+                Settings <KbdShort keys={["⌘", ","]} additionalStyles="ml-2" />
+              </span>
+            </button>
+          )}
           <button
             className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
             onClick={onClickNew}

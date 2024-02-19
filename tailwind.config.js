@@ -60,7 +60,8 @@ module.exports = {
       kbd: "var(--color-bg-kbd)",
       kbdTooltip: "var(--color-bg-tooltip-kbd)",
       tooltip: "var(--color-bg-tooltip)",
-      action: "var(--color-bg-action)",
+      action: "hsl(var(--color-bg-action))",
+      actionHover: "hsl(var(--color-bg-action)/0.7)",
       ...colors,
     },
     borderColor: {

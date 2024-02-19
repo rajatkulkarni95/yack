@@ -95,7 +95,7 @@ const HistoryPage = () => {
 
   return (
     <React.Fragment>
-      <Header hideHistory />
+      <Header backToChat hideHistory />
 
       <div className="flex h-[calc(100vh-80px)] flex-col overflow-y-auto pb-2">
         <div className="flex items-center justify-between px-4 pt-4">

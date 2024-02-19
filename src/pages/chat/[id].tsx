@@ -163,13 +163,13 @@ const ChatPage = () => {
   useEffect(() => {
     async function checkAPIKeyAndModel() {
       const key = await getApiKey();
-      const model = (await getModel()) || "gpt-3.5-turbo";
+      const localModel = (await getModel()) || "gpt-3.5-turbo";
 
       if (!key) {
         navigate("/");
       } else {
         setApiKey(key);
-        setModel(model);
+        setModel(localModel);
       }
     }
 

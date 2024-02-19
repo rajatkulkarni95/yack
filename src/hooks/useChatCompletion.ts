@@ -30,7 +30,7 @@ export type ChatCompletionChunk = {
   id: string;
   object: string;
   created: number;
-  model: Model;
+  model: string;
   choices: {
     delta: Partial<OpenAIChatMessage>;
     index: number;
@@ -42,7 +42,7 @@ export type ChatMessage = DeepRequired<ChatMessageParams>;
 
 export type OpenAIStreamingProps = {
   apiKey: string;
-  model: Model;
+  model: string;
   setErrorMessage: (message: string) => void;
 };
 
@@ -72,7 +72,7 @@ const getOpenAIRequestMessage = ({
 
 const getRequestOptions = (
   apiKey: string,
-  model: Model,
+  model: string,
   messages: ChatMessage[]
 ): RequestOptions => ({
   headers: {

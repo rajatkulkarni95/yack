@@ -4,11 +4,16 @@ import { setApiKey, getApiKey, setModel, getModel } from "../helpers/store";
 import { MODELS_API } from "../constants/API";
 import Header from "../components/Header";
 import { DownChevron } from "../svg";
+import fetcher from "../helpers/fetcher";
+
+type TModel = {
+  id: string;
+}[];
 
 const SettingsPage = () => {
   const [apiKey, setApiKeyState] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
-  const [availableModels, setAvailableModels] = useState([]);
+  const [availableModels, setAvailableModels] = useState<TModel>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,13 +23,14 @@ const SettingsPage = () => {
       const model = await getModel();
       setSelectedModel(model || "");
 
-      const response = await fetch(MODELS_API);
-      console.log(await response.json());
-      const models = await response.json();
-      const gptModels = models.filter((model: { id: string }) =>
-        model.id.startsWith("gpt")
-      );
-      setAvailableModels(gptModels);
+      if (key) {
+        const response = await fetcher(MODELS_API);
+
+        const gptModels = response?.data?.filter((model: { id: string }) =>
+          model.id.startsWith("gpt")
+        );
+        setAvailableModels(gptModels);
+      }
     }
 
     fetchSettings();
@@ -60,8 +66,8 @@ const SettingsPage = () => {
               className="mr-1 appearance-none rounded border border-primary bg-transparent py-1.5 pl-2 pr-8 text-primary hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
             >
               {availableModels.map((model) => (
-                <option key={model} value={model}>
-                  {model}
+                <option key={model.id} value={model.id}>
+                  {model.id}
                 </option>
               ))}
             </select>

@@ -39,6 +39,11 @@ module.exports = {
         },
       },
     },
+    colors: {
+      bg: "var(--color-bg-primary)",
+      action: "hsl(var(--color-bg-action))",
+      ...colors,
+    },
     textColor: {
       primary: "var(--color-text-primary)",
       secondary: "var(--color-text-secondary)",

@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { setApiKey, getApiKey, setModel, getModel } from "../helpers/store";
+import {
+  setApiKey,
+  getApiKey,
+  setModel,
+  getModel,
+  getSavedTheme,
+  saveTheme,
+} from "../helpers/store";
 import { MODELS_API } from "../constants/API";
 import Header from "../components/Header";
 import { DownChevron } from "../svg";
@@ -14,6 +21,7 @@ const SettingsPage = () => {
   const [apiKey, setApiKeyState] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [availableModels, setAvailableModels] = useState<TModel>([]);
+  const [theme, setTheme] = useState<string>("");
   const navigate = useNavigate();
 
   const apiKeyInputRef = useRef<HTMLInputElement>(null);
@@ -25,6 +33,8 @@ const SettingsPage = () => {
       setApiKeyState(key || "");
       const model = await getModel();
       setSelectedModel(model || "");
+      const theme = await getSavedTheme();
+      setTheme(theme || "dark");
 
       if (key) {
         const response = await fetcher(MODELS_API);
@@ -39,10 +49,19 @@ const SettingsPage = () => {
     fetchSettings();
   }, []);
 
+  useEffect(() => {
+    const saveSelectedTheme = async () => {
+      await saveTheme(theme);
+      document.querySelector("html")?.setAttribute("data-theme", theme);
+    };
+
+    if (theme) {
+      saveSelectedTheme();
+    }
+  }, [theme]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await setApiKey(apiKey);
-    await setModel(selectedModel);
     navigate("/");
   };
 
@@ -80,7 +99,22 @@ const SettingsPage = () => {
                 </option>
               ))}
             </select>
-            <DownChevron className="absolute right-4 h-4 w-4 text-white" />
+            <DownChevron className="pointer-events-none absolute right-4 h-4 w-4  text-white" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="font-mono text-sm text-secondary">Theme</label>
+          <div className="relative flex items-center">
+            <select
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              className="appearance-none rounded border border-primary bg-transparent py-1.5 pl-2 pr-8 text-primary focus-within:border-secondary hover:bg-primaryBtnHover"
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="andromeda">Andromeda</option>
+            </select>
+            <DownChevron className="pointer-events-none absolute right-4 h-4 w-4 text-white" />
           </div>
         </div>
         <button

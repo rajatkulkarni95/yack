@@ -121,6 +121,7 @@ const Header = ({
             <button
               className="mr-1 rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover"
               onClick={onClickHistory}
+              tabIndex={-1}
             >
               <span className="flex items-center font-sans text-sm font-normal text-secondary">
                 History
@@ -133,6 +134,7 @@ const Header = ({
               className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
               onClick={onClickSettings}
               disabled={streamOngoing}
+              tabIndex={-1}
             >
               <span className="flex items-center font-sans text-sm font-normal text-secondary">
                 Settings <KbdShort keys={["⌘", ","]} additionalStyles="ml-2" />
@@ -143,6 +145,7 @@ const Header = ({
             className="rounded border border-primary bg-transparent px-2 py-1 hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
             onClick={onClickNew}
             disabled={streamOngoing}
+            tabIndex={-1}
           >
             <span className="flex items-center font-sans text-sm font-normal text-secondary">
               New Chat <KbdShort keys={["⌘", "N"]} additionalStyles="ml-2" />

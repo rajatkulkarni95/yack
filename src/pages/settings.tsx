@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { setApiKey, getApiKey, setModel, getModel } from "../helpers/store";
 import { MODELS_API } from "../constants/API";
@@ -15,6 +15,9 @@ const SettingsPage = () => {
   const [selectedModel, setSelectedModel] = useState("");
   const [availableModels, setAvailableModels] = useState<TModel>([]);
   const navigate = useNavigate();
+
+  const apiKeyInputRef = useRef<HTMLInputElement>(null);
+  const modelSelectRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     async function fetchSettings() {
@@ -54,6 +57,7 @@ const SettingsPage = () => {
         <div className="flex flex-col gap-2">
           <label className="font-mono text-sm text-secondary">API Key</label>
           <input
+            ref={apiKeyInputRef}
             type="text"
             value={apiKey}
             onChange={(e) => setApiKeyState(e.target.value)}
@@ -65,9 +69,10 @@ const SettingsPage = () => {
           <label className="font-mono text-sm text-secondary">Model</label>
           <div className="relative flex items-center">
             <select
+              ref={modelSelectRef}
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="mr-1 appearance-none rounded border border-primary bg-transparent py-1.5 pl-2 pr-8 text-primary hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
+              className="mr-1 appearance-none rounded border border-primary bg-transparent py-1.5 pl-2 pr-8 text-primary focus-within:border-secondary hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
             >
               {availableModels.map((model) => (
                 <option key={model.id} value={model.id}>
@@ -80,7 +85,7 @@ const SettingsPage = () => {
         </div>
         <button
           type="submit"
-          className="mr-1 rounded bg-action px-2 py-1.5 text-primary active:bg-actionHover disabled:cursor-not-allowed disabled:opacity-40"
+          className="mr-1 rounded bg-action px-2 py-1.5 text-primary focus-visible:ring-1 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-bg active:bg-actionHover disabled:cursor-not-allowed disabled:opacity-40"
         >
           Save
         </button>

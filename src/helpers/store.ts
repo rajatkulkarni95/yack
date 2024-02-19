@@ -28,6 +28,13 @@ export const setApiKey = async (apiKey: string) => {
 export const getApiKey = async () =>
   await store.get<Promise<string>>("api_key");
 
+export const setModel = async (model: string) => {
+  await store.set("model", model);
+  await store.save();
+};
+
+export const getModel = async () => await store.get<Promise<string>>("model");
+
 export const removeApiKey = async () => {
   await store.delete("api_key");
   await store.save();

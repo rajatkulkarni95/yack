@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { setApiKey, getApiKey } from "../helpers/store";
+import { setApiKey, getApiKey, setModel, getModel } from "../helpers/store";
 import { MODELS_API } from "../constants/API";
 import Header from "../components/Header";
-import { DownArrow, DownChevron } from "../svg";
+import { DownChevron } from "../svg";
 
 const SettingsPage = () => {
   const [apiKey, setApiKeyState] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
+  const [availableModels, setAvailableModels] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchSettings() {
       const key = await getApiKey();
       setApiKeyState(key || "");
-      // Fetch and set the selected model
+      const model = await getModel();
+      setSelectedModel(model || "");
+
+      const response = await fetch(MODELS_API);
+      console.log(await response.json());
+      const models = await response.json();
+      const gptModels = models.filter((model: { id: string }) =>
+        model.id.startsWith("gpt")
+      );
+      setAvailableModels(gptModels);
     }
 
     fetchSettings();
@@ -22,7 +32,7 @@ const SettingsPage = () => {
 
   const handleSave = async () => {
     await setApiKey(apiKey);
-    // Save the selected model
+    await setModel(selectedModel);
     navigate("/");
   };
 
@@ -49,8 +59,11 @@ const SettingsPage = () => {
               onChange={(e) => setSelectedModel(e.target.value)}
               className="mr-1 appearance-none rounded border border-primary bg-transparent py-1.5 pl-2 pr-8 text-primary hover:bg-primaryBtnHover disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-              <option value="gpt-4">GPT-4</option>
+              {availableModels.map((model) => (
+                <option key={model} value={model}>
+                  {model}
+                </option>
+              ))}
             </select>
             <DownChevron className="absolute right-4 h-4 w-4 text-white" />
           </div>

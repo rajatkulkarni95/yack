@@ -55,7 +55,7 @@ const Header = ({
       onClickNew();
     }
   });
-  useHotkeys("meta+,", onClickSettings);
+  useHotkeys("meta+comma", onClickSettings);
 
   useHotkeys("meta+[", navigateToPrevChat);
   useHotkeys("meta+]", navigateToNextChat);

@@ -36,7 +36,8 @@ const SettingsPage = () => {
     fetchSettings();
   }, []);
 
-  const handleSave = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     await setApiKey(apiKey);
     await setModel(selectedModel);
     navigate("/");
@@ -45,7 +46,10 @@ const SettingsPage = () => {
   return (
     <React.Fragment>
       <Header backToChat hideSettings />
-      <div className="flex flex-col items-start gap-4 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-start gap-4 p-4"
+      >
         <p className="font-mono text-lg text-secondary">Settings</p>
         <div className="flex flex-col gap-2">
           <label className="font-mono text-sm text-secondary">API Key</label>
@@ -75,12 +79,12 @@ const SettingsPage = () => {
           </div>
         </div>
         <button
-          onClick={handleSave}
+          type="submit"
           className="mr-1 rounded bg-action px-2 py-1.5 text-primary active:bg-actionHover disabled:cursor-not-allowed disabled:opacity-40"
         >
           Save
         </button>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

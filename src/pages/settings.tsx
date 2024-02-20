@@ -62,6 +62,8 @@ const SettingsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setModel(selectedModel);
+    setApiKey(apiKey);
     navigate("/");
   };
 

@@ -17,8 +17,13 @@ export const PromptInput = ({
   streamOngoing,
 }: TProps) => {
   const [value, setValue] = useState<string>("");
-  const { navigateToNextChat, navigateToPrevChat, onClickHistory, onClickNew } =
-    useNavigation();
+  const {
+    navigateToNextChat,
+    navigateToPrevChat,
+    onClickHistory,
+    onClickNew,
+    onClickSettings,
+  } = useNavigation();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -60,6 +65,10 @@ export const PromptInput = ({
 
     if (e.key === "n" && e.metaKey && !streamOngoing) {
       onClickNew();
+    }
+
+    if (e.key === "," && e.metaKey) {
+      onClickSettings();
     }
 
     if (e.key === "[" && e.metaKey) {

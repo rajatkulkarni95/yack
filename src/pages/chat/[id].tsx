@@ -14,6 +14,7 @@ import KbdShort from "../../components/KbdShort";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   getApiKey,
+  getModel,
   getConversation,
   incrementUsage,
   removeApiKey,
@@ -39,6 +40,7 @@ const ChatPage = () => {
   const [conv, setConv] = useState<ChatMessageParams[]>([]);
   const [queryErrored, setQueryErrored] = useState(false);
   const [apiKey, setApiKey] = useState("");
+  const [model, setModel] = useState("");
   const [streamClosed, setStreamClosed] = useState(false);
   const [queryErroredMessage, setQueryErroredMessage] = useState(
     "Something went wrong. Please try again."
@@ -50,7 +52,7 @@ const ChatPage = () => {
 
   const [messages, submitQuery, resetMessages, closeStream] = useChatCompletion(
     {
-      model: "gpt-3.5-turbo",
+      model: model,
       apiKey: apiKey,
       setErrorMessage: (message) => handleErrorMessage(message),
     }
@@ -159,17 +161,19 @@ const ChatPage = () => {
   if (!id) return null;
 
   useEffect(() => {
-    async function checkAPIKey() {
+    async function checkAPIKeyAndModel() {
       const key = await getApiKey();
+      const localModel = (await getModel()) || "gpt-3.5-turbo";
 
       if (!key) {
         navigate("/");
       } else {
         setApiKey(key);
+        setModel(localModel);
       }
     }
 
-    checkAPIKey();
+    checkAPIKeyAndModel();
   }, []);
 
   useEffect(() => {

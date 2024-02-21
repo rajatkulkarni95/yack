@@ -39,6 +39,11 @@ module.exports = {
         },
       },
     },
+    colors: {
+      bg: "var(--color-bg-primary)",
+      action: "hsl(var(--color-bg-action))",
+      ...colors,
+    },
     textColor: {
       primary: "var(--color-text-primary)",
       secondary: "var(--color-text-secondary)",
@@ -60,7 +65,8 @@ module.exports = {
       kbd: "var(--color-bg-kbd)",
       kbdTooltip: "var(--color-bg-tooltip-kbd)",
       tooltip: "var(--color-bg-tooltip)",
-      action: "var(--color-bg-action)",
+      action: "hsl(var(--color-bg-action))",
+      actionHover: "hsl(var(--color-bg-action)/0.7)",
       ...colors,
     },
     borderColor: {

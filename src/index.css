@@ -37,7 +37,7 @@ button {
   --color-bg-tertiary: #3f3f46;
   --color-bg-hover: #232324;
   --color-bg-primary-btn-hover: #333333;
-  --color-bg-action: rgba(95, 32, 189, 0.7);
+  --color-bg-action: 264 61% 33%;
 
   --color-border-primary: #2e2e2f;
   --color-border-secondary: #52525b;
@@ -65,7 +65,7 @@ button {
   --color-bg-tertiary: #e4e4e7;
   --color-bg-hover: #f4f4f5;
   --color-bg-primary-btn-hover: #f4f5f8;
-  --color-bg-action: rgba(95, 32, 189, 0.4);
+  --color-bg-action: 261 48% 76%;
 
   --color-border-primary: #d4d4d8;
   --color-border-secondary: #a1a1aa;
@@ -94,7 +94,7 @@ button {
   --color-bg-hover: rgb(38, 41, 48);
   --color-bg-primary-btn: rgb(32, 32, 32);
   --color-bg-primary-btn-hover: rgb(74, 71, 71);
-  --color-bg-action: rgba(57, 139, 233, 0.6);
+  --color-bg-action: 217deg 43% 41%;
 
   --color-border-primary: rgb(43, 46, 55);
   --color-border-secondary: rgb(73, 77, 90);

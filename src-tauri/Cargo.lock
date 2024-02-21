@@ -3746,7 +3746,7 @@ dependencies = [
 
 [[package]]
 name = "yack"
-version = "0.5.10"
+version = "0.6.0"
 dependencies = [
  "cocoa",
  "objc",
